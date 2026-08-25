@@ -11,11 +11,54 @@ const LIVE = {
   viewerPeer: null,
   peers: new Map(),
   rooms: [],
+  syncInterval: null,
 
   init() {
     this.loadRooms();
     this.renderBroadcastButton();
     this.autoJoinFromUrl();
+    this.startRoomSync();
+  },
+
+  // Start continuous room sync
+  startRoomSync() {
+    // Sync rooms every 2 seconds
+    this.syncInterval = setInterval(() => {
+      this.loadRooms();
+      this.checkForExpiredRooms();
+    }, 2000);
+    
+    // Listen for sync events
+    window.addEventListener('gzvm:refresh', () => {
+      this.loadRooms();
+    });
+    
+    window.addEventListener('gzvm:sync', (e) => {
+      if (e.detail?.type === 'liveRooms') {
+        this.loadRooms();
+      }
+    });
+  },
+
+  // Check for and remove expired rooms (older than 24 hours)
+  checkForExpiredRooms() {
+    const now = Date.now();
+    const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+    let changed = false;
+    
+    this.rooms = this.rooms.filter(r => {
+      const age = now - new Date(r.startedAt).getTime();
+      if (age > maxAge && r.active) {
+        r.active = false;
+        r.endedAt = new Date().toISOString();
+        changed = true;
+      }
+      return true;
+    });
+    
+    if (changed) {
+      this.saveRooms();
+    }
   },
 
   async ensurePeer() {
@@ -46,16 +89,34 @@ const LIVE = {
     try { local = JSON.parse(localStorage.getItem('gzvm_rooms') || '[]'); } catch { local = []; }
     const synced = (window.APP && Array.isArray(APP.data.liveRooms)) ? APP.data.liveRooms : [];
     const byId = new Map();
-    [...local, ...synced].forEach(r => { if (r && r.id) byId.set(r.id, r); });
+    
+    // Merge local and synced rooms, preferring newer data
+    [...local, ...synced].forEach(r => {
+      if (r && r.id) {
+        const existing = byId.get(r.id);
+        if (!existing || new Date(r.startedAt) > new Date(existing.startedAt)) {
+          byId.set(r.id, r);
+        }
+      }
+    });
+    
     this.rooms = [...byId.values()];
   },
+
   saveRooms() {
-    try { localStorage.setItem('gzvm_rooms', JSON.stringify(this.rooms)); } catch {}
+    try { 
+      localStorage.setItem('gzvm_rooms', JSON.stringify(this.rooms)); 
+    } catch (e) {
+      console.warn('[LIVE] Failed to save rooms to localStorage:', e);
+    }
+    
     if (window.APP) {
       APP.data.liveRooms = this.rooms;
+      // Force save and sync
       APP.save();
     }
   },
+
   createRoom(hostName, title, description, type = 'p2p') {
     const room = {
       id: 'room_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
@@ -74,25 +135,37 @@ const LIVE = {
     this.saveRooms();
     return room;
   },
+
   endRoom(roomId) {
     const r = this.rooms.find(x => x.id === roomId);
-    if (r) { r.active = false; r.endedAt = new Date().toISOString(); }
+    if (r) { 
+      r.active = false; 
+      r.endedAt = new Date().toISOString(); 
+    }
     this.saveRooms();
   },
+
   getActiveRooms() {
     this.loadRooms();
     return this.rooms.filter(r => r.active);
   },
+
   listenToRooms(callback) {
     window.addEventListener('storage', e => {
-      if (e.key === 'gzvm_rooms') { this.loadRooms(); callback(); }
+      if (e.key === 'gzvm_rooms') { 
+        this.loadRooms(); 
+        callback(); 
+      }
     });
-    window.addEventListener('gzvm:refresh', () => { this.loadRooms(); callback(); });
+    window.addEventListener('gzvm:refresh', () => { 
+      this.loadRooms(); 
+      callback(); 
+    });
     setInterval(() => {
       const before = JSON.stringify(this.rooms);
       this.loadRooms();
       if (JSON.stringify(this.rooms) !== before) callback();
-    }, 3000);
+    }, 2000); // Check every 2 seconds
   },
 
   async getCamera(optional = false) {
@@ -112,6 +185,7 @@ const LIVE = {
       throw new Error('Camera/mic access denied: ' + err.message);
     }
   },
+
   stopCamera() {
     if (this.localStream) {
       this.localStream.getTracks().forEach(t => t.stop());
@@ -407,7 +481,13 @@ const LIVE = {
     document.getElementById('live-fab')?.classList.remove('active');
     APP.toast('Stream ended', 'info');
   },
-  cleanup() { this.stopCamera(); },
+
+  cleanup() { 
+    this.stopCamera();
+    if (this.syncInterval) {
+      clearInterval(this.syncInterval);
+    }
+  },
 
   renderActiveRooms() {
     const wrap = document.getElementById('active-rooms');
