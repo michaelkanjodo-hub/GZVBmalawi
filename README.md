@@ -19,6 +19,7 @@ python3 -m http.server 8000
 | 🏠 **Home** | `index.html` | Hero, live countdown, ticker, live stream preview, score pad, court map, leaderboard preview, scouting highlights |
 | 💪 **Training** | `training.html` | Skill tabs (serve/spike/pass/set/block/fitness), featured videos, personal skill progress tracker |
 | 📺 **Live** | `live.html` | Live stream player, schedule, live stats, chat link, **public highlight reel** |
+| 🎬 **Videos** | `videos.html` | Upload & watch community videos, highlights, training clips, match replays |
 | 👥 **Teams** | `teams.html` | All registered teams with logos, city filter, search, click for roster + schedule |
 | 🏆 **Leaderboard** | `leaderboard.html` | Sortable/filterable stats table, podium for top 3, search, **player photos** |
 | 📅 **Matches** | `matches.html` | Upcoming/live/completed tabs, booking modal, my-bookings tab |

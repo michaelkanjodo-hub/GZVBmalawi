@@ -132,6 +132,7 @@ const APP = {
       { href: 'index.html', label: 'Home' },
       { href: 'training.html', label: 'Training' },
       { href: 'live.html', label: 'Live' },
+      { href: 'videos.html', label: 'Videos' },
       { href: 'teams.html', label: 'Teams' },
       { href: 'leaderboard.html', label: 'Leaderboard' },
       { href: 'matches.html', label: 'Matches' },

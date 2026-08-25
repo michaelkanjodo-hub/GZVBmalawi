@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Videos — Gen Z Volleyball Malawi</title>
+<meta name="description" content="Upload and watch volleyball highlights, training videos, and match replays from the Gen Z Volleyball Malawi community.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+<style>
+  .video-card {
+    position: relative;
+    background: var(--c-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: var(--shadow-3d);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .video-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 0 0 rgba(0,0,0,0.35), 0 22px 50px rgba(255,59,107,0.2);
+  }
+  .video-thumb {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: var(--c-deeper);
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .video-thumb video,
+  .video-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .video-thumb .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .video-thumb:hover .play-overlay {
+    opacity: 1;
+  }
+  .play-overlay .play-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--gradient-1);
+    display: grid;
+    place-items: center;
+    color: var(--c-deep);
+    font-size: 1.3rem;
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.2), var(--shadow-3d);
+  }
+  .video-info {
+    padding: 1rem;
+  }
+  .video-info h4 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+    color: var(--c-text);
+    font-family: var(--font-body);
+    text-transform: none;
+    font-weight: 700;
+  }
+  .video-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--c-muted);
+    margin-top: 0.5rem;
+  }
+  .video-meta .views {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .video-actions {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .upload-zone {
+    border: 2px dashed rgba(255,255,255,0.2);
+    border-radius: var(--radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--c-card);
+  }
+  .upload-zone:hover,
+  .upload-zone.dragover {
+    border-color: var(--c-accent);
+    background: rgba(255, 212, 0, 0.05);
+  }
+  .upload-zone .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  .upload-zone input {
+    display: none;
+  }
+  .video-player-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .video-player-modal.open {
+    display: flex;
+  }
+  .video-player-container {
+    max-width: 900px;
+    width: 100%;
+    background: var(--c-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .video-player-container video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+  }
+  .video-player-info {
+    padding: 1.5rem;
+  }
+  .video-player-info h3 {
+    font-family: var(--font-body);
+    text-transform: none;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .video-player-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .video-player-close:hover {
+    background: var(--c-primary);
+  }
+  .upload-progress {
+    display: none;
+    margin-top: 1rem;
+  }
+  .upload-progress.show {
+    display: block;
+  }
+  .category-filter {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .category-filter .btn {
+    font-size: 0.8rem;
+  }
+  .video-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--c-card);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-card .num {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--c-accent);
+    display: block;
+  }
+  .stat-card .label {
+    font-size: 0.8rem;
+    color: var(--c-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <section class="hero" style="padding:2rem 0;">
+    <div class="container">
+      <span class="tag tag-pink">🎬 COMMUNITY</span>
+      <h1>Upload & Watch <span class="gradient-text">Volleyball Videos</span></h1>
+      <p>Share your highlights, training clips, and match replays. Watch what others are uploading!</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <!-- Stats -->
+      <div class="video-stats">
+        <div class="stat-card">
+          <span class="num" id="total-videos">0</span>
+          <span class="label">Videos</span>
+        </div>
+        <div class="stat-card">
+          <span class="num" id="total-views">0</span>
+          <span class="label">Views</span>
+        </div>
+        <div class="stat-card">
+          <span class="num" id="total-uploaders">0</span>
+          <span class="label">Uploaders</span>
+        </div>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="section-title">
+        <span class="badge">📤 UPLOAD</span>
+        <h2>Share Your Video</h2>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:3rem;">
+        <div>
+          <div class="upload-zone" id="upload-zone">
+            <div class="icon">📹</div>
+            <h3>Drag & Drop Your Video</h3>
+            <p class="muted">or click to browse files</p>
+            <p class="muted" style="font-size:0.8rem; margin-top:0.5rem;">MP4, WebM, MOV • Max 100MB</p>
+            <input type="file" id="video-file" accept="video/*">
+          </div>
+          <div class="upload-progress" id="upload-progress">
+            <div class="progress" style="height:12px;">
+              <div class="progress-bar" id="upload-bar" style="width:0%"></div>
+            </div>
+            <p class="muted text-center" style="font-size:0.85rem; margin-top:0.5rem;" id="upload-status">Uploading...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📝 Video Details</h3>
+          <form id="upload-form" style="margin-top:1rem;">
+            <div class="form-group">
+              <label>Title *</label>
+              <input type="text" name="title" class="form-control" placeholder="e.g. My best spike of 2026" required>
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select name="category" class="form-control">
+                <option value="highlight">🏐 Highlight</option>
+                <option value="training">💪 Training</option>
+                <option value="match">🏆 Match Replay</option>
+                <option value="skill">🎯 Skill Demo</option>
+                <option value="fun">😄 Fun/Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea name="description" class="form-control" placeholder="Tell us about this video..." rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" name="uploader" class="form-control" placeholder="Leave blank to stay anonymous">
+            </div>
+            <div class="form-group">
+              <label>Team (optional)</label>
+              <input type="text" name="team" class="form-control" placeholder="Your team name">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="upload-btn" disabled>
+              📤 Upload Video
+            </button>
+            <p class="muted text-center" style="font-size:0.8rem; margin-top:0.5rem;">
+              Select a video file first to enable upload
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Video Gallery -->
+      <div class="section-title">
+        <span class="badge" style="background: var(--c-accent-2);">🎬 GALLERY</span>
+        <h2>Community Videos</h2>
+        <span class="muted" style="margin-left:auto;" id="video-count">0 videos</span>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="category-filter">
+        <button class="btn btn-sm btn-primary" data-filter="all">All</button>
+        <button class="btn btn-sm btn-ghost" data-filter="highlight">🏐 Highlights</button>
+        <button class="btn btn-sm btn-ghost" data-filter="training">💪 Training</button>
+        <button class="btn btn-sm btn-ghost" data-filter="match">🏆 Matches</button>
+        <button class="btn btn-sm btn-ghost" data-filter="skill">🎯 Skills</button>
+        <button class="btn btn-sm btn-ghost" data-filter="fun">😄 Fun</button>
+      </div>
+
+      <!-- Videos Grid -->
+      <div class="grid-3" id="videos-grid"></div>
+      <p id="videos-empty" class="text-center muted" style="padding:3rem; display:none;">
+        No videos yet. Be the first to upload! 📹
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- Video Player Modal -->
+<div class="video-player-modal" id="video-player-modal">
+  <button class="video-player-close" id="close-player">✕</button>
+  <div class="video-player-container">
+    <video id="modal-video" controls></video>
+    <div class="video-player-info">
+      <h3 id="modal-title">Video Title</h3>
+      <p class="muted" id="modal-description"></p>
+      <div class="video-meta" style="margin-top:0.8rem;">
+        <span id="modal-uploader"></span>
+        <span id="modal-date"></span>
+        <span class="views" id="modal-views">👁️ 0 views</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer"></footer>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+
+// ====== VIDEO STORAGE ======
+const VIDEOS = {
+  key: 'gzvm_videos',
+
+  load() {
+    try {
+      return JSON.parse(localStorage.getItem(this.key) || '[]');
+    } catch { return []; }
+  },
+
+  save(videos) {
+    localStorage.setItem(this.key, JSON.stringify(videos));
+    if (window.APP) {
+      APP.data.videos = videos;
+      APP.save();
+    }
+  },
+
+  add(video) {
+    const videos = this.load();
+    videos.unshift(video);
+    this.save(videos);
+    return video;
+  },
+
+  incrementView(id) {
+    const videos = this.load();
+    const v = videos.find(x => x.id === id);
+    if (v) {
+      v.views = (v.views || 0) + 1;
+      this.save(videos);
+    }
+  }
+};
+
+// Sync videos from APP.data if available
+if (APP.data.videos && APP.data.videos.length) {
+  const local = VIDEOS.load();
+  const merged = [...APP.data.videos];
+  local.forEach(v => {
+    if (!merged.find(m => m.id === v.id)) merged.push(v);
+  });
+  VIDEOS.save(merged);
+}
+
+// ====== FILE UPLOAD HANDLING ======
+const uploadZone = document.getElementById('upload-zone');
+const fileInput = document.getElementById('video-file');
+const uploadBtn = document.getElementById('upload-btn');
+const uploadForm = document.getElementById('upload-form');
+const uploadProgress = document.getElementById('upload-progress');
+const uploadBar = document.getElementById('upload-bar');
+const uploadStatus = document.getElementById('upload-status');
+
+let selectedFile = null;
+
+// Drag and drop
+uploadZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadZone.classList.add('dragover');
+});
+uploadZone.addEventListener('dragleave', () => {
+  uploadZone.classList.remove('dragover');
+});
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('video/')) {
+    handleFileSelect(file);
+  } else {
+    APP.toast('Please select a video file', 'error');
+  }
+});
+
+// Click to browse
+uploadZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    handleFileSelect(e.target.files[0]);
+  }
+});
+
+function handleFileSelect(file) {
+  if (file.size > 100 * 1024 * 1024) {
+    APP.toast('File too large. Max 100MB.', 'error');
+    return;
+  }
+  selectedFile = file;
+  uploadBtn.disabled = false;
+  uploadZone.innerHTML = `
+    <div class="icon">✅</div>
+    <h3>${file.name}</h3>
+    <p class="muted">${(file.size / 1024 / 1024).toFixed(1)} MB</p>
+    <p class="muted" style="font-size:0.8rem;">Click to change file</p>
+  `;
+}
+
+// Form submission
+uploadForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!selectedFile) {
+    APP.toast('Please select a video file', 'error');
+    return;
+  }
+
+  const fd = new FormData(uploadForm);
+  const user = APP.currentUser();
+
+  uploadBtn.disabled = true;
+  uploadBtn.textContent = '⏳ Processing...';
+  uploadProgress.classList.add('show');
+
+  // Simulate upload progress (in real app, this would upload to Supabase Storage)
+  let progress = 0;
+  const progressInterval = setInterval(() => {
+    progress += Math.random() * 15;
+    if (progress > 90) progress = 90;
+    uploadBar.style.width = progress + '%';
+    uploadStatus.textContent = `Uploading... ${Math.round(progress)}%`;
+  }, 200);
+
+  // Create video object
+  const videoId = APP.uid();
+
+  // Read file as data URL for local storage (for demo purposes)
+  // In production, you'd upload to Supabase Storage
+  const reader = new FileReader();
+  reader.onload = function() {
+    clearInterval(progressInterval);
+    uploadBar.style.width = '100%';
+    uploadStatus.textContent = 'Processing...';
+
+    setTimeout(() => {
+      const video = {
+        id: videoId,
+        title: fd.get('title'),
+        category: fd.get('category'),
+        description: fd.get('description'),
+        uploader: fd.get('uploader') || (user ? user.name : 'Anonymous'),
+        team: fd.get('team') || '',
+        videoData: reader.result, // Base64 data URL
+        thumbnail: '', // Could generate from video
+        views: 0,
+        likes: 0,
+        date: new Date().toISOString(),
+        userId: user?.id
+      };
+
+      VIDEOS.add(video);
+
+      // Reset form
+      uploadForm.reset();
+      selectedFile = null;
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = '📤 Upload Video';
+      uploadProgress.classList.remove('show');
+      uploadBar.style.width = '0%';
+      uploadZone.innerHTML = `
+        <div class="icon">📹</div>
+        <h3>Drag & Drop Your Video</h3>
+        <p class="muted">or click to browse files</p>
+        <p class="muted" style="font-size:0.8rem; margin-top:0.5rem;">MP4, WebM, MOV • Max 100MB</p>
+      `;
+
+      APP.toast('Video uploaded successfully! 🎉', 'success');
+      renderVideos();
+      renderStats();
+    }, 500);
+  };
+
+  reader.readAsDataURL(selectedFile);
+});
+
+// ====== RENDER VIDEOS ======
+let currentFilter = 'all';
+
+function renderVideos() {
+  const grid = document.getElementById('videos-grid');
+  const empty = document.getElementById('videos-empty');
+  const countEl = document.getElementById('video-count');
+
+  let videos = VIDEOS.load();
+
+  // Apply filter
+  if (currentFilter !== 'all') {
+    videos = videos.filter(v => v.category === currentFilter);
+  }
+
+  // Sort by date (newest first)
+  videos.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  countEl.textContent = `${videos.length} video${videos.length !== 1 ? 's' : ''}`;
+
+  if (videos.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  grid.innerHTML = videos.map(v => {
+    const categoryIcons = {
+      highlight: '🏐',
+      training: '💪',
+      match: '🏆',
+      skill: '🎯',
+      fun: '😄'
+    };
+    const icon = categoryIcons[v.category] || '🏐';
+    const timeAgo = getTimeAgo(v.date);
+
+    return `
+      <div class="video-card">
+        <div class="video-thumb" onclick="playVideo('${v.id}')">
+          ${v.videoData
+            ? `<video src="${v.videoData}" muted preload="metadata"></video>`
+            : `<div style="display:grid;place-items:center;height:100%;font-size:3rem;">${icon}</div>`
+          }
+          <div class="play-overlay">
+            <div class="play-icon">▶</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h4>${APP.escapeHtml(v.title)}</h4>
+          <div class="video-meta">
+            <span>${icon} ${v.category || 'highlight'}</span>
+            <span>•</span>
+            <span>${APP.escapeHtml(v.uploader || 'Anonymous')}</span>
+            <span>•</span>
+            <span>${timeAgo}</span>
+          </div>
+          <div class="video-meta">
+            <span class="views">👁️ ${v.views || 0} views</span>
+            ${v.team ? `<span>🏐 ${APP.escapeHtml(v.team)}</span>` : ''}
+          </div>
+          <div class="video-actions">
+            <button class="btn btn-sm btn-ghost" onclick="playVideo('${v.id}')">▶ Watch</button>
+            <button class="btn btn-sm btn-ghost" onclick="shareVideo('${v.id}')">📋 Share</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Add hover preview
+  grid.querySelectorAll('.video-thumb video').forEach(vid => {
+    vid.addEventListener('mouseenter', () => vid.play());
+    vid.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+  });
+}
+
+function getTimeAgo(dateStr) {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diff = now - date;
+  const mins = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days < 7) return `${days}d ago`;
+  return APP.fmtDate(dateStr);
+}
+
+// ====== VIDEO PLAYER ======
+function playVideo(id) {
+  const videos = VIDEOS.load();
+  const video = videos.find(v => v.id === id);
+  if (!video) return;
+
+  // Increment view count
+  VIDEOS.incrementView(id);
+
+  const modal = document.getElementById('video-player-modal');
+  const modalVideo = document.getElementById('modal-video');
+  const modalTitle = document.getElementById('modal-title');
+  const modalDesc = document.getElementById('modal-description');
+  const modalUploader = document.getElementById('modal-uploader');
+  const modalDate = document.getElementById('modal-date');
+  const modalViews = document.getElementById('modal-views');
+
+  modalVideo.src = video.videoData;
+  modalTitle.textContent = video.title;
+  modalDesc.textContent = video.description || '';
+  modalUploader.textContent = `👤 ${video.uploader || 'Anonymous'}`;
+  modalDate.textContent = APP.fmtDate(video.date);
+  modalViews.textContent = `👁️ ${(video.views || 0) + 1} views`;
+
+  modal.classList.add('open');
+  modalVideo.play();
+
+  // Refresh the grid to update view count
+  setTimeout(() => renderVideos(), 1000);
+}
+
+document.getElementById('close-player').addEventListener('click', () => {
+  const modal = document.getElementById('video-player-modal');
+  const modalVideo = document.getElementById('modal-video');
+  modalVideo.pause();
+  modal.classList.remove('open');
+});
+
+document.getElementById('video-player-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'video-player-modal') {
+    const modalVideo = document.getElementById('modal-video');
+    modalVideo.pause();
+    document.getElementById('video-player-modal').classList.remove('open');
+  }
+});
+
+// ====== SHARE VIDEO ======
+function shareVideo(id) {
+  const videos = VIDEOS.load();
+  const video = videos.find(v => v.id === id);
+  if (!video) return;
+
+  const shareText = `🏐 Check out this volleyball video: "${video.title}" on Gen Z Volleyball Malawi!`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: video.title,
+      text: shareText,
+      url: window.location.href
+    });
+  } else {
+    navigator.clipboard.writeText(shareText + '\n' + window.location.href);
+    APP.toast('Link copied to clipboard!', 'success');
+  }
+}
+
+// ====== CATEGORY FILTER ======
+document.querySelectorAll('[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter]').forEach(b => {
+      b.classList.remove('btn-primary');
+      b.classList.add('btn-ghost');
+    });
+    btn.classList.remove('btn-ghost');
+    btn.classList.add('btn-primary');
+    currentFilter = btn.dataset.filter;
+    renderVideos();
+  });
+});
+
+// ====== STATS ======
+function renderStats() {
+  const videos = VIDEOS.load();
+  document.getElementById('total-videos').textContent = videos.length;
+  document.getElementById('total-views').textContent = videos.reduce((sum, v) => sum + (v.views || 0), 0);
+  const uploaders = new Set(videos.map(v => v.uploader || 'Anonymous'));
+  document.getElementById('total-uploaders').textContent = uploaders.size;
+}
+
+// ====== INIT ======
+renderVideos();
+renderStats();
+
+// Re-render on sync
+window.addEventListener('gzvm:refresh', () => {
+  renderVideos();
+  renderStats();
+});
+</script>
+</body>
+</html>

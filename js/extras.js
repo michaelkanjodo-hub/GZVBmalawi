@@ -7,6 +7,7 @@ const EXTRAS = {
     { title: 'Home', href: 'index.html', keys: 'train play rise countdown score pad map highlights' },
     { title: 'Training', href: 'training.html', keys: 'serve spike pass set block fitness drills' },
     { title: 'Live', href: 'live.html', keys: 'stream watch highlights reel go live camera' },
+    { title: 'Videos', href: 'videos.html', keys: 'upload video highlights training match replay community' },
     { title: 'Teams', href: 'teams.html', keys: 'roster city coach logo' },
     { title: 'Leaderboard', href: 'leaderboard.html', keys: 'rank points mvp players stats' },
     { title: 'Matches', href: 'matches.html', keys: 'book fixture schedule results practice' },
