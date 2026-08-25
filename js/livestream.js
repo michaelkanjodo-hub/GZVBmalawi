@@ -34,7 +34,8 @@ const LIVE = {
       config: {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' }
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' }
         ]
       }
     };
@@ -132,21 +133,56 @@ const LIVE = {
   async startCameraBroadcast(title) {
     await this.ensurePeer();
     const stream = await this.getCamera();
-    this.hostPeer = new window.Peer(this.iceConfig());
+    
+    // Create a unique peer ID for this broadcast
+    const broadcastId = 'gzvb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    
+    this.hostPeer = new window.Peer(broadcastId, this.iceConfig());
+    
     const peerId = await new Promise((resolve, reject) => {
-      this.hostPeer.on('open', id => resolve(id));
-      this.hostPeer.on('error', err => reject(err));
-      setTimeout(() => reject(new Error('Live connection timed out')), 12000);
+      this.hostPeer.on('open', id => {
+        console.log('[LIVE] Host peer opened with ID:', id);
+        resolve(id);
+      });
+      this.hostPeer.on('error', err => {
+        console.error('[LIVE] Host peer error:', err);
+        reject(err);
+      });
+      setTimeout(() => reject(new Error('Live connection timed out')), 15000);
     });
+
+    // When a viewer connects, call them with our stream
     this.hostPeer.on('connection', conn => {
+      console.log('[LIVE] Viewer connected:', conn.peer);
+      
+      // Call the viewer with our video stream
       const call = this.hostPeer.call(conn.peer, stream);
       this.peers.set(conn.peer, call);
+      
+      call.on('stream', remoteStream => {
+        console.log('[LIVE] Received stream back from viewer (expected for P2P)');
+      });
+      
+      call.on('close', () => {
+        console.log('[LIVE] Viewer call closed:', conn.peer);
+        this.peers.delete(conn.peer);
+        if (this.currentRoom) {
+          this.currentRoom.viewers = this.peers.size;
+          this.saveRooms();
+        }
+      });
+      
       if (this.currentRoom) {
         this.currentRoom.viewers = this.peers.size;
         this.saveRooms();
       }
     });
-    this.hostPeer.on('call', call => call.answer(stream));
+
+    this.hostPeer.on('disconnected', () => {
+      console.log('[LIVE] Host peer disconnected, attempting reconnect...');
+      this.hostPeer.reconnect();
+    });
+
     const me = window.APP && APP.currentUser();
     this.currentRoom = this.createRoom(me?.name || 'Broadcaster', title, '', 'p2p');
     this.currentRoom.peerId = peerId;
@@ -159,22 +195,61 @@ const LIVE = {
 
   async watchPeer(peerId, videoEl) {
     await this.ensurePeer();
-    this.viewerPeer = new window.Peer(this.iceConfig());
+    
+    // Create a unique peer ID for this viewer
+    const viewerId = 'gzvb_viewer_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    
+    this.viewerPeer = new window.Peer(viewerId, this.iceConfig());
+    
     await new Promise((resolve, reject) => {
-      this.viewerPeer.on('open', () => resolve());
-      this.viewerPeer.on('error', reject);
-      setTimeout(() => reject(new Error('Could not reach the live server')), 12000);
+      this.viewerPeer.on('open', () => {
+        console.log('[LIVE] Viewer peer opened');
+        resolve();
+      });
+      this.viewerPeer.on('error', err => {
+        console.error('[LIVE] Viewer peer error:', err);
+        reject(err);
+      });
+      setTimeout(() => reject(new Error('Could not reach the live server')), 15000);
     });
+
+    // When host calls us with their stream, answer and display it
     this.viewerPeer.on('call', call => {
-      call.answer();
-      call.on('stream', remote => {
+      console.log('[LIVE] Received call from host');
+      call.answer(); // Answer without sending stream back
+      
+      call.on('stream', remoteStream => {
+        console.log('[LIVE] Received host stream');
         if (videoEl) {
-          videoEl.srcObject = remote;
-          videoEl.play?.().catch(() => {});
+          videoEl.srcObject = remoteStream;
+          videoEl.play().catch(e => console.warn('[LIVE] Auto-play blocked:', e));
         }
       });
+      
+      call.on('close', () => {
+        console.log('[LIVE] Host call closed');
+        if (videoEl) {
+          videoEl.srcObject = null;
+        }
+      });
+      
+      call.on('error', err => {
+        console.error('[LIVE] Call error:', err);
+      });
     });
-    this.viewerPeer.connect(peerId);
+
+    // Connect to the host peer
+    console.log('[LIVE] Connecting to host peer:', peerId);
+    const conn = this.viewerPeer.connect(peerId);
+    
+    conn.on('open', () => {
+      console.log('[LIVE] Connected to host');
+    });
+    
+    conn.on('error', err => {
+      console.error('[LIVE] Connection error:', err);
+    });
+
     this.state = 'viewing';
   },
 

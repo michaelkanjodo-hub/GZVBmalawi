@@ -372,13 +372,23 @@ async function joinPeerStream(peerId, room) {
   document.getElementById('stream-badge').innerHTML = '<span class="live-dot"></span> ON AIR';
   document.getElementById('stream-badge').style.background = 'var(--c-danger)';
   document.getElementById('stream-title').textContent = room?.title || 'Live';
+  
   try {
+    console.log('[LIVE] Attempting to join peer stream:', peerId);
     await LIVE.watchPeer(peerId, video);
     document.getElementById('overlay-counter').textContent = '● LIVE';
+    console.log('[LIVE] Successfully connected to stream');
   } catch (e) {
+    console.error('[LIVE] Failed to join stream:', e);
     document.getElementById('player-placeholder').style.display = 'flex';
-    document.getElementById('player-placeholder').innerHTML = `<div class="icon">📡</div><h3 style="color:white">Could not join</h3><p>${APP.escapeHtml(e.message || 'Try the link again')}</p>`;
-    video.remove();
+    document.getElementById('player-placeholder').innerHTML = `
+      <div class="icon">📡</div>
+      <h3 style="color:white">Could not join stream</h3>
+      <p>${APP.escapeHtml(e.message || 'The broadcaster may have ended the stream or there is a connection issue.')}</p>
+      <p class="muted" style="font-size:0.85rem; margin-top:1rem;">Try refreshing the page or ask the broadcaster for a new link.</p>
+      <button class="btn btn-primary" style="margin-top:1rem;" onclick="location.reload()">🔄 Try Again</button>
+    `;
+    if (video) video.remove();
   }
 }
 

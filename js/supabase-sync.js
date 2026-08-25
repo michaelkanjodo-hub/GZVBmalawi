@@ -126,6 +126,7 @@ const SYNC = {
         const { error } = await this.client.from('gzvm_sync').upsert(batch, { onConflict: 'entity_type,entity_id' });
         if (error) throw error;
       }
+      console.info(`[SYNC] Pushed ${rows.length} entities to Supabase`);
     } catch (e) { console.warn('[SYNC] pushAll failed', e); }
   },
 
