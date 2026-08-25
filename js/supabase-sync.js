@@ -25,11 +25,14 @@ const SYNC = {
   async init() {
     if (this._inited) return;
     this._inited = true;
+    
     if (!this.isConfigured()) {
       console.info('[SYNC] No anon key yet. Running in localStorage-only mode.');
       return;
     }
+    
     try {
+      // Load Supabase library if not already loaded
       if (!window.supabase) {
         await new Promise((resolve, reject) => {
           const s = document.createElement('script');
@@ -39,71 +42,178 @@ const SYNC = {
           document.head.appendChild(s);
         });
       }
+      
+      // Create client
       this.client = window.supabase.createClient(this.config.url, this.getKey());
       this.ready = true;
       console.info('[SYNC] ✅ Connected to Supabase');
+      
+      // Show sync status indicator
+      this.showSyncStatus(true);
 
       // Pull all existing data on startup
       await this.pullAll();
 
-      // Subscribe to changes
-      this.client
-        .channel('gzvm-changes')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'gzvm_sync' },
-          payload => this.handleChange(payload))
-        .subscribe();
+      // Subscribe to changes with automatic reconnection
+      this.subscribeToChanges();
 
       // Hook APP.save() to auto-sync
       this.installSaveHook();
 
       // Refresh UI
       window.dispatchEvent(new CustomEvent('gzvm:refresh'));
+      
+      // Periodic sync check every 30 seconds
+      setInterval(() => {
+        if (this.ready) {
+          this.pullAll();
+        }
+      }, 30000);
+      
     } catch (err) {
       console.error('[SYNC] Failed to connect:', err);
+      this.showSyncStatus(false);
+      
+      // Retry connection after 10 seconds
+      setTimeout(() => {
+        this._inited = false;
+        this.init();
+      }, 10000);
+    }
+  },
+
+  // Show sync status indicator
+  showSyncStatus(connected) {
+    let indicator = document.getElementById('sync-status');
+    if (!indicator) {
+      indicator = document.createElement('div');
+      indicator.id = 'sync-status';
+      indicator.style.cssText = `
+        position: fixed;
+        bottom: 80px;
+        left: 20px;
+        z-index: 1000;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s;
+        cursor: pointer;
+      `;
+      indicator.title = 'Click to force sync';
+      indicator.addEventListener('click', () => {
+        this.pullAll();
+        this.pushAll(APP.data);
+        APP.toast('Sync refreshed!', 'success');
+      });
+      document.body.appendChild(indicator);
+    }
+    
+    if (connected) {
+      indicator.innerHTML = '🟢 SYNC ON';
+      indicator.style.background = 'rgba(25, 210, 124, 0.2)';
+      indicator.style.color = '#19d27c';
+      indicator.style.border = '1px solid rgba(25, 210, 124, 0.3)';
+    } else {
+      indicator.innerHTML = '🔴 SYNC OFF';
+      indicator.style.background = 'rgba(255, 77, 77, 0.2)';
+      indicator.style.color = '#ff4d4d';
+      indicator.style.border = '1px solid rgba(255, 77, 77, 0.3)';
+    }
+  },
+
+  // Subscribe to realtime changes with reconnection
+  subscribeToChanges() {
+    if (!this.client) return;
+    
+    try {
+      this.client
+        .channel('gzvm-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'gzvm_sync' },
+          payload => {
+            console.log('[SYNC] Realtime update received:', payload.eventType);
+            this.handleChange(payload);
+          })
+        .subscribe((status) => {
+          console.log('[SYNC] Subscription status:', status);
+          if (status === 'SUBSCRIBED') {
+            console.log('[SYNC] ✅ Realtime subscription active');
+            this.showSyncStatus(true);
+          } else if (status === 'CHANNEL_ERROR') {
+            console.warn('[SYNC] Subscription error, reconnecting...');
+            this.showSyncStatus(false);
+            setTimeout(() => this.subscribeToChanges(), 5000);
+          }
+        });
+    } catch (e) {
+      console.warn('[SYNC] Subscription failed:', e);
     }
   },
 
   // ---------- PULL ALL DATA ON STARTUP ----------
   async pullAll() {
-    if (!this.ready) return;
+    if (!this.ready || !this.client) return;
     try {
       const { data, error } = await this.client.from('gzvm_sync').select('*');
       if (error) throw error;
-      if (!data) return;
+      if (!data || !data.length) return;
 
       // Group by entity_type and merge into APP.data
+      let changed = false;
       data.forEach(row => {
         const type = row.entity_type;
         if (!APP.data[type]) return;
         if (Array.isArray(APP.data[type])) {
           // Replace if exists, otherwise add
           const idx = APP.data[type].findIndex(x => x.id === row.entity_id);
-          if (idx >= 0) APP.data[type][idx] = row.data;
-          else APP.data[type].push(row.data);
+          if (idx >= 0) {
+            // Only update if newer
+            const existing = APP.data[type][idx];
+            if (!existing.updated_at || new Date(row.updated_at) > new Date(existing.updated_at)) {
+              APP.data[type][idx] = { ...row.data, updated_at: row.updated_at };
+              changed = true;
+            }
+          } else {
+            APP.data[type].push({ ...row.data, updated_at: row.updated_at });
+            changed = true;
+          }
         } else {
           APP.data[type] = row.data;
+          changed = true;
         }
       });
-      APP.save();
-      console.info(`[SYNC] Pulled ${data.length} entities from Supabase`);
-    } catch (e) { console.warn('[SYNC] pull failed', e); }
+      
+      if (changed) {
+        APP.save();
+        window.dispatchEvent(new CustomEvent('gzvm:refresh'));
+        console.info(`[SYNC] Pulled ${data.length} entities from Supabase`);
+      }
+    } catch (e) { 
+      console.warn('[SYNC] pull failed:', e.message);
+    }
   },
 
   // ---------- PUSH ----------
   async push(entityType, entity) {
-    if (!this.ready || !entity || !entity.id) return;
+    if (!this.ready || !this.client || !entity || !entity.id) return;
     try {
-      await this.client.from('gzvm_sync').upsert({
+      const { error } = await this.client.from('gzvm_sync').upsert({
         entity_type: entityType,
         entity_id: entity.id,
-        data: entity,
+        data: { ...entity, updated_at: new Date().toISOString() },
         updated_at: new Date().toISOString()
       }, { onConflict: 'entity_type,entity_id' });
-    } catch (e) { console.warn('[SYNC] push failed', e); }
+      if (error) throw error;
+    } catch (e) { 
+      console.warn('[SYNC] push failed:', e.message);
+    }
   },
 
   async pushAll(data) {
-    if (!this.ready) return;
+    if (!this.ready || !this.client) return;
     const rows = [];
     for (const [type, list] of Object.entries(data)) {
       if (!Array.isArray(list)) continue;
@@ -112,7 +222,7 @@ const SYNC = {
           rows.push({
             entity_type: type,
             entity_id: entity.id,
-            data: entity,
+            data: { ...entity, updated_at: new Date().toISOString() },
             updated_at: new Date().toISOString()
           });
         }
@@ -127,12 +237,14 @@ const SYNC = {
         if (error) throw error;
       }
       console.info(`[SYNC] Pushed ${rows.length} entities to Supabase`);
-    } catch (e) { console.warn('[SYNC] pushAll failed', e); }
+    } catch (e) { 
+      console.warn('[SYNC] pushAll failed:', e.message);
+    }
   },
 
   // ---------- FILE UPLOADS ----------
   async uploadFile(bucket, file, pathPrefix = '') {
-    if (!this.ready || !file) return null;
+    if (!this.ready || !this.client || !file) return null;
     try {
       const ext = file.name.split('.').pop();
       const path = `${pathPrefix}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
@@ -140,7 +252,10 @@ const SYNC = {
       if (error) throw error;
       const { data: urlData } = this.client.storage.from(bucket).getPublicUrl(path);
       return urlData.publicUrl;
-    } catch (e) { console.warn('[SYNC] upload failed', e); return null; }
+    } catch (e) { 
+      console.warn('[SYNC] upload failed:', e.message);
+      return null;
+    }
   },
 
   // ---------- REALTIME ----------
@@ -162,7 +277,15 @@ const SYNC = {
     } else {
       list.push(data);
     }
-    APP.save();
+    
+    // Save locally without triggering another sync push
+    try {
+      localStorage.setItem(APP.storageKey, JSON.stringify(APP.data));
+    } catch (e) {
+      console.warn('[SYNC] Local save failed:', e);
+    }
+    
+    // Dispatch events to update UI
     window.dispatchEvent(new CustomEvent('gzvm:sync', { detail: { type: entity_type, eventType } }));
     window.dispatchEvent(new CustomEvent('gzvm:refresh'));
   },
@@ -175,9 +298,12 @@ const SYNC = {
       originalSave();
       clearTimeout(APP.__syncTimer);
       APP.__syncTimer = setTimeout(() => {
-        SYNC.pushAll(APP.data);
-      }, 1000); // debounce
+        if (SYNC.ready) {
+          SYNC.pushAll(APP.data);
+        }
+      }, 500); // debounce - faster sync
     };
+    console.info('[SYNC] Save hook installed - sync will happen automatically');
   }
 };
 
