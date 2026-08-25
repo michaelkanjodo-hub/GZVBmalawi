@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Walkthrough — Gen Z Volleyball Malawi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>
+  .walkthrough-section {
+    padding: 3rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .walkthrough-section:last-child {
+    border-bottom: none;
+  }
+  .step-card {
+    background: var(--c-card);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: var(--shadow-3d);
+  }
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gradient-1);
+    color: var(--c-deep);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+  .step-card h3 {
+    font-family: var(--font-body);
+    text-transform: none;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    color: var(--c-accent);
+  }
+  .step-card p {
+    color: var(--c-muted);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .feature-item {
+    background: var(--c-card-2);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .feature-item .icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+  }
+  .feature-item h4 {
+    font-family: var(--font-body);
+    text-transform: none;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  .feature-item p {
+    color: var(--c-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .audio-player {
+    background: var(--c-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+  .audio-player audio {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 1rem;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <section class="hero" style="padding:3rem 0;">
+    <div class="container">
+      <span class="tag tag-pink">🎬 WALKTHROUGH</span>
+      <h1>Welcome to <span class="gradient-text">Gen Z Volleyball Malawi</span></h1>
+      <p>Your complete guide to using the website. Take a tour of all the features!</p>
+      
+      <div class="audio-player">
+        <h3>🎧 Listen to the Walkthrough</h3>
+        <p class="muted">Click play to hear a narration of the website features</p>
+        <audio controls>
+          <source src="walkthrough-narration.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+  </section>
+
+  <section class="walkthrough-section">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge">🏠 HOME PAGE</span>
+        <h2>Your Dashboard</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Live Countdown & Score Pad</h3>
+        <p>The home page shows a live countdown to your next match, a scrolling ticker with recent results, and an interactive score pad to track games in real-time. Use the + and − buttons to update scores, and save completed matches to your history.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Highlights Reel</h3>
+        <p>Watch curated volleyball highlights from YouTube, or see live streams from your community. The reel auto-rotates through featured clips every 45 seconds. Click any highlight to watch it full-screen.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Court Map & Leaderboard</h3>
+        <p>See practice locations pinned on an interactive court map. The leaderboard shows top players ranked by total skill points. Register your team to get on the board!</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="walkthrough-section">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge">📡 LIVE STREAMING</span>
+        <h2>Go Live & Watch</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>Start a Camera Stream</h3>
+        <p>Click the 📡 button (bottom right) on any page. Choose "Stream from my camera" and allow camera access. You'll get a watch link to share via WhatsApp, SMS, or chat. The other person just opens the link — no codes needed!</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">5</div>
+        <h3>Watch a Live Stream</h3>
+        <p>When someone shares a watch link, just open it. The stream plays automatically using PeerJS technology. You'll see the broadcaster's camera feed in real-time with low latency.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">6</div>
+        <h3>External Streams</h3>
+        <p>You can also paste a YouTube Live, Twitch, or Facebook Live URL to embed external streams. Viewers watch directly on the website.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="walkthrough-section">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge">🎬 VIDEOS PAGE</span>
+        <h2>Upload & Watch</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">7</div>
+        <h3>Upload Your Videos</h3>
+        <p>Go to the Videos page and drag & drop your video file (MP4, WebM, MOV up to 100MB). Add a title, category (Highlights, Training, Matches, Skills, Fun), description, and your name. Click Upload and it appears in the gallery instantly!</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">8</div>
+        <h3>Browse & Filter</h3>
+        <p>Watch videos from the community. Use category filters to find specific types. Hover over thumbnails to preview. Click to play in full-screen. Share videos with friends using the share button.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="walkthrough-section">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge">📝 REGISTRATION</span>
+        <h2>Join the Community</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">9</div>
+        <h3>Player Registration</h3>
+        <p>Register as a player with your name, photo, position, skills, emergency contact, and medical info. Sign the liability waiver digitally. Your profile appears on the leaderboard and team roster.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">10</div>
+        <h3>Team Registration</h3>
+        <p>Create a team with a name, logo, city, coach, and contact info. Add members from registered players. Your team appears on the Teams page and can book matches.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="walkthrough-section">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge">🔄 SYNC</span>
+        <h2>Cross-Device Sync</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">11</div>
+        <h3>Real-Time Sync via Supabase</h3>
+        <p>Everything syncs across all devices in real-time! Register a player on your phone, and it appears on your computer instantly. Match scores, donations, live streams, and chat messages all sync automatically. No page refresh needed.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">12</div>
+        <h3>How It Works</h3>
+        <p>The website uses Supabase for real-time database sync. When anyone adds or updates data, it's pushed to Supabase. All other devices receive the update instantly via WebSocket subscriptions. Data is also saved locally in localStorage as a backup.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="walkthrough-section">
+    <div class="container">
+      <div class="section-title">
+        <span class="badge">✨ FEATURES</span>
+        <h2>Extra Features</h2>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="icon">🌙</div>
+          <h4>Dark/Light Mode</h4>
+          <p>Toggle between dark and light themes. Your preference is saved for next visit.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">🔍</div>
+          <h4>Site Search</h4>
+          <p>Press Ctrl+K or click the search icon to find any page instantly.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">🍪</div>
+          <h4>Cookie Banner</h4>
+          <p>Simple cookie consent for theme preferences. No tracking or ads.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">⬆️</div>
+          <h4>Back to Top</h4>
+          <p>Scroll down and a button appears to quickly return to the top.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">📱</div>
+          <h4>Mobile Menu</h4>
+          <p>Responsive hamburger menu on mobile devices. Works on screens down to 360px.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">⏳</div>
+          <h4>Loading Animations</h4>
+          <p>Smooth loading bar and ball animation when pages load.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">📋</div>
+          <h4>Copy Buttons</h4>
+          <p>One-click copy for code blocks and shareable content.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">🖨️</div>
+          <h4>Print Stylesheet</h4>
+          <p>Clean print layout that hides navigation and decorative elements.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">⏭️</div>
+          <h4>Skip to Content</h4>
+          <p>Accessibility link for keyboard users to skip navigation.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">👁️</div>
+          <h4>Password Toggle</h4>
+          <p>Show/hide password fields with a single click.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">📈</div>
+          <h4>UTM Tracking</h4>
+          <p>Captures UTM parameters for marketing analytics.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">✅</div>
+          <h4>Form Confirmations</h4>
+          <p>Confirmation modals before submitting forms. Success states after completion.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">❓</div>
+          <h4>Expandable FAQ</h4>
+          <p>Common questions with expandable answers at the bottom of every page.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">✉️</div>
+          <h4>Floating Contact</h4>
+          <p>Contact button on every page to send messages directly.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">💬</div>
+          <h4>Live Chat</h4>
+          <p>Floating chat button for real-time conversations with other fans.</p>
+        </div>
+        <div class="feature-item">
+          <div class="icon">🔒</div>
+          <h4>Coach Locker Room</h4>
+          <p>Password-protected area for coaches to share strategy videos and private feedback.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:3rem 0;">
+    <div class="container text-center">
+      <h2>Ready to Get Started?</h2>
+      <p class="muted" style="max-width:600px; margin:1rem auto;">Join the Gen Z Volleyball Malawi community today. Register, upload videos, go live, and connect with players across the country!</p>
+      <div class="cta-buttons" style="justify-content:center;">
+        <a href="index.html" class="btn btn-primary">🏠 Go to Home</a>
+        <a href="register.html" class="btn btn-accent">📝 Register Now</a>
+        <a href="videos.html" class="btn btn-ghost">🎬 Watch Videos</a>
+        <a href="live.html" class="btn btn-ghost">📡 Go Live</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"></footer>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+</script>
+</body>
+</html>
