@@ -8,8 +8,8 @@ const SYNC = {
   ready: false,
   config: {
     // 👇 PASTE YOUR CREDENTIALS HERE
-    url: 'https://ofvolzlpgfvhuluezrid.supabase.co',
-    anonKey: '',  // ← paste your "anon public" key from Supabase Settings → API
+    url: 'https://pttzavzoarznsmskcnxc.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0dHphdnpvYXJ6bnNtc2tjbnhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTEzMTIsImV4cCI6MjEwMzIyNzMxMn0.A-xRb6dheszcrwIAsxZQqSBB1tNieL7knodQEzHMtV8',
   },
 
   isConfigured() {
