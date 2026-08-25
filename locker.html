@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Locker Room — Gen Z Volleyball Malawi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <!-- LOGIN GATE -->
+  <div id="locker-gate" class="auth-gate card card-3d" style="display:none;">
+    <div class="icon">🔒</div>
+    <h2>Coach Locker Room</h2>
+    <p class="muted">Restricted area. Coaches and admins only.</p>
+    <p class="muted" style="font-size:0.85rem; margin-top:1rem;">Click below to access the password-protected coach area.</p>
+    <button class="btn btn-primary" id="enter-locker" style="margin-top:1rem;">Enter Locker Room →</button>
+    <p style="font-size:0.8rem; margin-top:0.8rem;" class="muted">Need a coach account? <a href="login.html">Login / Sign up</a></p>
+  </div>
+
+  <!-- LOCKER CONTENT -->
+  <div id="locker-content" style="display:none;">
+    <section class="hero" style="padding:2rem 0;">
+      <div class="container">
+        <span class="tag tag-pink">🔒 COACHES ONLY</span>
+        <h1>The <span class="gradient-text">Locker Room</span></h1>
+        <p>Strategy videos, private feedback, and team notes. <span class="muted" id="who-am-i"></span></p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="tabs">
+          <button class="tab active" data-lk="strategy">📹 Strategy Videos</button>
+          <button class="tab" data-lk="feedback">💬 Private Feedback</button>
+          <button class="tab" data-lk="roster">👥 Roster</button>
+        </div>
+
+        <!-- STRATEGY VIDEOS -->
+        <div class="tab-content active" id="lk-strategy">
+          <div class="grid-2">
+            <div class="card">
+              <h3>📤 Upload Strategy Video</h3>
+              <form id="strategy-form" style="margin-top:1rem;">
+                <div class="form-group">
+                  <label>Title *</label>
+                  <input type="text" name="title" class="form-control" placeholder="e.g. Rotation Analysis vs Top Spikers" required>
+                </div>
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea name="description" class="form-control" placeholder="Key takeaways, what to focus on…"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Video URL or Upload</label>
+                  <input type="url" name="videoUrl" class="form-control" placeholder="https://youtube.com/... or .mp4 link">
+                </div>
+                <div class="form-group">
+                  <label>Or upload video file (mp4)</label>
+                  <label class="file-drop" id="video-drop">
+                    <input type="file" name="videoFile" accept="video/*">
+                    <div>🎥 Click or drag to upload</div>
+                    <small class="muted" id="video-name">No file selected</small>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label>Tag Players (multi-select)</label>
+                  <select name="taggedPlayers" class="form-control" multiple size="4" id="tagged-players"></select>
+                  <p class="muted" style="font-size:0.8rem; margin-top:0.3rem;">Hold Ctrl/Cmd to select multiple</p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">📤 Share with Team</button>
+              </form>
+            </div>
+
+            <div>
+              <h3 style="margin-bottom:1rem;">📂 Shared Videos</h3>
+              <div id="strategy-list" class="grid-2"></div>
+              <p id="strategy-empty" class="text-center muted">No strategy videos yet. Upload one!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRIVATE FEEDBACK -->
+        <div class="tab-content" id="lk-feedback">
+          <div class="grid-2">
+            <div class="card">
+              <h3>📝 Send Private Feedback</h3>
+              <form id="feedback-form" style="margin-top:1rem;">
+                <div class="form-group">
+                  <label>Player *</label>
+                  <select name="playerId" class="form-control" required id="fb-player"></select>
+                </div>
+                <div class="form-group">
+                  <label>Video Reference (optional)</label>
+                  <select name="videoTitle" class="form-control">
+                    <option value="">— None —</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Feedback Message *</label>
+                  <textarea name="text" class="form-control" rows="5" placeholder="Constructive notes only. Be specific. Encourage first, then improve." required></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Rating (1-5 stars)</label>
+                  <select name="rating" class="form-control">
+                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                    <option value="4">⭐⭐⭐⭐ Strong</option>
+                    <option value="3" selected>⭐⭐⭐ Solid</option>
+                    <option value="2">⭐⭐ Developing</option>
+                    <option value="1">⭐ Needs work</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Send Feedback</button>
+              </form>
+            </div>
+
+            <div>
+              <h3 style="margin-bottom:1rem;">📬 Feedback History</h3>
+              <div id="feedback-list"></div>
+              <p id="feedback-empty" class="text-center muted">No feedback sent yet.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROSTER -->
+        <div class="tab-content" id="lk-roster">
+          <div class="card">
+            <h3>👥 Team Roster</h3>
+            <p class="muted" style="font-size:0.9rem;">All registered players across all teams.</p>
+            <div class="table-wrap" style="margin-top:1rem;">
+              <table id="roster-table">
+                <thead><tr><th>#</th><th>Name</th><th>Team</th><th>Pos</th><th>Age</th><th>Waiver</th><th>Medical</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p id="roster-empty" class="text-center muted">No players registered yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer"></footer>
+
+<!-- PASSWORD MODAL -->
+<div class="modal-backdrop" id="password-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🔐 Enter Locker Room</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <p class="muted" style="font-size:0.9rem;">Enter the coach password to access the strategy area.</p>
+    <form id="password-form" style="margin-top:1rem;">
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" class="form-control" required autofocus>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Unlock</button>
+      <p class="muted text-center" style="font-size:0.8rem; margin-top:0.8rem;">Demo password: <code>locker2026</code></p>
+    </form>
+  </div>
+</div>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+
+const COACH_PASSWORD = 'locker2026';
+const ALLOWED_ROLES = ['coach', 'admin', 'captain'];
+
+function checkAccess() {
+  const user = APP.currentUser();
+  const unlocked = sessionStorage.getItem('gzvm_locker') === '1';
+  if (unlocked && user && ALLOWED_ROLES.includes(user.role)) {
+    document.getElementById('locker-gate').style.display = 'none';
+    document.getElementById('locker-content').style.display = 'block';
+    document.getElementById('who-am-i').textContent = `Logged in as ${user.name} (${user.role})`;
+    loadRoster();
+    loadFeedbackHistory();
+    loadStrategyList();
+    populatePlayerOptions();
+  } else {
+    document.getElementById('locker-gate').style.display = 'block';
+    document.getElementById('locker-content').style.display = 'none';
+    if (!user) {
+      document.getElementById('locker-gate').innerHTML = `
+        <div class="icon">🔒</div>
+        <h2>Login Required</h2>
+        <p class="muted">You must log in to access the Coach Locker Room.</p>
+        <a href="login.html" class="btn btn-primary" style="margin-top:1rem;">Login / Sign Up →</a>
+      `;
+    } else if (!ALLOWED_ROLES.includes(user.role)) {
+      document.getElementById('locker-gate').innerHTML = `
+        <div class="icon">🚫</div>
+        <h2>Access Denied</h2>
+        <p class="muted">Your account (${user.role}) doesn't have locker room access. Please contact a coach to upgrade your role.</p>
+        <a href="index.html" class="btn btn-ghost" style="margin-top:1rem;">← Back to home</a>
+      `;
+    }
+  }
+}
+
+document.getElementById('enter-locker').addEventListener('click', () => {
+  if (!APP.currentUser()) { location.href = 'login.html'; return; }
+  document.getElementById('password-modal').classList.add('open');
+});
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById('password-modal').classList.remove('open')));
+document.getElementById('password-form').addEventListener('submit', e => {
+  e.preventDefault();
+  if (e.target.password.value === COACH_PASSWORD) {
+    sessionStorage.setItem('gzvm_locker', '1');
+    document.getElementById('password-modal').classList.remove('open');
+    APP.toast('Welcome to the Locker Room 🔓', 'success');
+    checkAccess();
+  } else {
+    APP.toast('Wrong password', 'error');
+  }
+});
+
+document.querySelectorAll('.tab[data-lk]').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab[data-lk]').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('#lk-strategy, #lk-feedback, #lk-roster').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('lk-' + t.dataset.lk).classList.add('active');
+  });
+});
+
+function populatePlayerOptions() {
+  const opts = APP.data.players.map(p => `<option value="${p.id}">${APP.escapeHtml(p.name)} (${p.team || '—'})</option>`).join('');
+  const fb = document.getElementById('fb-player');
+  if (fb) fb.innerHTML = '<option value="">— Select player —</option>' + opts;
+  const tagged = document.getElementById('tagged-players');
+  if (tagged) tagged.innerHTML = opts;
+}
+
+function loadRoster() {
+  const tb = document.querySelector('#roster-table tbody');
+  const empty = document.getElementById('roster-empty');
+  if (!APP.data.players.length) { tb.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  tb.innerHTML = APP.data.players.map((p, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td><strong>${APP.escapeHtml(p.name)}</strong></td>
+      <td>${APP.escapeHtml(p.team || '—')}</td>
+      <td><span class="tag tag-blue">${p.position || '—'}</span></td>
+      <td>${p.age || '—'}</td>
+      <td>${p.waiver?.signed ? '<span class="tag tag-teal">SIGNED</span>' : '<span class="tag tag-pink">MISSING</span>'}</td>
+      <td>${p.medical?.name ? '<span class="tag tag-teal">✓</span>' : '<span class="tag tag-pink">✗</span>'}</td>
+    </tr>
+  `).join('');
+}
+
+function loadStrategyList() {
+  const list = document.getElementById('strategy-list');
+  const empty = document.getElementById('strategy-empty');
+  if (!APP.data.strategy.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = APP.data.strategy.slice().reverse().map(s => `
+    <div class="card card-3d">
+      <h3>📹 ${APP.escapeHtml(s.title)}</h3>
+      <p class="muted" style="font-size:0.85rem;">By ${APP.escapeHtml(s.coach)} • ${APP.fmtDate(s.date)}</p>
+      <p style="font-size:0.9rem;">${APP.escapeHtml(s.description || 'No description')}</p>
+      ${s.videoUrl ? `<a href="${APP.escapeHtml(s.videoUrl)}" target="_blank" class="btn btn-sm btn-accent">▶ Watch Video</a>` : ''}
+      ${s.taggedPlayers && s.taggedPlayers.length ? `<p style="font-size:0.8rem; margin-top:0.5rem;"><strong>Tagged:</strong> ${s.taggedPlayers.map(id => APP.data.players.find(p => p.id === id)?.name || '?').join(', ')}</p>` : ''}
+    </div>
+  `).join('');
+}
+
+function loadFeedbackHistory() {
+  const list = document.getElementById('feedback-list');
+  const empty = document.getElementById('feedback-empty');
+  if (!APP.data.feedback.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = APP.data.feedback.slice().reverse().map(f => {
+    const player = APP.data.players.find(p => p.id === f.playerId);
+    return `
+      <div class="card" style="margin-bottom:0.8rem;">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+          <strong>→ ${APP.escapeHtml(player?.name || 'Unknown')}</strong>
+          <span>${'⭐'.repeat(f.rating || 0)}</span>
+        </div>
+        ${f.videoTitle ? `<p class="muted" style="font-size:0.8rem;">Re: ${APP.escapeHtml(f.videoTitle)}</p>` : ''}
+        <p style="margin-top:0.5rem;">${APP.escapeHtml(f.text)}</p>
+        <small class="muted">${APP.fmtDate(f.date)} • from ${APP.escapeHtml(f.coach)}</small>
+      </div>
+    `;
+  }).join('');
+}
+
+// File drop
+const vdrop = document.getElementById('video-drop');
+if (vdrop) {
+  const input = vdrop.querySelector('input');
+  vdrop.addEventListener('dragover', e => { e.preventDefault(); vdrop.classList.add('drag'); });
+  vdrop.addEventListener('dragleave', () => vdrop.classList.remove('drag'));
+  vdrop.addEventListener('drop', e => {
+    e.preventDefault();
+    vdrop.classList.remove('drag');
+    if (e.dataTransfer.files.length) {
+      input.files = e.dataTransfer.files;
+      document.getElementById('video-name').textContent = e.dataTransfer.files[0].name;
+    }
+  });
+  input.addEventListener('change', e => {
+    if (e.target.files.length) document.getElementById('video-name').textContent = e.target.files[0].name;
+  });
+}
+
+document.getElementById('strategy-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const videoFile = e.target.videoFile.files[0];
+  if (!fd.get('videoUrl') && !videoFile) return APP.toast('Add a video URL or file', 'error');
+  const tagged = Array.from(e.target.taggedPlayers.selectedOptions).map(o => o.value);
+  const me = APP.currentUser();
+  const strategy = {
+    id: APP.uid(),
+    coach: me?.name || 'Coach',
+    title: fd.get('title'),
+    description: fd.get('description'),
+    videoUrl: fd.get('videoUrl'),
+    videoFile: videoFile ? { name: videoFile.name, size: videoFile.size } : null,
+    taggedPlayers: tagged,
+    date: new Date().toISOString()
+  };
+  APP.data.strategy.push(strategy);
+  APP.save();
+  APP.toast('Strategy video shared! 📹', 'success');
+  e.target.reset();
+  document.getElementById('video-name').textContent = 'No file selected';
+  loadStrategyList();
+});
+
+document.getElementById('feedback-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const me = APP.currentUser();
+  const feedback = {
+    id: APP.uid(),
+    coach: me?.name || 'Coach',
+    playerId: fd.get('playerId'),
+    videoTitle: fd.get('videoTitle'),
+    text: fd.get('text'),
+    rating: parseInt(fd.get('rating') || 3),
+    date: new Date().toISOString()
+  };
+  APP.data.feedback.push(feedback);
+  APP.save();
+  APP.toast('Feedback sent! 💬', 'success');
+  e.target.reset();
+  loadFeedbackHistory();
+});
+
+checkAccess();
+</script>
+</body>
+</html>

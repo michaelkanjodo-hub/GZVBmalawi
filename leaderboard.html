@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard — Gen Z Volleyball Malawi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <section class="hero" style="padding:2rem 0;">
+    <div class="container">
+      <span class="tag tag-yellow">🏆 RANKINGS</span>
+      <h1>Top <span class="gradient-text">Players</span></h1>
+      <p>Ranked by overall performance, MVPs, and consistency across the season. Updated after every match.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="tabs">
+        <button class="tab active" data-rank="all">All Players</button>
+        <button class="tab" data-rank="setter">Setters</button>
+        <button class="tab" data-rank="hitter">Hitters</button>
+        <button class="tab" data-rank="libero">Liberos</button>
+        <button class="tab" data-rank="blocker">Blockers</button>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:1.5rem;">
+        <div>
+          <label style="font-size:0.85rem; color: var(--c-muted); font-weight: 600;">SORT BY</label>
+          <select id="sort-by" class="form-control">
+            <option value="points">Total Points</option>
+            <option value="mvps">MVPs</option>
+            <option value="serve">Serve Rating</option>
+            <option value="spike">Spike Rating</option>
+            <option value="block">Block Rating</option>
+            <option value="name">Name (A–Z)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.85rem; color: var(--c-muted); font-weight: 600;">SEARCH</label>
+          <input type="text" id="search" class="form-control" placeholder="Player or team name…">
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Team</th>
+              <th>Pos</th>
+              <th>Serve</th>
+              <th>Spike</th>
+              <th>Set</th>
+              <th>Block</th>
+              <th>Pass</th>
+              <th>Dig</th>
+              <th>Total</th>
+              <th>MVPs</th>
+            </tr>
+          </thead>
+          <tbody id="lb-body"></tbody>
+        </table>
+      </div>
+      <p id="lb-empty" class="text-center muted" style="margin-top:1.5rem; display:none;">
+        No players yet. <a href="register.html">Register your team</a> to populate the leaderboard.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" style="background: var(--c-accent); color: var(--c-deep);">⭐ TOP 3</span>
+        <h2>Podium</h2>
+      </div>
+      <div class="grid-3" id="podium"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"></footer>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+
+let currentFilter = 'all';
+
+function computeLeaderboard() {
+  const sortBy = document.getElementById('sort-by').value;
+  const search = (document.getElementById('search').value || '').toLowerCase();
+
+  let players = APP.data.players.map(p => {
+    const stats = p.stats || { serve: 0, spike: 0, set: 0, block: 0, pass: 0, dig: 0 };
+    const total = Object.values(stats).reduce((a, b) => a + (b || 0), 0);
+    return { ...p, stats, total, mvps: p.mvps || 0 };
+  });
+
+  if (currentFilter !== 'all') {
+    players = players.filter(p => (p.position || '').toLowerCase().includes(currentFilter));
+  }
+  if (search) {
+    players = players.filter(p => (p.name || '').toLowerCase().includes(search) || (p.team || '').toLowerCase().includes(search));
+  }
+  if (sortBy === 'name') players.sort((a, b) => a.name.localeCompare(b.name));
+  else if (sortBy === 'mvps') players.sort((a, b) => b.mvps - a.mvps);
+  else if (['serve','spike','set','block','pass','dig'].includes(sortBy)) players.sort((a, b) => (b.stats[sortBy] || 0) - (a.stats[sortBy] || 0));
+  else players.sort((a, b) => b.total - a.total);
+
+  return players;
+}
+
+function renderLeaderboard() {
+  const players = computeLeaderboard();
+  const tbody = document.getElementById('lb-body');
+  const empty = document.getElementById('lb-empty');
+
+  if (!APP.data.players.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('podium').innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  if (!players.length) {
+    tbody.innerHTML = '<tr><td colspan="12" class="text-center muted" style="padding:2rem;">No players match your filters</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = players.map((p, i) => {
+    const r = i + 1;
+    const cls = r === 1 ? 'rank-1' : r === 2 ? 'rank-2' : r === 3 ? 'rank-3' : 'rank-n';
+    const avatar = p.photo
+      ? `<img src="${APP.escapeHtml(p.photo)}" alt="" style="width:36px; height:36px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:0.6rem; border: 2px solid var(--c-primary);">`
+      : `<span style="display:inline-block; width:36px; height:36px; line-height:36px; text-align:center; border-radius:50%; background: var(--gradient-2); margin-right:0.6rem; vertical-align:middle;">🏐</span>`;
+    return `
+      <tr>
+        <td><span class="rank-badge ${cls}">${r}</span></td>
+        <td>${avatar}<strong>${APP.escapeHtml(p.name)}</strong></td>
+        <td>${APP.escapeHtml(p.team || '—')}</td>
+        <td><span class="tag tag-blue">${p.position || '—'}</span></td>
+        <td>${p.stats.serve || 0}</td>
+        <td>${p.stats.spike || 0}</td>
+        <td>${p.stats.set || 0}</td>
+        <td>${p.stats.block || 0}</td>
+        <td>${p.stats.pass || 0}</td>
+        <td>${p.stats.dig || 0}</td>
+        <td><strong style="color: var(--c-accent)">${p.total}</strong></td>
+        <td>${p.mvps > 0 ? '⭐ ' + p.mvps : '—'}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // Podium
+  const top3 = players.slice(0, 3);
+  const podium = document.getElementById('podium');
+  const order = [1, 0, 2]; // visualize 2nd, 1st, 3rd
+  podium.innerHTML = order.map(i => {
+    const p = top3[i];
+    if (!p) return '<div></div>';
+    const colors = ['linear-gradient(135deg, #c0c0c0, #888)', 'linear-gradient(135deg, #ffd400, #c89b00)', 'linear-gradient(135deg, #cd7f32, #8a4a1f)'];
+    return `
+      <div class="card card-3d text-center" style="background: ${colors[i]}; color: var(--c-deep); border:none;">
+        <div style="font-size:3rem;">${i === 0 ? '🥈' : i === 1 ? '🥇' : '🥉'}</div>
+        <h3 style="color: var(--c-deep);">${APP.escapeHtml(p.name)}</h3>
+        <p style="font-weight: 700;">${APP.escapeHtml(p.team || 'Free Agent')}</p>
+        <p style="font-size: 1.4rem; font-family: var(--font-display); margin-top:0.5rem;">${p.total} PTS</p>
+        <p>${p.mvps} MVPs</p>
+      </div>
+    `;
+  }).join('');
+}
+
+document.querySelectorAll('.tab[data-rank]').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab[data-rank]').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    currentFilter = t.dataset.rank;
+    renderLeaderboard();
+  });
+});
+document.getElementById('sort-by').addEventListener('change', renderLeaderboard);
+document.getElementById('search').addEventListener('input', renderLeaderboard);
+renderLeaderboard();
+</script>
+</body>
+</html>

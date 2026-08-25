@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gen Z Volleyball Malawi — Train. Play. Rise.</title>
+<meta name="description" content="Gen Z Volleyball Malawi — the home of under-25 volleyball in Malawi. Training, live streams, registration, leaderboard, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<!-- TICKER -->
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <span class="tag tag-pink">🏐 Under-25 Volleyball Community</span>
+      <h1>Train Hard.<br>Play <span class="gradient-text">Louder.</span><br>Rise Together.</h1>
+      <p>The official home of Gen Z Volleyball Malawi. Register, train, stream live, and chase your dream of representing the nation — all in one place.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="register.html">Join the Team →</a>
+        <button class="btn btn-accent" onclick="LIVE.openStreamModal()">📡 Go Live</button>
+        <a class="btn btn-ghost" href="live.html">Watch Live</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section>
+    <div class="container">
+      <div id="home-live-rooms"></div>
+      <div class="section-title">
+        <span class="badge">NEXT MATCH</span>
+        <h2>Countdown to Tip-Off</h2>
+      </div>
+      <div id="countdown-next" class="countdown"></div>
+      <p class="text-center muted" id="next-match-info">No matches scheduled yet. Book one to start the countdown!</p>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS REEL + SCORE PAD -->
+  <section>
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="section-title">
+            <span class="badge" style="background: var(--c-danger);">▶ WATCH</span>
+            <h2>Highlights Reel</h2>
+          </div>
+          <div class="live-stream" id="home-reel">
+            <div class="stream-content" id="reel-placeholder">
+              <div class="icon">🏐</div>
+              <h3 style="color: white;">No match live right now</h3>
+              <p>Check out the highlights reel below</p>
+              <a href="live.html" class="btn btn-primary" style="margin-top:1rem;">Open Full Reel →</a>
+            </div>
+            <div class="stream-overlay" id="reel-overlay" style="display:none;">
+              <span id="reel-title">Loading…</span>
+              <span class="viewer-count" id="reel-counter">▶ Reel 1 / 6</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title">
+            <span class="badge" style="background: var(--c-accent-2);">SCORE</span>
+            <h2>Match Score Pad</h2>
+          </div>
+          <div class="scorepad">
+            <div class="scorepad-header">
+              <strong id="sp-set-label">Set 1</strong>
+              <button class="btn btn-sm btn-ghost" id="sp-reset">Reset</button>
+            </div>
+            <div class="scorepad-teams">
+              <div class="scorepad-team">
+                <h4 class="name" id="sp-home-name">Home</h4>
+                <div class="scorepad-score">
+                  <button data-team="home" data-delta="-1">−</button>
+                  <span id="sp-home">0</span>
+                  <button data-team="home" data-delta="1">+</button>
+                </div>
+              </div>
+              <div class="scorepad-vs">VS</div>
+              <div class="scorepad-team">
+                <h4 class="name" id="sp-away-name">Away</h4>
+                <div class="scorepad-score">
+                  <button data-team="away" data-delta="-1">−</button>
+                  <span id="sp-away">0</span>
+                  <button data-team="away" data-delta="1">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="scorepad-sets" id="sp-sets"></div>
+            <div class="scorepad-actions">
+              <input type="text" id="sp-team-home-input" class="form-control" placeholder="Home team name" style="max-width:160px">
+              <input type="text" id="sp-team-away-input" class="form-control" placeholder="Away team name" style="max-width:160px">
+            </div>
+            <div class="scorepad-actions" style="margin-top:0.5rem;">
+              <button class="btn btn-accent btn-sm" id="sp-next-set">Finish Set →</button>
+              <button class="btn btn-primary btn-sm" id="sp-save">Save Score</button>
+            </div>
+            <p class="muted text-center" style="font-size:0.8rem; margin-top:0.8rem;">Track the score in real time. Saves to your match history.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COURT MAP -->
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <span class="badge">📍 MAP</span>
+        <h2>Practice Locations</h2>
+      </div>
+      <div class="court-map" id="court-map">
+        <div class="court-lines"></div>
+        <div class="net"></div>
+        <div class="map-legend">
+          <div><span class="dot" style="background: var(--c-primary)"></span> Active</div>
+          <div><span class="dot" style="background: var(--c-accent)"></span> Upcoming</div>
+          <div><span class="dot" style="background: var(--c-accent-2)"></span> Open</div>
+        </div>
+        <!-- pins injected by JS -->
+      </div>
+      <div class="grid-3" id="location-cards" style="margin-top:1.5rem;"></div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD PREVIEW -->
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" style="background: var(--c-accent); color: var(--c-deep)">🏆 TOP PLAYERS</span>
+        <h2>Leaderboard</h2>
+        <a href="leaderboard.html" class="btn btn-ghost btn-sm" style="margin-left:auto;">View full →</a>
+      </div>
+      <div class="table-wrap">
+        <table id="home-leaderboard">
+          <thead>
+            <tr><th>Rank</th><th>Player</th><th>Team</th><th>Position</th><th>Points</th><th>MVPs</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="leaderboard-empty" class="text-center muted" style="margin-top:1rem;">Register your team to populate the leaderboard. <a href="register.html">Sign up →</a></p>
+    </div>
+  </section>
+
+  <!-- SCOUTING HIGHLIGHTS -->
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <span class="badge" style="background: var(--c-accent-2);">🎬 SCOUTING</span>
+        <h2>Highlights — Get Noticed</h2>
+      </div>
+      <div class="grid-3" id="highlights-grid"></div>
+      <p id="highlights-empty" class="text-center muted" style="margin-top:1rem;">No highlights yet. Be the first to upload yours after registering.</p>
+    </div>
+  </section>
+
+  <!-- QUICK LINKS -->
+  <section>
+    <div class="container">
+      <div class="grid-4">
+        <div class="card card-3d text-center" style="cursor:pointer; border: 2px solid var(--c-primary);" onclick="LIVE.openStreamModal()">
+          <div style="font-size:3rem;">📡</div>
+          <h3>Go Live</h3>
+          <p class="muted" style="font-size:0.9rem">Stream your game now</p>
+        </div>
+        <a href="teams.html" class="card card-3d text-center" style="text-decoration:none; color: var(--c-text);">
+          <div style="font-size:3rem;">👥</div>
+          <h3>Teams</h3>
+          <p class="muted" style="font-size:0.9rem">All registered teams</p>
+        </a>
+        <a href="training.html" class="card card-3d text-center" style="text-decoration:none; color: var(--c-text);">
+          <div style="font-size:3rem;">💪</div>
+          <h3>Training Tips</h3>
+          <p class="muted" style="font-size:0.9rem">Drills, videos & guides</p>
+        </a>
+        <a href="register.html" class="card card-3d text-center" style="text-decoration:none; color: var(--c-text);">
+          <div style="font-size:3rem;">📝</div>
+          <h3>Register</h3>
+          <p class="muted" style="font-size:0.9rem">Players & teams</p>
+        </a>
+        <a href="matches.html" class="card card-3d text-center" style="text-decoration:none; color: var(--c-text);">
+          <div style="font-size:3rem;">📅</div>
+          <h3>Book a Match</h3>
+          <p class="muted" style="font-size:0.9rem">Find opponents</p>
+        </a>
+        <a href="donate.html" class="card card-3d text-center" style="text-decoration:none; color: var(--c-text);">
+          <div style="font-size:3rem;">💛</div>
+          <h3>Donate</h3>
+          <p class="muted" style="font-size:0.9rem">Support the league</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"></footer>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+// ====== TICKER ======
+APP.renderTicker();
+
+// ====== COUNTDOWN ======
+let nextMatch = null;
+function findNextMatch() {
+  const upcoming = APP.data.matches
+    .filter(m => m.status === 'scheduled' && m.date && new Date(m.date) > new Date())
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  return upcoming[0] || null;
+}
+function renderCountdown() {
+  nextMatch = findNextMatch();
+  const wrap = document.getElementById('countdown-next');
+  const info = document.getElementById('next-match-info');
+  if (!nextMatch) {
+    wrap.innerHTML = '<div class="countdown-unit"><span class="num">—</span><span class="lbl">No match</span></div>';
+    info.innerHTML = 'No matches scheduled yet. <a href="matches.html">Book one →</a>';
+    return;
+  }
+  const c = APP.countdown(nextMatch.date);
+  wrap.innerHTML = `
+    <div class="countdown-unit"><span class="num">${c.d}</span><span class="lbl">Days</span></div>
+    <div class="countdown-unit"><span class="num">${String(c.h).padStart(2, '0')}</span><span class="lbl">Hours</span></div>
+    <div class="countdown-unit"><span class="num">${String(c.m).padStart(2, '0')}</span><span class="lbl">Mins</span></div>
+    <div class="countdown-unit"><span class="num">${String(c.s).padStart(2, '0')}</span><span class="lbl">Secs</span></div>
+  `;
+  info.innerHTML = `<strong>${APP.escapeHtml(nextMatch.homeTeam)}</strong> vs <strong>${APP.escapeHtml(nextMatch.awayTeam)}</strong> — ${APP.fmtDate(nextMatch.date)} at ${APP.fmtTime(nextMatch.date)}`;
+}
+renderCountdown();
+setInterval(renderCountdown, 1000);
+
+// ====== HIGHLIGHTS REEL (homepage) ======
+// When no match is live, rotate through public volleyball highlight videos.
+let reelIndex = 0;
+function renderReel() {
+  const liveMatch = APP.data.matches.find(m => m.status === 'live');
+  const liveRooms = LIVE.getActiveRooms();
+  const placeholder = document.getElementById('reel-placeholder');
+  const overlay = document.getElementById('reel-overlay');
+  const stream = document.getElementById('home-reel');
+  // Clear any prior iframe
+  stream.querySelectorAll('iframe').forEach(f => f.remove());
+  stream.querySelectorAll('.live-badge').forEach(b => b.remove());
+
+  // 1) Real scheduled match is live
+  if (liveMatch) {
+    stream.insertAdjacentHTML('afterbegin', '<div class="live-badge"><span class="live-dot"></span> ON AIR</div>');
+    placeholder.innerHTML = `
+      <div class="icon">🏐</div>
+      <h3 style="color: white;">${APP.escapeHtml(liveMatch.homeTeam)} vs ${APP.escapeHtml(liveMatch.awayTeam)}</h3>
+      <p>Match in progress</p>
+      <a href="live.html" class="btn btn-primary" style="margin-top:1rem;">Watch Live →</a>
+    `;
+    placeholder.style.display = 'flex';
+    overlay.style.display = 'flex';
+    overlay.querySelector('#reel-title').textContent = '📍 ' + (liveMatch.venue || 'Live');
+    overlay.querySelector('#reel-counter').textContent = '● LIVE';
+    return;
+  }
+
+  // 2) Someone is live-streaming via WebRTC / external service
+  if (liveRooms.length) {
+    const room = liveRooms[0];
+    stream.insertAdjacentHTML('afterbegin', '<div class="live-badge"><span class="live-dot"></span> ON AIR</div>');
+    overlay.style.display = 'flex';
+    overlay.querySelector('#reel-title').textContent = `📡 ${room.title}`;
+    overlay.querySelector('#reel-counter').textContent = `● LIVE — ${room.host}`;
+
+    if (room.type === 'external' && room.externalUrl) {
+      const iframe = document.createElement('iframe');
+      iframe.src = LIVE.toEmbedUrl(room.externalUrl);
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0;';
+      stream.appendChild(iframe);
+      placeholder.style.display = 'none';
+    } else {
+      // P2P room — link to live page to join
+      placeholder.style.display = 'flex';
+      placeholder.innerHTML = `
+        <div class="icon">📡</div>
+        <h3 style="color: white;">${APP.escapeHtml(room.title)}</h3>
+        <p>Live P2P stream by ${APP.escapeHtml(room.host)}</p>
+        <a href="live.html?room=${room.id}" class="btn btn-primary" style="margin-top:1rem;">▶ Join Stream</a>
+      `;
+    }
+    return;
+  }
+
+  // No live match — rotate the public highlights reel
+  const v = APP.publicHighlights[reelIndex % APP.publicHighlights.length];
+  const iframe = document.createElement('iframe');
+  iframe.src = APP.embedUrl(v.videoId);
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen = true;
+  iframe.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0;';
+  stream.appendChild(iframe);
+  placeholder.style.display = 'none';
+  overlay.style.display = 'flex';
+  overlay.querySelector('#reel-title').textContent = v.title;
+  overlay.querySelector('#reel-counter').textContent = `▶ Reel ${reelIndex + 1} / ${APP.publicHighlights.length}`;
+
+  // Advance to next reel when current video ends
+  iframe.addEventListener('load', () => {
+    // YouTube iframes don't fire 'ended' reliably, so we just rotate every ~45s
+  });
+  clearInterval(window._reelTimer);
+  window._reelTimer = setInterval(() => {
+    reelIndex++;
+    renderReel();
+  }, 45000);
+}
+renderReel();
+// Re-check for a live match every 30s
+setInterval(renderReel, 30000);
+
+// ====== LIVE ROOMS STRIP (homepage) ======
+function renderHomeLiveRooms() {
+  const wrap = document.getElementById('home-live-rooms');
+  const active = LIVE.getActiveRooms();
+  if (!active.length) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = `
+    <div class="alert alert-danger" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem;">
+      <div>
+        <strong>📡 ${active.length} live stream${active.length === 1 ? '' : 's'} happening right now</strong>
+        <p class="muted" style="font-size:0.85rem; margin:0;">
+          ${active.slice(0, 3).map(r => `<span>• ${APP.escapeHtml(r.title)} (${APP.escapeHtml(r.host)})</span>`).join(' ')}
+        </p>
+      </div>
+      <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+        ${active.slice(0, 2).map(r => `<a class="btn btn-sm btn-primary" href="live.html?room=${r.id}">▶ Watch</a>`).join('')}
+      </div>
+    </div>
+  `;
+}
+renderHomeLiveRooms();
+LIVE.listenToRooms(renderHomeLiveRooms);
+
+// ====== SCORE PAD ======
+const sp = { home: 0, away: 0, sets: [] };
+const $ = id => document.getElementById(id);
+
+function renderScorePad() {
+  $('sp-home').textContent = sp.home;
+  $('sp-away').textContent = sp.away;
+  $('sp-sets').innerHTML = sp.sets.map((s, i) =>
+    `<div class="set-pill">Set ${i+1}: ${s[0]}-${s[1]}</div>`
+  ).join('') || '<span class="muted" style="font-size:0.85rem;">No sets completed</span>';
+  $('sp-set-label').textContent = `Set ${sp.sets.length + 1}`;
+}
+document.querySelectorAll('.scorepad-score button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const team = btn.dataset.team;
+    const delta = parseInt(btn.dataset.delta);
+    sp[team] = Math.max(0, sp[team] + delta);
+    $('sp-home-name').textContent = $('sp-team-home-input').value || 'Home';
+    $('sp-away-name').textContent = $('sp-team-away-input').value || 'Away';
+    renderScorePad();
+  });
+});
+$('sp-team-home-input').addEventListener('input', e => $('sp-home-name').textContent = e.target.value || 'Home');
+$('sp-team-away-input').addEventListener('input', e => $('sp-away-name').textContent = e.target.value || 'Away');
+$('sp-next-set').addEventListener('click', () => {
+  if (sp.home === 0 && sp.away === 0) return APP.toast('Add some points first', 'info');
+  sp.sets.push([sp.home, sp.away]);
+  sp.home = 0; sp.away = 0;
+  renderScorePad();
+  APP.toast('Set saved!', 'success');
+});
+$('sp-reset').addEventListener('click', () => {
+  sp.home = 0; sp.away = 0; sp.sets = [];
+  renderScorePad();
+});
+$('sp-save').addEventListener('click', () => {
+  const home = $('sp-team-home-input').value || 'Home Team';
+  const away = $('sp-team-away-input').value || 'Away Team';
+  if (!sp.sets.length) return APP.toast('Finish at least one set first', 'warning');
+  APP.data.matches.push({
+    id: APP.uid(),
+    homeTeam: home, awayTeam: away,
+    date: new Date().toISOString(),
+    status: 'completed',
+    score: {
+      home: sp.sets.reduce((a, s) => a + (s[0] > s[1] ? 1 : 0), 0),
+      away: sp.sets.reduce((a, s) => a + (s[1] > s[0] ? 1 : 0), 0)
+    },
+    sets: sp.sets.map(s => [...s])
+  });
+  APP.save();
+  APP.toast('Match saved to history!', 'success');
+  $('sp-reset').click();
+});
+renderScorePad();
+
+// ====== COURT MAP ======
+// Show practice locations from real bookings (type='practice') so it starts empty.
+function renderCourtMap() {
+  const map = $('court-map');
+  const cards = $('location-cards');
+  // Clear pins (keep court lines + net)
+  map.querySelectorAll('.map-pin').forEach(p => p.remove());
+
+  const practices = APP.data.bookings
+    .filter(b => b.type === 'practice' && b.status !== 'cancelled')
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  if (practices.length === 0) {
+    // Show 4 sample venue pin positions but with no data
+    const venues = [
+      { name: 'Blantyre Sports Complex', x: 20, y: 75, cls: '' },
+      { name: 'Lilongwe Civic Centre', x: 55, y: 35, cls: 'pin-2' },
+      { name: 'Mzuzu Court Arena', x: 30, y: 15, cls: 'pin-3' },
+      { name: 'Zomba Youth Field', x: 75, y: 70, cls: 'pin-4' },
+    ];
+    venues.forEach((v, i) => {
+      const pin = document.createElement('div');
+      pin.className = 'map-pin ' + v.cls;
+      pin.style.left = v.x + '%';
+      pin.style.top = v.y + '%';
+      pin.style.opacity = '0.35';
+      pin.innerHTML = `<span>${i+1}</span>`;
+      pin.title = v.name + ' — no practices scheduled';
+      map.appendChild(pin);
+    });
+    cards.innerHTML = `
+      <div class="card card-3d" style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+        <h3>📅 No practice sessions scheduled yet</h3>
+        <p class="muted">Once teams book practice sessions, they'll appear here on the court map.</p>
+        <a href="matches.html" class="btn btn-primary" style="margin-top:1rem;">Book a Practice →</a>
+      </div>
+    `;
+    return;
+  }
+
+  // Plot real practice bookings on the court
+  const venues = {
+    'Blantyre Sports Complex': { x: 20, y: 75, cls: '' },
+    'Lilongwe Civic Centre': { x: 55, y: 35, cls: 'pin-2' },
+    'Mzuzu Court Arena': { x: 30, y: 15, cls: 'pin-3' },
+    'Zomba Youth Field': { x: 75, y: 70, cls: 'pin-4' },
+    'Capital Volleyball Hall': { x: 50, y: 50, cls: 'pin-2' },
+  };
+  const seen = new Set();
+  practices.forEach((p, i) => {
+    const v = venues[p.venue] || { x: 50 + (i * 7) % 30, y: 50 + (i * 11) % 30, cls: '' };
+    const key = p.venue;
+    if (!seen.has(key)) {
+      seen.add(key);
+      const pin = document.createElement('div');
+      pin.className = 'map-pin ' + v.cls;
+      pin.style.left = v.x + '%';
+      pin.style.top = v.y + '%';
+      pin.innerHTML = `<span>${seen.size}</span>`;
+      pin.title = `${p.venue} — ${p.teamName}`;
+      map.appendChild(pin);
+    }
+  });
+
+  cards.innerHTML = practices.slice(0, 6).map(p => `
+    <div class="card card-3d">
+      <span class="tag tag-teal">PRACTICE</span>
+      <h3 style="margin-top:0.5rem;">${APP.escapeHtml(p.venue)}</h3>
+      <p class="muted" style="font-size:0.9rem;">🏐 ${APP.escapeHtml(p.teamName)}</p>
+      <p style="margin-top:0.5rem;"><strong>Next session:</strong> ${APP.fmtDate(p.date)} at ${APP.fmtTime(p.date)}</p>
+    </div>
+  `).join('');
+}
+renderCourtMap();
+
+// ====== LEADERBOARD PREVIEW ======
+function renderLeaderboard() {
+  const tb = document.querySelector('#home-leaderboard tbody');
+  const empty = $('leaderboard-empty');
+  if (!APP.data.players.length) { tb.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  const ranked = APP.data.players
+    .map(p => ({
+      ...p,
+      pts: Object.values(p.stats || {}).reduce((a, b) => a + (b || 0), 0),
+      mvps: p.mvps || 0
+    }))
+    .sort((a, b) => b.pts - a.pts)
+    .slice(0, 5);
+  tb.innerHTML = ranked.map((p, i) => {
+    const avatar = p.photo
+      ? `<img src="${APP.escapeHtml(p.photo)}" alt="" style="width:32px; height:32px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:0.5rem; border: 2px solid var(--c-primary);">`
+      : `<span style="display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; border-radius:50%; background: var(--gradient-2); margin-right:0.5rem; vertical-align:middle;">🏐</span>`;
+    return `
+    <tr>
+      <td><span class="rank-badge ${i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n'}">${i+1}</span></td>
+      <td>${avatar}<strong>${APP.escapeHtml(p.name)}</strong></td>
+      <td>${APP.escapeHtml(p.team || '—')}</td>
+      <td><span class="tag tag-blue">${p.position || '—'}</span></td>
+      <td><strong style="color: var(--c-accent)">${p.pts}</strong></td>
+      <td>${p.mvps}</td>
+    </tr>
+  `;
+  }).join('');
+}
+renderLeaderboard();
+
+// ====== HIGHLIGHTS ======
+// Combine user-uploaded highlights with curated public volleyball clips.
+function renderHighlights() {
+  const grid = $('highlights-grid');
+  const empty = $('highlights-empty');
+  const userHighlights = APP.data.highlights.map(h => ({ ...h, source: 'user' }));
+  const publicOnes = APP.publicHighlights.map(p => ({
+    id: p.id,
+    title: p.title,
+    player: p.channel,
+    team: 'Featured',
+    views: 0,
+    videoId: p.videoId,
+    source: 'public'
+  }));
+  const all = [...userHighlights, ...publicOnes];
+
+  if (all.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = all.slice(0, 6).map(h => {
+    const thumb = h.videoId ? APP.thumbUrl(h.videoId) : '';
+    return `
+      <div class="highlight-card" onclick="openHighlight('${h.id}','${h.source}','${h.videoId || ''}')">
+        ${thumb ? `<img class="highlight-thumb-img" src="${thumb}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">` : '<div class="highlight-thumb">🏐</div>'}
+        <div class="play-btn">▶</div>
+        <div class="highlight-info">
+          <h4>${APP.escapeHtml(h.title)}</h4>
+          <div class="highlight-meta">${APP.escapeHtml(h.player || '')} ${h.team ? '• ' + APP.escapeHtml(h.team) : ''} ${h.source === 'public' ? '• 🌐 Featured' : ''}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+window.openHighlight = (id, source, videoId) => {
+  if (source === 'public' && videoId) {
+    location.href = `live.html?v=${videoId}`;
+  } else {
+    APP.toast(`Highlight: ${id}`, 'info');
+  }
+};
+renderHighlights();
+
+// ====== TILT ======
+APP.attachTilt();
+
+// Re-render dynamic sections after storage/sync loads extra data
+window.addEventListener('gzvm:refresh', () => {
+  renderCountdown();
+  renderReel();
+  renderHomeLiveRooms();
+  renderCourtMap();
+  renderLeaderboard();
+  renderHighlights();
+  APP.renderTicker();
+});
+</script>
+</body>
+</html>

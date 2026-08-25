@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live & Highlights — Gen Z Volleyball Malawi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <section style="padding-top:2rem;">
+    <div class="container">
+      <div id="live-rooms-strip"></div>
+
+      <div class="section-title">
+        <span class="badge" id="stream-badge" style="background: var(--c-danger);">● OFF AIR</span>
+        <h2 id="stream-title">Highlights Reel</h2>
+        <button class="btn btn-ghost btn-sm" id="autoplay-toggle" style="margin-left:auto;">⏯ Autoplay: ON</button>
+        <button class="btn btn-primary btn-sm" onclick="LIVE.openStreamModal()" style="margin-left:0.5rem;">📡 Go Live</button>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <!-- MAIN PLAYER -->
+          <div class="live-stream" id="main-player" style="aspect-ratio: 16/9;">
+            <div class="stream-content" id="player-placeholder">
+              <div class="icon">🏐</div>
+              <h3 style="color: white;">No match live right now</h3>
+              <p>Pick a highlight below or browse the public reel</p>
+            </div>
+            <div class="stream-overlay" id="player-overlay" style="display:none;">
+              <span id="overlay-title">Loading…</span>
+              <span id="overlay-counter"></span>
+            </div>
+          </div>
+
+          <!-- LIVE STATUS PANEL -->
+          <div class="card" id="live-status" style="margin-top:1rem; display:none;">
+            <h3>📺 Live Match Stats</h3>
+            <div class="grid-2" style="margin-top:1rem;">
+              <div>
+                <strong>Top Scorer</strong>
+                <p style="font-size:1.4rem; color: var(--c-accent); font-family: var(--font-display);" id="stat-scorer">—</p>
+              </div>
+              <div>
+                <strong>Best Server</strong>
+                <p style="font-size:1.4rem; color: var(--c-accent); font-family: var(--font-display);" id="stat-server">—</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h3>📅 Match Schedule</h3>
+            <table style="margin-top:0.5rem;" id="schedule-table">
+              <thead><tr><th>Match</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody></tbody>
+            </table>
+            <p id="schedule-empty" class="text-center muted" style="font-size:0.85rem; margin-top:0.8rem;">No matches scheduled yet.</p>
+          </div>
+
+          <div class="card" style="margin-top:1rem;">
+            <h3>💬 Live Chat</h3>
+            <p class="muted" style="font-size:0.9rem;">Join the conversation with other fans using the floating chat button.</p>
+            <button class="btn btn-primary btn-sm" onclick="document.querySelector('.chat-fab').click()" style="margin-top:0.5rem;">Open Chat →</button>
+          </div>
+
+          <div class="card" style="margin-top:1rem;">
+            <h3>🏐 Past Broadcasts</h3>
+            <div id="past-broadcasts">
+              <p class="muted" style="font-size:0.9rem;">No past broadcasts yet. Once matches are completed, replay links will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HIGHLIGHTS REEL -->
+      <div class="section-title" style="margin-top:3rem;">
+        <span class="badge" style="background: var(--c-accent); color: var(--c-deep);">🎬 REEL</span>
+        <h2>Highlights Reel</h2>
+        <span class="muted" style="margin-left:auto; font-size:0.85rem;">Click any clip to play it above</span>
+      </div>
+
+      <div class="grid-3" id="highlights-grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"></footer>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+
+// ====== STATE ======
+let currentIndex = 0;
+let autoplay = true;
+let autoplayTimer = null;
+
+// ====== SCHEDULE ======
+function renderSchedule() {
+  const tb = document.querySelector('#schedule-table tbody');
+  const empty = document.getElementById('schedule-empty');
+  const matches = [...APP.data.matches].sort((a, b) => new Date(a.date) - new Date(b.date));
+  if (!matches.length) {
+    tb.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  tb.innerHTML = matches.map(m => {
+    const status = m.status === 'live' ? 'tag-pink' : m.status === 'completed' ? 'tag-teal' : m.status === 'scheduled' ? 'tag-blue' : 'tag-yellow';
+    const label = (m.status || 'scheduled').toUpperCase();
+    return `<tr>
+      <td>${APP.escapeHtml(m.homeTeam)} vs ${APP.escapeHtml(m.awayTeam)}</td>
+      <td>${m.date ? APP.fmtDate(m.date) : 'TBD'}</td>
+      <td><span class="tag ${status}">${label}</span></td>
+    </tr>`;
+  }).join('');
+}
+renderSchedule();
+
+// ====== PAST BROADCASTS ======
+function renderPastBroadcasts() {
+  const el = document.getElementById('past-broadcasts');
+  const completed = APP.data.matches.filter(m => m.status === 'completed');
+  if (!completed.length) { return; }
+  el.innerHTML = '<ul style="list-style:none; margin-top:0.5rem;">' + completed.map(m => `
+    <li style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+      ▶ <strong>${APP.escapeHtml(m.homeTeam)} ${m.score?.home || 0}-${m.score?.away || 0} ${APP.escapeHtml(m.awayTeam)}</strong>
+      <br><small class="muted">${APP.fmtDate(m.date)} • ${APP.escapeHtml(m.venue || '')}</small>
+    </li>
+  `).join('') + '</ul>';
+}
+renderPastBroadcasts();
+
+// ====== MAIN PLAYER ======
+function clearPlayer() {
+  const p = document.getElementById('main-player');
+  p.querySelectorAll('iframe').forEach(f => f.remove());
+}
+function setLiveMode(match) {
+  document.getElementById('stream-badge').innerHTML = '<span class="live-dot"></span> ON AIR';
+  document.getElementById('stream-badge').style.background = 'var(--c-danger)';
+  document.getElementById('stream-title').textContent = 'Live Now';
+  document.getElementById('player-placeholder').innerHTML = `
+    <div class="icon">🏐</div>
+    <h3 style="color:white;">${APP.escapeHtml(match.homeTeam)} vs ${APP.escapeHtml(match.awayTeam)}</h3>
+    <p>Match is live — embed your stream URL in your match to broadcast it here</p>
+  `;
+  document.getElementById('player-placeholder').style.display = 'flex';
+  document.getElementById('player-overlay').style.display = 'flex';
+  document.getElementById('overlay-title').textContent = '📍 ' + (match.venue || 'Live');
+  document.getElementById('overlay-counter').innerHTML = '<span class="live-dot"></span> ● LIVE';
+  document.getElementById('live-status').style.display = 'block';
+  document.getElementById('stat-scorer').textContent = '— (no stats yet)';
+  document.getElementById('stat-server').textContent = '— (no stats yet)';
+  // If the match has a streamUrl embedded, use it
+  if (match.streamUrl) {
+    clearPlayer();
+    const iframe = document.createElement('iframe');
+    iframe.src = match.streamUrl;
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0;';
+    document.getElementById('main-player').appendChild(iframe);
+    document.getElementById('player-placeholder').style.display = 'none';
+  }
+}
+function playHighlight(videoId, title, idx) {
+  clearPlayer();
+  const placeholder = document.getElementById('player-placeholder');
+  const overlay = document.getElementById('player-overlay');
+  const iframe = document.createElement('iframe');
+  iframe.src = APP.embedUrl(videoId) + '&autoplay=1';
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen = true;
+  iframe.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0; z-index:3;';
+  document.getElementById('main-player').appendChild(iframe);
+  placeholder.style.display = 'none';
+  overlay.style.display = 'flex';
+  document.getElementById('overlay-title').textContent = title;
+  if (typeof idx === 'number') {
+    currentIndex = idx;
+    document.getElementById('overlay-counter').textContent = `🎬 ${idx + 1} / ${APP.publicHighlights.length}`;
+  }
+  document.getElementById('stream-badge').innerHTML = '▶ NOW PLAYING';
+  document.getElementById('stream-badge').style.background = 'var(--c-accent-2)';
+  document.getElementById('stream-title').textContent = title;
+  document.getElementById('live-status').style.display = 'none';
+}
+function enterReelMode() {
+  document.getElementById('stream-badge').innerHTML = '● OFF AIR';
+  document.getElementById('stream-badge').style.background = 'var(--c-muted)';
+  document.getElementById('stream-title').textContent = 'Highlights Reel';
+  document.getElementById('live-status').style.display = 'none';
+  if (APP.publicHighlights.length) {
+    playHighlight(APP.publicHighlights[0].videoId, APP.publicHighlights[0].title, 0);
+  } else {
+    document.getElementById('player-placeholder').style.display = 'flex';
+    document.getElementById('player-placeholder').innerHTML = `
+      <div class="icon">🏐</div>
+      <h3 style="color:white;">No highlights available</h3>
+      <p>Check back later</p>
+    `;
+  }
+  startAutoplay();
+}
+
+// ====== AUTOPLAY (rotates through highlights every 45s) ======
+function startAutoplay() {
+  clearInterval(autoplayTimer);
+  if (!autoplay) return;
+  autoplayTimer = setInterval(() => {
+    if (!autoplay) return;
+    currentIndex = (currentIndex + 1) % APP.publicHighlights.length;
+    const v = APP.publicHighlights[currentIndex];
+    playHighlight(v.videoId, v.title, currentIndex);
+  }, 45000);
+}
+document.getElementById('autoplay-toggle').addEventListener('click', e => {
+  autoplay = !autoplay;
+  e.target.textContent = autoplay ? '⏯ Autoplay: ON' : '⏯ Autoplay: OFF';
+  if (autoplay) startAutoplay();
+  else clearInterval(autoplayTimer);
+});
+
+// ====== HIGHLIGHTS GRID ======
+function renderHighlightsGrid() {
+  const grid = document.getElementById('highlights-grid');
+  // Combine user highlights + public
+  const user = APP.data.highlights.map(h => ({
+    id: h.id, title: h.title, sub: h.player || '—', videoId: h.videoId, source: 'user'
+  }));
+  const pub = APP.publicHighlights.map((p, i) => ({
+    id: p.id, title: p.title, sub: p.channel + ' • ' + p.duration, videoId: p.videoId, source: 'public', idx: i
+  }));
+  const all = [...user, ...pub];
+  if (!all.length) {
+    grid.innerHTML = '<p class="muted text-center" style="grid-column: 1 / -1; padding:2rem;">No highlights yet.</p>';
+    return;
+  }
+  grid.innerHTML = all.map(h => `
+    <div class="highlight-card" onclick="window._playCard('${h.videoId || ''}','${APP.escapeHtml(h.title).replace(/'/g, "&#39;")}',${h.idx ?? -1})">
+      <img class="highlight-thumb-img" src="${APP.thumbUrl(h.videoId)}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
+      <div class="highlight-thumb" style="background:transparent;"></div>
+      <div class="play-btn">▶</div>
+      <div class="highlight-info">
+        <h4>${APP.escapeHtml(h.title)}</h4>
+        <div class="highlight-meta">${APP.escapeHtml(h.sub)}${h.source === 'public' ? ' • 🌐 Featured' : ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+window._playCard = (videoId, title, idx) => {
+  if (!videoId) return APP.toast('No video available for this highlight', 'warning');
+  playHighlight(videoId, title, idx >= 0 ? idx : 0);
+  document.getElementById('main-player').scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+// ====== INIT ======
+function renderLiveRoomsStrip() {
+  const wrap = document.getElementById('live-rooms-strip');
+  const active = LIVE.getActiveRooms();
+  if (!active.length) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = `
+    <div class="alert alert-danger" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+      <div>
+        <strong>📡 ${active.length} live stream${active.length === 1 ? '' : 's'} right now</strong>
+        <p class="muted" style="font-size:0.85rem; margin:0;">
+          ${active.map(r => `<span>• ${APP.escapeHtml(r.title)} (${APP.escapeHtml(r.host)})</span>`).join(' ')}
+        </p>
+      </div>
+      <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+        ${active.map(r => `<a class="btn btn-sm btn-primary" href="?room=${r.id}">▶ Watch "${APP.escapeHtml(r.title)}"</a>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function init() {
+  renderLiveRoomsStrip();
+  LIVE.listenToRooms(renderLiveRoomsStrip);
+
+  // 1) ?peer=ID or ?room=ID → join that live room
+  const params = new URLSearchParams(location.search);
+  const peerId = params.get('peer');
+  const roomId = params.get('room');
+  if (peerId || roomId) {
+    const room = LIVE.rooms.find(r => (peerId && r.peerId === peerId) || (r.id === roomId && r.active));
+    if (room && room.type === 'external' && room.externalUrl) {
+      playExternal(room.externalUrl, room.title, room.service);
+      return;
+    }
+    const pid = peerId || room?.peerId;
+    if (pid) {
+      joinPeerStream(pid, room);
+      return;
+    }
+    if (room) { showP2PJoinPanel(room); return; }
+  }
+
+  // 2) Is there a real match live? Show it
+  const live = APP.data.matches.find(m => m.status === 'live');
+  if (live) { setLiveMode(live); return; }
+
+  // 3) ?v= → specific highlight
+  const requested = params.get('v');
+  if (requested) {
+    const found = APP.publicHighlights.find(p => p.videoId === requested);
+    if (found) { playHighlight(found.videoId, found.title, APP.publicHighlights.indexOf(found)); return; }
+  }
+
+  // 4) Default to reel mode
+  enterReelMode();
+}
+
+function playExternal(url, title, service) {
+  const embed = LIVE.toEmbedUrl(url);
+  clearPlayer();
+  const iframe = document.createElement('iframe');
+  iframe.src = embed;
+  iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+  iframe.allowFullscreen = true;
+  iframe.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0; z-index:3;';
+  document.getElementById('main-player').appendChild(iframe);
+  document.getElementById('player-placeholder').style.display = 'none';
+  document.getElementById('player-overlay').style.display = 'flex';
+  document.getElementById('overlay-title').textContent = title;
+  document.getElementById('overlay-counter').textContent = `📡 ${service || 'External'}`;
+  document.getElementById('stream-badge').innerHTML = '<span class="live-dot"></span> ON AIR';
+  document.getElementById('stream-badge').style.background = 'var(--c-danger)';
+  document.getElementById('stream-title').textContent = title;
+  document.getElementById('live-status').style.display = 'none';
+  clearInterval(autoplayTimer);
+}
+
+async function joinPeerStream(peerId, room) {
+  const player = document.getElementById('main-player');
+  clearPlayer();
+  document.getElementById('player-placeholder').style.display = 'none';
+  let video = document.getElementById('peer-watch-video');
+  if (!video) {
+    video = document.createElement('video');
+    video.id = 'peer-watch-video';
+    video.className = 'video-preview';
+    video.autoplay = true;
+    video.playsInline = true;
+    video.controls = true;
+    video.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;z-index:2';
+    player.appendChild(video);
+  }
+  document.getElementById('player-overlay').style.display = 'flex';
+  document.getElementById('overlay-title').textContent = room?.title || 'Live camera';
+  document.getElementById('overlay-counter').textContent = 'Connecting…';
+  document.getElementById('stream-badge').innerHTML = '<span class="live-dot"></span> ON AIR';
+  document.getElementById('stream-badge').style.background = 'var(--c-danger)';
+  document.getElementById('stream-title').textContent = room?.title || 'Live';
+  try {
+    await LIVE.watchPeer(peerId, video);
+    document.getElementById('overlay-counter').textContent = '● LIVE';
+  } catch (e) {
+    document.getElementById('player-placeholder').style.display = 'flex';
+    document.getElementById('player-placeholder').innerHTML = `<div class="icon">📡</div><h3 style="color:white">Could not join</h3><p>${APP.escapeHtml(e.message || 'Try the link again')}</p>`;
+    video.remove();
+  }
+}
+
+function showP2PJoinPanel(room) {
+  const player = document.getElementById('main-player');
+  clearPlayer();
+  document.getElementById('player-placeholder').style.display = 'flex';
+  document.getElementById('player-placeholder').innerHTML = `
+    <div style="padding:2rem; max-width:500px;">
+      <div class="icon">📡</div>
+      <h3 style="color:white;">${APP.escapeHtml(room.title)}</h3>
+      <p>Hosted by ${APP.escapeHtml(room.host)} • Started ${APP.fmtTime(room.startedAt)}</p>
+      <p class="muted" style="font-size:0.9rem; margin-top:1rem;">This is a peer-to-peer stream. To watch, you need the share code from the broadcaster.</p>
+      <button class="btn btn-primary" style="margin-top:1rem;" onclick="LIVE.openStreamModal('p2p'); setTimeout(()=>{const i=document.getElementById('offer-input'); if(i) i.scrollIntoView({block:'center'});}, 100)">📥 Join Stream</button>
+    </div>
+  `;
+  document.getElementById('stream-badge').innerHTML = '● P2P LIVE';
+  document.getElementById('stream-badge').style.background = 'var(--c-accent)';
+  document.getElementById('stream-title').textContent = room.title;
+  clearInterval(autoplayTimer);
+}
+
+renderHighlightsGrid();
+init();
+
+// Re-check for live status every 30s
+setInterval(() => {
+  const live = APP.data.matches.find(m => m.status === 'live');
+  const badge = document.getElementById('stream-badge').textContent;
+  if (live && !badge.includes('ON AIR')) setLiveMode(live);
+  if (!live && badge.includes('ON AIR')) enterReelMode();
+  renderLiveRoomsStrip();
+}, 30000);
+</script>
+</body>
+</html>

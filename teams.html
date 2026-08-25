@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teams — Gen Z Volleyball Malawi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <section class="hero" style="padding:2rem 0;">
+    <div class="container">
+      <span class="tag tag-teal">👥 TEAMS</span>
+      <h1>Every Team in <span class="gradient-text">GZVM</span></h1>
+      <p>All registered teams across Malawi. Click a team to see its roster, schedule, and stats.</p>
+      <a href="register.html" class="btn btn-primary" style="margin-top:1rem;">+ Register Your Team</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="grid-2" style="margin-bottom:1rem;">
+        <div>
+          <label style="font-size:0.85rem; color: var(--c-muted); font-weight: 600;">FILTER BY CITY</label>
+          <select id="city-filter" class="form-control">
+            <option value="">All cities</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.85rem; color: var(--c-muted); font-weight: 600;">SEARCH</label>
+          <input type="text" id="search" class="form-control" placeholder="Team or coach name…">
+        </div>
+      </div>
+
+      <div class="grid-3" id="teams-grid"></div>
+      <p id="teams-empty" class="text-center muted" style="margin:2rem 0; display:none;">
+        No teams registered yet. <a href="register.html">Be the first →</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"></footer>
+
+<!-- TEAM DETAIL MODAL -->
+<div class="modal-backdrop" id="team-modal">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-header">
+      <h3 id="team-modal-name">Team Name</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div id="team-modal-body"></div>
+  </div>
+</div>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+
+function renderTeams() {
+  const grid = document.getElementById('teams-grid');
+  const empty = document.getElementById('teams-empty');
+  const cityFilter = document.getElementById('city-filter').value;
+  const search = (document.getElementById('search').value || '').toLowerCase();
+
+  let teams = [...APP.data.teams];
+  if (cityFilter) teams = teams.filter(t => t.city === cityFilter);
+  if (search) teams = teams.filter(t => (t.name || '').toLowerCase().includes(search) || (t.coach || '').toLowerCase().includes(search));
+
+  // Populate city filter options
+  const citySel = document.getElementById('city-filter');
+  const cities = [...new Set(APP.data.teams.map(t => t.city).filter(Boolean))].sort();
+  citySel.innerHTML = '<option value="">All cities</option>' + cities.map(c => `<option ${c === cityFilter ? 'selected' : ''}>${APP.escapeHtml(c)}</option>`).join('');
+
+  if (!APP.data.teams.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  if (!teams.length) {
+    grid.innerHTML = '<p class="muted text-center" style="grid-column: 1 / -1; padding:2rem;">No teams match your filters</p>';
+    return;
+  }
+
+  grid.innerHTML = teams.map(t => {
+    const memberCount = (t.members || []).length;
+    const playerCount = APP.data.players.filter(p => p.team === t.name).length;
+    return `
+      <div class="card card-3d" style="cursor:pointer; text-align:center;" onclick="openTeam('${t.id}')">
+        <div style="width:96px; height:96px; margin:0 auto 0.8rem; border-radius:50%; background: var(--gradient-1); display:grid; place-items:center; font-size:2.5rem; overflow:hidden; box-shadow: var(--shadow-3d);">
+          ${t.logo ? `<img src="${APP.escapeHtml(t.logo)}" alt="" style="width:100%; height:100%; object-fit:cover;">` : '🏐'}
+        </div>
+        <h3 style="margin-bottom:0.2rem;">${APP.escapeHtml(t.name)}</h3>
+        <p class="muted" style="font-size:0.85rem;">📍 ${APP.escapeHtml(t.city || '—')} • ${APP.escapeHtml(t.level || 'Recreational')}</p>
+        <p style="margin-top:0.6rem; font-size:0.9rem;">
+          <strong>${playerCount}</strong> player${playerCount === 1 ? '' : 's'} registered
+        </p>
+        <p class="muted" style="font-size:0.8rem;">Coach: ${APP.escapeHtml(t.coach || '—')}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+window.openTeam = (teamId) => {
+  const team = APP.data.teams.find(t => t.id === teamId);
+  if (!team) return;
+  const players = APP.data.players.filter(p => p.team === team.name);
+  const bookings = APP.data.bookings.filter(b => b.teamName === team.name);
+  const matches = APP.data.matches.filter(m => m.homeTeam === team.name || m.awayTeam === team.name);
+
+  document.getElementById('team-modal-name').innerHTML = `
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+      <div style="width:40px; height:40px; border-radius:50%; background: var(--gradient-1); display:grid; place-items:center; font-size:1.2rem; overflow:hidden;">
+        ${team.logo ? `<img src="${APP.escapeHtml(team.logo)}" alt="" style="width:100%; height:100%; object-fit:cover;">` : '🏐'}
+      </div>
+      ${APP.escapeHtml(team.name)}
+    </div>
+  `;
+
+  document.getElementById('team-modal-body').innerHTML = `
+    <div class="grid-2" style="margin-bottom:1rem;">
+      <div><strong>City:</strong> ${APP.escapeHtml(team.city || '—')}</div>
+      <div><strong>Level:</strong> ${APP.escapeHtml(team.level || '—')}</div>
+      <div><strong>Coach:</strong> ${APP.escapeHtml(team.coach || '—')}</div>
+      <div><strong>Contact:</strong> ${APP.escapeHtml(team.contact || '—')}</div>
+    </div>
+
+    <h4 style="margin-top:1rem;">👥 Roster (${players.length})</h4>
+    ${players.length === 0
+      ? '<p class="muted" style="font-size:0.9rem;">No players have joined this team yet.</p>'
+      : `<div class="grid-3" style="margin-top:0.5rem;">${players.map(p => `
+          <div class="card" style="padding:0.8rem; text-align:center;">
+            <div style="width:60px; height:60px; margin:0 auto 0.4rem; border-radius:50%; background: var(--gradient-2); display:grid; place-items:center; font-size:1.5rem; overflow:hidden;">
+              ${p.photo ? `<img src="${APP.escapeHtml(p.photo)}" alt="" style="width:100%; height:100%; object-fit:cover;">` : '🏐'}
+            </div>
+            <strong style="font-size:0.9rem;">${APP.escapeHtml(p.name)}</strong>
+            <p class="muted" style="font-size:0.75rem;">${APP.escapeHtml(p.position || '—')} • #${p.jersey || '—'}</p>
+          </div>
+        `).join('')}</div>`
+    }
+
+    <h4 style="margin-top:1.5rem;">📅 Schedule (${bookings.length})</h4>
+    ${bookings.length === 0
+      ? '<p class="muted" style="font-size:0.9rem;">No upcoming matches or practices.</p>'
+      : `<ul style="list-style:none; padding:0; margin-top:0.5rem;">${bookings.slice(0, 5).map(b => `
+          <li style="padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;">
+            <span class="tag ${b.type === 'match' ? 'tag-pink' : 'tag-teal'}">${b.type.toUpperCase()}</span>
+            ${APP.escapeHtml(b.opponent)} — ${APP.fmtDate(b.date)}
+            <br><small class="muted">📍 ${APP.escapeHtml(b.venue)}</small>
+          </li>
+        `).join('')}</ul>`
+    }
+
+    <div style="text-align:center; margin-top:1.5rem;">
+      <a class="btn btn-accent btn-sm" href="leaderboard.html">🏆 See Team on Leaderboard</a>
+    </div>
+  `;
+  document.getElementById('team-modal').classList.add('open');
+};
+
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById('team-modal').classList.remove('open')));
+document.getElementById('team-modal').addEventListener('click', e => { if (e.target.id === 'team-modal') e.target.classList.remove('open'); });
+document.getElementById('city-filter').addEventListener('change', renderTeams);
+document.getElementById('search').addEventListener('input', renderTeams);
+
+renderTeams();
+
+// Re-render on sync events
+window.addEventListener('gzvm:refresh', renderTeams);
+</script>
+</body>
+</html>

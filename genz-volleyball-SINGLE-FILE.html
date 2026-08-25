@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gen Z Volleyball Malawi — Train. Play. Rise.</title>
+<meta name="description" content="Gen Z Volleyball Malawi — the home of under-25 volleyball in Malawi. Training, live streams, registration, leaderboard, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+<style>
+/* =========================================================
+   CSS — all inlined
+   ========================================================= */
+:root {
+  --c-primary: #ff3b6b; --c-primary-dark: #c81f4d;
+  --c-accent: #ffd400; --c-accent-2: #00d4a8;
+  --c-deep: #0b1426; --c-deeper: #050a17;
+  --c-card: #12203b; --c-card-2: #1a2a4a;
+  --c-text: #f5f7fb; --c-muted: #9aa7c2;
+  --c-success: #19d27c; --c-danger: #ff4d4d; --c-warning: #ffa500; --c-info: #4aa3ff;
+  --gradient-1: linear-gradient(135deg, #ff3b6b 0%, #ffd400 100%);
+  --gradient-2: linear-gradient(135deg, #00d4a8 0%, #4aa3ff 100%);
+  --gradient-3: linear-gradient(135deg, #0b1426 0%, #1a2a4a 100%);
+  --shadow-3d: 0 12px 0 0 rgba(0,0,0,0.35), 0 18px 40px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 30px rgba(255, 59, 107, 0.45);
+  --radius: 14px; --radius-lg: 22px;
+  --font-display: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+@font-face { font-family: 'Bebas Neue'; src: local('Bebas Neue'), local('Oswald'), local('Impact'); }
+@font-face { font-family: 'Inter'; src: local('Inter'), local('system-ui'); }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--c-deeper);color:var(--c-text);font-family:var(--font-body);line-height:1.5;overflow-x:hidden;scroll-behavior:smooth}
+a{color:var(--c-accent);text-decoration:none;transition:color .2s}a:hover{color:var(--c-primary)}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:.5px;text-transform:uppercase;line-height:1.1}
+h1{font-size:clamp(2.4rem,6vw,5rem)}h2{font-size:clamp(1.8rem,4vw,3rem);margin-bottom:.6em}h3{font-size:clamp(1.2rem,2.5vw,1.6rem);margin-bottom:.4em}
+.scene-3d{position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at top,#142a55 0%,var(--c-deeper) 60%);overflow:hidden}
+.scene-3d::before,.scene-3d::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;animation:floatBlob 18s ease-in-out infinite}
+.scene-3d::before{width:480px;height:480px;background:var(--c-primary);top:-120px;left:-120px}
+.scene-3d::after{width:520px;height:520px;background:var(--c-accent-2);bottom:-160px;right:-120px;animation-delay:-9s}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,-40px) scale(1.1)}66%{transform:translate(-60px,60px) scale(.95)}}
+.ball-3d{position:fixed;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff 0%,#ffd400 30%,#c89b00 80%);box-shadow:inset -10px -10px 20px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.5);z-index:1;pointer-events:none;animation:floatBall 12s ease-in-out infinite;top:30%;right:8%;opacity:.85}
+.ball-3d::before{content:"";position:absolute;inset:8px;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 60deg,#c81f4d 60deg 90deg,transparent 90deg 240deg,#c81f4d 240deg 270deg,transparent 270deg);mask:radial-gradient(circle,transparent 30%,#000 32%,#000 60%,transparent 62%);-webkit-mask:radial-gradient(circle,transparent 30%,#000 32%,#000 60%,transparent 62%);opacity:.85}
+@keyframes floatBall{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-40px) rotate(180deg)}}
+.container{width:min(1240px,92%);margin:0 auto}
+.row{display:flex;flex-wrap:wrap;gap:1.5rem}.col{flex:1 1 280px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+main{padding:2rem 0 5rem;min-height:70vh;position:relative;z-index:2}
+section{margin:3rem 0}
+.section-title{display:flex;align-items:center;gap:.8rem;margin-bottom:1.5rem}
+.section-title .badge{background:var(--gradient-1);color:var(--c-deep);padding:.2rem .7rem;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:1px;box-shadow:var(--shadow-3d)}
+.section-title h2{margin:0}
+.nav{position:sticky;top:0;z-index:100;background:rgba(11,20,38,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:2px solid rgba(255,59,107,.3)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:.8rem 0}
+.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--font-display);font-size:1.5rem;color:var(--c-text);letter-spacing:1px}
+.brand:hover{color:var(--c-text)}
+.brand .logo{width:42px;height:42px;border-radius:50%;background:var(--gradient-1);display:grid;place-items:center;font-size:1.4rem;box-shadow:var(--shadow-3d),var(--shadow-glow);transform:rotateZ(-8deg);transition:transform .3s}
+.brand:hover .logo{transform:rotateZ(8deg) scale(1.05)}
+.brand small{display:block;font-size:.6rem;color:var(--c-muted);letter-spacing:3px;font-family:var(--font-body)}
+.nav-links{display:flex;gap:.4rem;align-items:center;list-style:none}
+.nav-links a{color:var(--c-text);padding:.5rem .9rem;border-radius:8px;font-weight:600;font-size:.95rem;transition:all .2s;position:relative;cursor:pointer}
+.nav-links a:hover,.nav-links a.active{background:rgba(255,59,107,.15);color:var(--c-accent)}
+.nav-toggle{display:none;background:none;border:none;color:var(--c-text);font-size:1.6rem;cursor:pointer}
+@media(max-width:880px){.nav-links{position:absolute;top:100%;left:0;right:0;background:var(--c-deep);flex-direction:column;padding:1rem;transform:translateY(-200%);transition:transform .3s;border-bottom:2px solid var(--c-primary)}.nav-links.open{transform:translateY(0)}.nav-toggle{display:block}}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.4rem;border-radius:10px;font-weight:700;font-size:.95rem;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s,background .2s;font-family:var(--font-body);text-transform:uppercase;letter-spacing:.5px;text-decoration:none}
+.btn:active{transform:translateY(2px)}
+.btn-primary{background:var(--gradient-1);color:var(--c-deep);box-shadow:var(--shadow-3d)}
+.btn-primary:hover{box-shadow:var(--shadow-3d),var(--shadow-glow);transform:translateY(-2px);color:var(--c-deep)}
+.btn-accent{background:var(--gradient-2);color:var(--c-deep);box-shadow:var(--shadow-3d)}
+.btn-accent:hover{transform:translateY(-2px);color:var(--c-deep)}
+.btn-ghost{background:transparent;color:var(--c-text);border:2px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{border-color:var(--c-accent);color:var(--c-accent)}
+.btn-sm{padding:.5rem .9rem;font-size:.85rem}.btn-block{width:100%;justify-content:center}
+.card{background:linear-gradient(180deg,var(--c-card) 0%,var(--c-card-2) 100%);border-radius:var(--radius);padding:1.4rem;border:1px solid rgba(255,255,255,.06);box-shadow:var(--shadow-3d);position:relative;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 0 0 rgba(0,0,0,.35),0 22px 50px rgba(255,59,107,.2)}
+.card-3d{transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .1s}
+.card-glass{background:rgba(18,32,59,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;margin-bottom:.4rem;font-weight:600;font-size:.9rem;color:var(--c-muted);letter-spacing:.3px}
+.form-control{width:100%;padding:.75rem .9rem;background:var(--c-deeper);color:var(--c-text);border:2px solid rgba(255,255,255,.1);border-radius:10px;font-size:.95rem;font-family:var(--font-body);transition:border-color .2s,box-shadow .2s}
+.form-control:focus{outline:none;border-color:var(--c-primary);box-shadow:0 0 0 3px rgba(255,59,107,.2)}
+.form-control::placeholder{color:var(--c-muted)}
+textarea.form-control{min-height:100px;resize:vertical}select.form-control{cursor:pointer}
+.file-drop{border:2px dashed rgba(255,255,255,.2);padding:1.5rem;text-align:center;border-radius:12px;cursor:pointer;transition:all .2s;color:var(--c-muted)}
+.file-drop:hover,.file-drop.drag{border-color:var(--c-accent);color:var(--c-accent);background:rgba(255,212,0,.05)}
+.file-drop input{display:none}
+.checkbox-row{display:flex;align-items:flex-start;gap:.6rem;font-size:.9rem;color:var(--c-muted)}.checkbox-row input{margin-top:.25rem}
+.tag{display:inline-block;padding:.2rem .6rem;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.tag-pink{background:rgba(255,59,107,.2);color:var(--c-primary)}
+.tag-teal{background:rgba(0,212,168,.2);color:var(--c-accent-2)}
+.tag-yellow{background:rgba(255,212,0,.2);color:var(--c-accent)}
+.tag-blue{background:rgba(74,163,255,.2);color:var(--c-info)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem;animation:fadeIn .2s}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--c-card);border-radius:var(--radius-lg);max-width:720px;width:100%;padding:2rem;box-shadow:0 30px 60px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);max-height:90vh;overflow-y:auto;animation:pop .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.modal-close{background:none;border:none;color:var(--c-muted);font-size:1.5rem;cursor:pointer}.modal-close:hover{color:var(--c-primary)}
+.toast-stack{position:fixed;top:80px;right:20px;z-index:300;display:flex;flex-direction:column;gap:.5rem}
+.toast{background:var(--c-card);color:var(--c-text);padding:.9rem 1.2rem;border-radius:10px;border-left:4px solid var(--c-primary);box-shadow:var(--shadow-3d);animation:slideIn .3s;max-width:320px}
+.toast.success{border-color:var(--c-success)}.toast.error{border-color:var(--c-danger)}.toast.info{border-color:var(--c-info)}
+@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+.footer{background:var(--c-deep);border-top:1px solid rgba(255,255,255,.06);padding:2.5rem 0 1.5rem;margin-top:3rem;position:relative;z-index:2}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;margin-bottom:1.5rem}
+.footer h4{font-size:1rem;color:var(--c-accent);margin-bottom:.7rem}.footer ul{list-style:none}
+.footer li{margin-bottom:.4rem;font-size:.9rem}.footer a{color:var(--c-muted)}.footer a:hover{color:var(--c-accent)}
+.footer-bottom{text-align:center;color:var(--c-muted);font-size:.85rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05)}
+.text-center{text-align:center}.muted{color:var(--c-muted)}
+.gradient-text{background:var(--gradient-1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.divider{height:2px;background:var(--gradient-1);margin:1.5rem 0;border-radius:2px}
+.tilt-on-hover{transition:transform .2s}.tilt-on-hover:hover{transform:perspective(600px) rotateX(2deg) rotateY(-2deg) scale(1.02)}
+.chat-fab{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:var(--gradient-1);color:var(--c-deep);border:none;font-size:1.6rem;cursor:pointer;box-shadow:var(--shadow-3d),var(--shadow-glow);z-index:90;transition:transform .2s}
+.chat-fab:hover{transform:scale(1.1) rotate(8deg)}
+.chat-panel{position:fixed;bottom:100px;right:24px;width:340px;max-width:calc(100vw - 32px);height:480px;max-height:70vh;background:var(--c-card);border-radius:var(--radius-lg);border:1px solid rgba(255,255,255,.1);box-shadow:var(--shadow-3d);display:none;flex-direction:column;z-index:95;overflow:hidden;animation:pop .3s}
+.chat-panel.open{display:flex}
+.chat-header{background:var(--gradient-1);color:var(--c-deep);padding:.9rem 1rem;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+.chat-header button{background:none;border:none;color:var(--c-deep);cursor:pointer;font-size:1.2rem}
+.chat-body{flex:1;overflow-y:auto;padding:.8rem;display:flex;flex-direction:column;gap:.5rem;background:var(--c-deeper)}
+.chat-msg{padding:.5rem .8rem;border-radius:10px;background:var(--c-card-2);max-width:80%;font-size:.9rem;word-wrap:break-word;animation:slideIn .2s}
+.chat-msg .who{font-size:.7rem;color:var(--c-accent);font-weight:700}
+.chat-msg.me{align-self:flex-end;background:var(--c-primary);color:white}.chat-msg.me .who{color:rgba(255,255,255,.8)}
+.chat-input{display:flex;gap:.4rem;padding:.6rem;background:var(--c-card);border-top:1px solid rgba(255,255,255,.05)}
+.chat-input input{flex:1;background:var(--c-deeper);color:var(--c-text);border:1px solid rgba(255,255,255,.1);padding:.5rem .7rem;border-radius:8px;font-size:.9rem}
+.chat-input button{background:var(--gradient-1);color:var(--c-deep);border:none;padding:.5rem .9rem;border-radius:8px;font-weight:700;cursor:pointer}
+.live-fab{position:fixed;bottom:24px;right:100px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#ff3b6b 0%,#ffd400 100%);color:#0b1426;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 12px 0 0 rgba(0,0,0,.35),0 18px 40px rgba(0,0,0,.4),0 0 30px rgba(255,59,107,.6);z-index:90;transition:transform .2s}
+.live-fab:hover{transform:scale(1.1) rotate(-8deg)}.live-fab.active{animation:livePulse 1.5s infinite}
+@keyframes livePulse{0%,100%{box-shadow:0 12px 0 0 rgba(0,0,0,.35),0 18px 40px rgba(0,0,0,.4),0 0 30px rgba(255,59,107,.6)}50%{box-shadow:0 12px 0 0 rgba(0,0,0,.35),0 18px 40px rgba(0,0,0,.4),0 0 50px rgba(255,59,107,1)}}
+.ticker{background:var(--c-deep);border-top:2px solid var(--c-primary);border-bottom:2px solid var(--c-primary);padding:.6rem 0;overflow:hidden;white-space:nowrap;position:relative}
+.ticker::before,.ticker::after{content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.ticker::before{left:0;background:linear-gradient(90deg,var(--c-deep),transparent)}.ticker::after{right:0;background:linear-gradient(-90deg,var(--c-deep),transparent)}
+.ticker-track{display:inline-block;animation:ticker 40s linear infinite;font-weight:600;font-size:.9rem}
+.ticker-track span{margin:0 1.5rem}.ticker-track .win{color:var(--c-success)}.ticker-track .loss{color:var(--c-danger)}.ticker-track .draw{color:var(--c-warning)}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.hero{position:relative;padding:4rem 0 3rem;text-align:center;overflow:hidden}
+.hero h1{margin-bottom:1rem}.hero p{font-size:1.15rem;color:var(--c-muted);max-width:640px;margin:0 auto 1.5rem}
+.hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.countdown{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0}
+.countdown-unit{background:var(--c-card);border-radius:var(--radius);padding:.8rem 1.2rem;min-width:90px;text-align:center;box-shadow:var(--shadow-3d);border:1px solid rgba(255,59,107,.2);transition:transform .2s}
+.countdown-unit:hover{transform:translateY(-4px) rotateZ(-2deg)}
+.countdown-unit .num{font-family:var(--font-display);font-size:2.4rem;color:var(--c-accent);display:block;line-height:1}
+.countdown-unit .lbl{font-size:.7rem;color:var(--c-muted);text-transform:uppercase;letter-spacing:1.5px}
+.scorepad{background:var(--c-card);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-3d);border:2px solid var(--c-primary)}
+.scorepad-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid rgba(255,255,255,.1)}
+.scorepad-teams{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center}
+.scorepad-team{text-align:center}.scorepad-team h4{font-size:1.1rem;margin-bottom:.3rem;color:var(--c-text)}
+.scorepad-team .name{font-family:var(--font-body);font-weight:700;text-transform:none}
+.scorepad-score{font-family:var(--font-display);font-size:4rem;line-height:1;color:var(--c-accent);margin:.5rem 0;display:flex;align-items:center;gap:.4rem;justify-content:center}
+.scorepad-score button{background:rgba(255,255,255,.08);color:var(--c-text);border:none;width:32px;height:32px;border-radius:8px;font-size:1.2rem;font-weight:700;cursor:pointer}
+.scorepad-score button:hover{background:var(--c-primary);color:white}
+.scorepad-vs{font-family:var(--font-display);color:var(--c-muted);font-size:1.5rem}
+.scorepad-sets{display:flex;gap:.5rem;justify-content:center;margin-top:.8rem;flex-wrap:wrap}
+.set-pill{background:var(--c-deeper);color:var(--c-text);padding:.3rem .7rem;border-radius:6px;font-weight:700;font-size:.85rem;border:1px solid rgba(255,255,255,.1)}
+.scorepad-actions{display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.table-wrap{overflow-x:auto;border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{padding:.8rem 1rem;text-align:left}
+thead th{background:var(--c-card);color:var(--c-accent);font-family:var(--font-display);text-transform:uppercase;letter-spacing:1px;font-size:.85rem;border-bottom:2px solid var(--c-primary)}
+tbody tr{background:var(--c-card-2);border-bottom:1px solid rgba(255,255,255,.04);transition:background .2s}
+tbody tr:hover{background:rgba(255,59,107,.08)}
+.rank-badge{display:inline-block;width:28px;height:28px;text-align:center;line-height:28px;border-radius:50%;font-weight:800;font-size:.85rem}
+.rank-1{background:var(--c-accent);color:var(--c-deep)}.rank-2{background:#c0c0c0;color:var(--c-deep)}.rank-3{background:#cd7f32;color:var(--c-deep)}.rank-n{background:rgba(255,255,255,.1);color:var(--c-text)}
+.court-map{position:relative;width:100%;aspect-ratio:16/9;background:radial-gradient(circle at 50% 50%,#1a4a2a 0%,#0d2e1a 100%);border-radius:var(--radius);overflow:hidden;border:2px solid var(--c-accent);box-shadow:var(--shadow-3d)}
+.court-lines{position:absolute;inset:8%;border:3px solid rgba(255,255,255,.6);pointer-events:none}
+.court-lines::before,.court-lines::after{content:"";position:absolute;background:rgba(255,255,255,.4)}
+.court-lines::before{top:0;left:50%;width:3px;height:100%;transform:translateX(-50%)}
+.court-lines::after{top:50%;left:0;width:100%;height:3px;transform:translateY(-50%)}
+.net{position:absolute;top:8%;left:50%;transform:translateX(-50%);width:6px;height:84%;background:linear-gradient(180deg,var(--c-muted),#555);box-shadow:0 0 10px rgba(255,255,255,.3)}
+.map-pin{position:absolute;width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg) translate(-50%,-50%);background:var(--c-primary);border:2px solid white;box-shadow:0 4px 10px rgba(0,0,0,.4);cursor:pointer;display:grid;place-items:center;color:white;font-weight:800;transition:transform .2s;animation:pinBounce 2s ease-in-out infinite}
+.map-pin span{transform:rotate(45deg);font-size:.8rem}
+.map-pin:hover{transform:rotate(-45deg) translate(-50%,-50%) scale(1.2);z-index:5}
+.map-pin.pin-2{background:var(--c-accent)}.map-pin.pin-3{background:var(--c-accent-2)}.map-pin.pin-4{background:var(--c-info)}
+@keyframes pinBounce{0%,100%{transform:rotate(-45deg) translate(-50%,-50%) translateY(0)}50%{transform:rotate(-45deg) translate(-50%,-50%) translateY(-6px)}}
+.map-legend{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);padding:.5rem .7rem;border-radius:8px;font-size:.75rem;z-index:4}
+.map-legend div{display:flex;align-items:center;gap:.4rem;margin:.15rem 0}.map-legend .dot{width:10px;height:10px;border-radius:50%}
+.highlight-card{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,var(--c-card) 0%,var(--c-deep) 100%);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.06);box-shadow:var(--shadow-3d);transition:transform .2s}
+.highlight-card:hover{transform:translateY(-4px) scale(1.02)}
+.highlight-thumb{position:absolute;inset:0;display:grid;place-items:center;font-size:4rem;background:radial-gradient(circle at center,rgba(255,59,107,.2),transparent 60%)}
+.play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:var(--gradient-1);display:grid;place-items:center;color:var(--c-deep);font-size:1.4rem;box-shadow:0 0 0 6px rgba(255,255,255,.15),var(--shadow-3d);z-index:2;transition:transform .2s}
+.highlight-card:hover .play-btn{transform:translate(-50%,-50%) scale(1.1)}
+.highlight-info{position:absolute;bottom:0;left:0;right:0;padding:1rem;background:linear-gradient(0deg,rgba(0,0,0,.9),transparent)}
+.highlight-info h4{font-size:.95rem}.highlight-meta{font-size:.75rem;color:var(--c-muted)}
+.progress{height:10px;background:var(--c-deeper);border-radius:999px;overflow:hidden;margin:.4rem 0}
+.progress-bar{height:100%;background:var(--gradient-1);border-radius:999px;transition:width .5s}
+.progress-bar.teal{background:var(--gradient-2)}.progress-bar.yellow{background:var(--c-accent)}
+.progress-label{display:flex;justify-content:space-between;font-size:.85rem;margin-top:.2rem;color:var(--c-muted)}
+.live-stream{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 100%);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-3d);border:2px solid var(--c-primary)}
+.live-badge{position:absolute;top:12px;left:12px;background:var(--c-danger);color:white;padding:.3rem .7rem;border-radius:4px;font-size:.75rem;font-weight:800;z-index:3;display:flex;align-items:center;gap:.4rem;letter-spacing:1px}
+.live-dot{width:8px;height:8px;background:white;border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.stream-content{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--c-muted);background:radial-gradient(circle at center,rgba(255,59,107,.1),transparent);padding:1rem}
+.stream-content .icon{font-size:5rem;color:var(--c-primary);margin-bottom:1rem;animation:floatBall 4s ease-in-out infinite}
+.stream-overlay{position:absolute;bottom:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.6);padding:.5rem .8rem;border-radius:8px;font-size:.85rem;z-index:3}
+.viewer-count{display:flex;align-items:center;gap:.4rem;color:var(--c-accent)}
+.alert{padding:.9rem 1.1rem;border-radius:10px;margin-bottom:1rem;font-size:.9rem;border-left:4px solid}
+.alert-info{background:rgba(74,163,255,.1);border-color:var(--c-info);color:var(--c-info)}
+.alert-warning{background:rgba(255,165,0,.1);border-color:var(--c-warning);color:var(--c-warning)}
+.alert-success{background:rgba(25,210,124,.1);border-color:var(--c-success);color:var(--c-success)}
+.alert-danger{background:rgba(255,77,77,.1);border-color:var(--c-danger);color:var(--c-danger)}
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap;border-bottom:2px solid rgba(255,255,255,.1);margin-bottom:1.5rem}
+.tab{padding:.6rem 1.1rem;background:none;border:none;color:var(--c-muted);font-weight:700;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;font-family:var(--font-body);text-transform:uppercase;letter-spacing:.5px;font-size:.9rem;transition:all .2s}
+.tab.active{color:var(--c-accent);border-color:var(--c-primary)}.tab:hover{color:var(--c-text)}
+.tab-content{display:none}.tab-content.active{display:block;animation:fadeIn .3s}
+.auth-gate{max-width:420px;margin:4rem auto;text-align:center;padding:2rem}.auth-gate .icon{font-size:4rem;color:var(--c-accent)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--c-deeper)}::-webkit-scrollbar-thumb{background:var(--c-card-2);border-radius:5px}::-webkit-scrollbar-thumb:hover{background:var(--c-primary)}
+.stream-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+@media(max-width:700px){.stream-modal-grid{grid-template-columns:1fr}}
+.stream-choice{background:var(--c-deeper);border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:1.2rem;cursor:pointer;transition:all .2s;text-align:center}
+.stream-choice:hover{border-color:var(--c-primary);background:rgba(255,59,107,.08);transform:translateY(-3px)}
+.stream-choice .icon{font-size:2.5rem;margin-bottom:.5rem}
+.stream-choice h4{margin-bottom:.3rem}
+.stream-choice p{color:var(--c-muted);font-size:.85rem}
+.code-block{width:100%;min-height:100px;max-height:200px;background:#000;color:#00ff88;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.6rem;font-family:'Courier New',monospace;font-size:.75rem;word-break:break-all;resize:vertical}
+.code-block:focus{outline:none;border-color:var(--c-accent)}
+.live-room-card{position:relative;background:linear-gradient(135deg,#1a0a0a 0%,var(--c-card) 100%);border:2px solid var(--c-danger);border-radius:12px;padding:1rem;margin-bottom:.8rem}
+.live-room-card h4{color:var(--c-text);margin-bottom:.3rem}
+.live-room-card .live-pill{position:absolute;top:10px;right:10px;background:var(--c-danger);color:white;padding:.2rem .6rem;border-radius:4px;font-size:.7rem;font-weight:800;letter-spacing:1px;display:flex;align-items:center;gap:.4rem}
+.live-room-card .live-pill .live-dot{width:6px;height:6px}
+.video-preview{width:100%;background:#000;border-radius:8px;aspect-ratio:16/9;object-fit:cover}
+.device-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0}
+.device-bar button{flex:1;min-width:80px}
+.device-bar button.active{background:var(--gradient-1);color:var(--c-deep)}
+.player-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:.6rem;border:2px solid var(--c-primary)}
+.team-avatar{width:96px;height:96px;margin:0 auto .8rem;border-radius:50%;background:var(--gradient-1);display:grid;place-items:center;font-size:2.5rem;overflow:hidden;box-shadow:var(--shadow-3d)}
+.team-avatar img{width:100%;height:100%;object-fit:cover}
+</style>
+</head>
+<body>
+
+<nav class="nav"></nav>
+<div class="ticker"><div class="ticker-track container"></div></div>
+<main id="app-main"></main>
+<footer class="footer"></footer>
+
+<script>
+/* =========================================================
+   APP — storage, auth, navbar, footer, chat, ticker
+   ========================================================= */
+const APP = {
+  name: 'Gen Z Volleyball Malawi', short: 'GZVM', storageKey: 'gzvm_data_v3',
+  data: { users:[], players:[], teams:[], matches:[], bookings:[], highlights:[], donations:[], chat:[], feedback:[], strategy:[], notifications:[] },
+  load() { try { const r = localStorage.getItem(this.storageKey); if (r) this.data = { ...this.data, ...JSON.parse(r) }; } catch(e){} },
+  save() { try { localStorage.setItem(this.storageKey, JSON.stringify(this.data)); } catch(e){} },
+  uid() { return 'id_' + Date.now() + '_' + Math.random().toString(36).slice(2,8); },
+  hash(s) { let h=0; for(let i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;} return 'h_'+Math.abs(h); },
+  fmtDate(d) { if(!d) return 'TBD'; return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); },
+  fmtTime(d) { return new Date(d).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); },
+  countdown(target) { const t=new Date(target).getTime(), n=Date.now(), diff=Math.max(0,t-n); return { d:Math.floor(diff/86400000), h:Math.floor((diff%86400000)/3600000), m:Math.floor((diff%3600000)/60000), s:Math.floor((diff%60000)/1000), total:diff }; },
+  currentUser() { const id=sessionStorage.getItem('gzvm_user'); return this.data.users.find(u=>u.id===id) || null; },
+  login(email,password) { const u=this.data.users.find(x=>x.email.toLowerCase()===email.toLowerCase()); if(!u) throw new Error('No account with that email'); if(u.passwordHash!==this.hash(password)) throw new Error('Wrong password'); sessionStorage.setItem('gzvm_user',u.id); return u; },
+  logout() { sessionStorage.removeItem('gzvm_user'); },
+  register({name,email,password,role}) { if(this.data.users.some(u=>u.email.toLowerCase()===email.toLowerCase())) throw new Error('Email already registered'); const u={id:this.uid(),name,email,role:role||'player',passwordHash:this.hash(password),createdAt:new Date().toISOString()}; this.data.users.push(u); this.save(); sessionStorage.setItem('gzvm_user',u.id); return u; },
+  toast(message,type='info') { let stack=document.querySelector('.toast-stack'); if(!stack){stack=document.createElement('div');stack.className='toast-stack';document.body.appendChild(stack);} const t=document.createElement('div');t.className='toast '+type;t.textContent=message;stack.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(120%)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},3500); },
+  escapeHtml(s) { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); },
+  embedUrl(id) { return `https://www.youtube.com/embed/${id}?autoplay=0&rel=0&modestbranding=1`; },
+  thumbUrl(id) { return `https://img.youtube.com/vi/${id}/mqdefault.jpg`; },
+  publicHighlights: [
+    {id:'ph1',title:'Best Volleyball Spikes 2024',channel:'Sports Arena',videoId:'k3hAkv3Gf50',category:'spikes',duration:'8:12'},
+    {id:'ph2',title:'Incredible Volleyball Saves',channel:'Volley Highlights',videoId:'F6W-b3iAIkM',category:'saves',duration:'6:45'},
+    {id:'ph3',title:'Top 10 Volleyball Serves',channel:'Volleyball World',videoId:'l1cD9LMbcwE',category:'serves',duration:'5:20'},
+    {id:'ph4',title:'Monster Blocks Compilation',channel:'Block Party',videoId:'A8A5QxqDYzw',category:'blocks',duration:'7:33'},
+    {id:'ph5',title:'Volleyball Setting Masterclass',channel:'Coach Insights',videoId:'jS4nD5b3GCA',category:'sets',duration:'9:15'},
+    {id:'ph6',title:'African Volleyball Championship Highlights',channel:'CAVB',videoId:'M7lc1UVf-VE',category:'matches',duration:'10:48'}
+  ],
+  renderNavbar(currentPage) {
+    const nav = document.querySelector('.nav');
+    if (!nav) return;
+    const user = this.currentUser();
+    const links = [
+      { id:'home', label:'Home' }, { id:'training', label:'Training' }, { id:'live', label:'Live' },
+      { id:'teams', label:'Teams' }, { id:'leaderboard', label:'Leaderboard' }, { id:'matches', label:'Matches' },
+      { id:'register', label:'Register' }, { id:'donate', label:'Donate' }
+    ];
+    nav.innerHTML = `
+      <div class="container nav-inner">
+        <a class="brand" href="#home" data-nav="home">
+          <div class="logo">🏐</div>
+          <div>GEN Z <span class="gradient-text">VOLLEYBALL</span><small>MALAWI</small></div>
+        </a>
+        <button class="nav-toggle" aria-label="menu">☰</button>
+        <ul class="nav-links">
+          ${links.map(l=>`<li><a href="#${l.id}" data-nav="${l.id}" class="${currentPage===l.id?'active':''}">${l.label}</a></li>`).join('')}
+          ${user?`<li><a href="#locker" data-nav="locker" class="${currentPage==='locker'?'active':''}">🔒 Locker</a></li><li><a href="#" id="logout-btn">Logout</a></li>`:`<li><a href="#login" data-nav="login" class="${currentPage==='login'?'active':''}">Login</a></li>`}
+        </ul>
+      </div>`;
+    nav.querySelectorAll('[data-nav]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); location.hash = '#' + a.dataset.nav; }));
+    const toggle = nav.querySelector('.nav-toggle'); const linksEl = nav.querySelector('.nav-links');
+    if (toggle) toggle.addEventListener('click', () => linksEl.classList.toggle('open'));
+    const lo = nav.querySelector('#logout-btn');
+    if (lo) lo.addEventListener('click', e => { e.preventDefault(); this.logout(); this.toast('Logged out', 'success'); location.hash = '#home'; });
+  },
+  renderFooter() {
+    const f = document.querySelector('.footer');
+    if (!f) return;
+    f.innerHTML = `<div class="container"><div class="footer-grid">
+      <div><h4>${this.name}</h4><p class="muted" style="font-size:.9rem">Empowering the next generation of Malawian volleyball athletes. Train hard. Play smart. Rise together.</p>
+      <div style="margin-top:.8rem;display:flex;gap:.5rem"><a href="#">📘</a><a href="#">📸</a><a href="#">🎵</a><a href="#">▶️</a></div></div>
+      <div><h4>Quick Links</h4><ul><li><a href="#training">Training Tips</a></li><li><a href="#teams">Teams</a></li><li><a href="#leaderboard">Leaderboard</a></li><li><a href="#matches">Book a Match</a></li><li><a href="#register">Register</a></li><li><a href="#donate">Donate</a></li></ul></div>
+      <div><h4>For Teams</h4><ul><li><a href="#locker">Coach Locker Room</a></li><li><a href="#register">Team Sign Up</a></li><li><a href="#matches">Match Booking</a></li><li><a href="#live">Live Streaming</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li>📍 Blantyre, Malawi</li><li>📞 +265 888 123 456</li><li>✉️ hello@genzvolleyball.mw</li></ul></div>
+    </div><div class="footer-bottom">© ${new Date().getFullYear()} ${this.name}. All rights reserved. Built with 🏐 for the under-25 community.</div></div>`;
+  },
+  renderTicker() {
+    const el = document.querySelector('.ticker-track'); if (!el) return;
+    const items = []; const recent = this.data.matches.filter(m => m.status === 'completed').slice(-6);
+    recent.forEach(m => { const winner = m.score.home > m.score.away ? m.homeTeam : m.awayTeam; const cls = m.score.home > m.score.away ? 'win' : (m.score.home < m.score.away ? 'loss' : 'draw'); items.push(`<span class="${cls}">🏐 ${m.homeTeam} ${m.score.home} - ${m.score.away} ${m.awayTeam} → ${winner} wins!</span>`); });
+    if (items.length === 0) el.innerHTML = '<span>🏐 No matches played yet — register a team to get the first result on the board!</span><span>🏐 No matches played yet — register a team to get the first result on the board!</span>';
+    else el.innerHTML = items.join('') + items.join('');
+  },
+  initChat() {
+    if (document.querySelector('.chat-fab')) return;
+    const fab = document.createElement('button'); fab.className = 'chat-fab'; fab.innerHTML = '💬'; fab.title = 'Open chat'; fab.setAttribute('aria-label','Open chat');
+    const panel = document.createElement('div'); panel.className = 'chat-panel';
+    panel.innerHTML = `<div class="chat-header"><span>🏐 Team Chat</span><button aria-label="Close chat">✕</button></div><div class="chat-body"></div><form class="chat-input"><input type="text" placeholder="Type a message..." maxlength="300" required><button type="submit">Send</button></form>`;
+    document.body.appendChild(fab); document.body.appendChild(panel);
+    const body = panel.querySelector('.chat-body'); const input = panel.querySelector('input'); const form = panel.querySelector('form');
+    const render = () => { const me = this.currentUser(); body.innerHTML = this.data.chat.slice(-50).map(m => `<div class="chat-msg ${me && m.userId === me.id ? 'me' : ''}"><div class="who">${this.escapeHtml(m.user)}</div><div>${this.escapeHtml(m.text)}</div></div>`).join(''); body.scrollTop = body.scrollHeight; };
+    fab.addEventListener('click', () => { panel.classList.toggle('open'); if (panel.classList.contains('open')) render(); });
+    panel.querySelector('.chat-header button').addEventListener('click', () => panel.classList.remove('open'));
+    form.addEventListener('submit', e => { e.preventDefault(); const me = this.currentUser(); const name = me ? me.name : (localStorage.getItem('gzvm_chat_name') || ('Guest_' + Math.floor(Math.random()*999))); if (!me) localStorage.setItem('gzvm_chat_name', name); const text = input.value.trim(); if (!text) return; this.data.chat.push({id:this.uid(),userId:me?.id,user:name,text,time:Date.now()}); if (this.data.chat.length > 200) this.data.chat = this.data.chat.slice(-200); this.save(); input.value = ''; render(); });
+  },
+  renderBackground() { if (document.querySelector('.scene-3d')) return; const scene = document.createElement('div'); scene.className = 'scene-3d'; document.body.prepend(scene); if (window.innerWidth > 600) { const ball = document.createElement('div'); ball.className = 'ball-3d'; document.body.appendChild(ball); } },
+  attachTilt(selector = '.card-3d') { document.querySelectorAll(selector).forEach(card => { card.addEventListener('mousemove', e => { const r = card.getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top; card.style.setProperty('--rx', ((y / r.height) - 0.5) * -8 + 'deg'); card.style.setProperty('--ry', ((x / r.width) - 0.5) * 8 + 'deg'); }); card.addEventListener('mouseleave', () => { card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg'); }); }); },
+  async init() { this.load(); this.renderBackground(); this.renderNavbar(currentPage); this.renderFooter(); this.initChat(); if (window.LIVE) LIVE.init(); }
+};
+
+/* =========================================================
+   LIVE STREAMING — WebRTC P2P + External RTMP
+   ========================================================= */
+const LIVE = {
+  state: 'idle', localStream: null, currentRoom: null, peers: new Map(),
+  config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] },
+  signaling: { pendingOffer: null, pendingAnswer: null },
+  rooms: [],
+  init() { this.loadRooms(); this.renderBroadcastButton(); },
+  loadRooms() { try { const r = localStorage.getItem('gzvm_rooms'); this.rooms = r ? JSON.parse(r) : []; } catch { this.rooms = []; } },
+  saveRooms() { try { localStorage.setItem('gzvm_rooms', JSON.stringify(this.rooms)); } catch {} },
+  createRoom(hostName, title, description, type = 'p2p') { const room = { id: 'room_' + Date.now() + '_' + Math.random().toString(36).slice(2,6), host: hostName, title: title || 'Live stream', description: description || '', type, externalUrl: null, startedAt: new Date().toISOString(), viewers: 0, active: true }; this.rooms = this.rooms.filter(r => r.id !== room.id); this.rooms.push(room); this.saveRooms(); return room; },
+  endRoom(roomId) { const r = this.rooms.find(x => x.id === roomId); if (r) { r.active = false; r.endedAt = new Date().toISOString(); } this.saveRooms(); },
+  getActiveRooms() { return this.rooms.filter(r => r.active); },
+  listenToRooms(callback) { window.addEventListener('storage', e => { if (e.key === 'gzvm_rooms') { this.loadRooms(); callback(); } }); setInterval(() => { const before = JSON.stringify(this.rooms); this.loadRooms(); if (JSON.stringify(this.rooms) !== before) callback(); }, 3000); },
+  async getCamera() { if (this.localStream) return this.localStream; try { this.localStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: { echoCancellation: true, noiseSuppression: true } }); return this.localStream; } catch (err) { throw new Error('Camera/mic access denied: ' + err.message); } },
+  stopCamera() { if (this.localStream) { this.localStream.getTracks().forEach(t => t.stop()); this.localStream = null; } this.peers.forEach(pc => pc.close()); this.peers.clear(); },
+  async createOffer(roomId) { const stream = await this.getCamera(); const pc = new RTCPeerConnection(this.config); stream.getTracks().forEach(t => pc.addTrack(t, stream)); const offer = await pc.createOffer(); await pc.setLocalDescription(offer); await new Promise(resolve => { if (pc.iceGatheringState === 'complete') return resolve(); pc.addEventListener('icegatheringstatechange', () => { if (pc.iceGatheringState === 'complete') resolve(); }); setTimeout(resolve, 3000); }); const offerCode = btoa(JSON.stringify(pc.localDescription)); this.signaling.pendingOffer = { roomId, pc, offerCode }; return offerCode; },
+  async acceptOffer(offerCode) { const stream = await this.getCamera(); const pc = new RTCPeerConnection(this.config); stream.getTracks().forEach(t => pc.addTrack(t, stream)); const offer = JSON.parse(atob(offerCode)); await pc.setRemoteDescription(offer); const answer = await pc.createAnswer(); await pc.setLocalDescription(answer); await new Promise(resolve => { if (pc.iceGatheringState === 'complete') return resolve(); pc.addEventListener('icegatheringstatechange', () => { if (pc.iceGatheringState === 'complete') resolve(); }); setTimeout(resolve, 3000); }); const answerCode = btoa(JSON.stringify(pc.localDescription)); this.signaling.pendingAnswer = { pc, answerCode }; return answerCode; },
+  async completeConnection(answerCode) { const answer = JSON.parse(atob(answerCode)); const offer = this.signaling.pendingOffer; if (!offer) throw new Error('No pending offer'); await offer.pc.setRemoteDescription(answer); return offer.pc; },
+  renderBroadcastButton() { if (document.getElementById('live-fab')) return; const fab = document.createElement('button'); fab.id = 'live-fab'; fab.className = 'live-fab'; fab.innerHTML = '📡'; fab.title = 'Start a live stream'; fab.setAttribute('aria-label','Start a live stream'); document.body.appendChild(fab); fab.addEventListener('click', () => this.openStreamModal()); },
+  toEmbedUrl(url) { if (!url) return null; try { const u = new URL(url); if (u.hostname.includes('youtube.com')) { const v = u.searchParams.get('v'); if (v) return `https://www.youtube.com/embed/${v}?autoplay=1&rel=0`; if (u.pathname.startsWith('/live/')) return `https://www.youtube.com/embed${u.pathname}?autoplay=1`; } if (u.hostname === 'youtu.be') { const id = u.pathname.slice(1); return `https://www.youtube.com/embed/${id}?autoplay=1`; } if (u.hostname.includes('twitch.tv')) { const path = u.pathname.replace(/^\//,'').split('/')[0]; if (path) return `https://player.twitch.tv/?channel=${path}&parent=${location.hostname}&autoplay=true`; } if (u.hostname.includes('facebook.com') || u.hostname.includes('fb.watch')) { return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&autoplay=true`; } if (u.hostname.includes('vimeo.com')) { const id = u.pathname.split('/').filter(Boolean).pop(); return `https://player.vimeo.com/video/${id}?autoplay=1`; } return url; } catch { return url; } },
+  openStreamModal(mode = null) {
+    const existing = document.getElementById('stream-modal'); if (existing) existing.remove();
+    const modal = document.createElement('div'); modal.id = 'stream-modal'; modal.className = 'modal-backdrop open';
+    modal.innerHTML = `<div class="modal"><div class="modal-header"><h3>📡 Go Live</h3><button class="modal-close" data-close>✕</button></div>
+      <p class="muted" style="font-size:.9rem">Pick how you want to stream. Everyone on the site will be able to watch.</p>
+      <div class="stream-modal-grid">
+        <div class="stream-choice" id="choose-p2p"><div class="icon">🏐</div><h4>Stream from my camera</h4><p>P2P WebRTC. Best for small audiences (5-20 viewers). No server needed.</p></div>
+        <div class="stream-choice" id="choose-external"><div class="icon">📺</div><h4>Stream via YouTube / Twitch / Facebook</h4><p>Use a streaming service for big audiences (50+). Just paste your stream URL.</p></div>
+      </div>
+      <div id="p2p-panel" style="display:none;margin-top:1.5rem">
+        <h4>📹 Camera Broadcast</h4>
+        <p class="muted" style="font-size:.85rem">Broadcasters create a share code. Viewers paste it to connect.</p>
+        <div class="grid-2" style="margin-top:1rem">
+          <div>
+            <h5 style="color:var(--c-accent)">📤 As Broadcaster</h5>
+            <ol style="font-size:.85rem;padding-left:1.2rem;margin-top:.5rem"><li>Click "Start Camera"</li><li>Click "Create Share Code"</li><li>Copy the code and send it to your viewers</li><li>Paste each viewer's answer code back here</li></ol>
+            <button class="btn btn-primary btn-sm" id="start-camera" style="margin-top:.6rem">📹 Start Camera</button>
+            <button class="btn btn-accent btn-sm" id="create-offer" style="margin-top:.4rem;display:none">Create Share Code</button>
+            <video id="local-preview" class="video-preview" autoplay muted playsinline style="margin-top:.5rem;display:none"></video>
+            <div id="offer-code-wrap" style="display:none;margin-top:.5rem">
+              <label style="font-size:.8rem;color:var(--c-muted)">SHARE THIS CODE WITH YOUR VIEWERS:</label>
+              <textarea id="offer-code" class="code-block" readonly></textarea>
+              <button class="btn btn-ghost btn-sm" id="copy-offer" style="margin-top:.3rem">📋 Copy Code</button>
+            </div>
+            <div style="margin-top:.5rem">
+              <label style="font-size:.8rem;color:var(--c-muted)">PASTE VIEWER'S ANSWER CODE:</label>
+              <textarea id="answer-input" class="code-block" placeholder="Paste answer code from viewer..."></textarea>
+              <button class="btn btn-primary btn-sm" id="connect-viewer" style="margin-top:.3rem">🔗 Connect</button>
+            </div>
+          </div>
+          <div>
+            <h5 style="color:var(--c-accent)">📥 As Viewer</h5>
+            <ol style="font-size:.85rem;padding-left:1.2rem;margin-top:.5rem"><li>Click "Start Camera"</li><li>Paste the broadcaster's offer code below</li><li>Click "Generate Answer Code" and send it back</li></ol>
+            <button class="btn btn-primary btn-sm" id="start-camera-v" style="margin-top:.6rem">📹 Start Camera</button>
+            <button class="btn btn-accent btn-sm" id="accept-offer" style="margin-top:.4rem;display:none">Generate Answer Code</button>
+            <video id="local-preview-v" class="video-preview" autoplay muted playsinline style="margin-top:.5rem;display:none"></video>
+            <div id="offer-input-wrap" style="margin-top:.5rem">
+              <label style="font-size:.8rem;color:var(--c-muted)">PASTE BROADCASTER'S OFFER CODE:</label>
+              <textarea id="offer-input" class="code-block" placeholder="Paste offer code..."></textarea>
+            </div>
+            <div id="answer-code-wrap" style="display:none;margin-top:.5rem">
+              <label style="font-size:.8rem;color:var(--c-muted)">SEND THIS CODE BACK TO BROADCASTER:</label>
+              <textarea id="answer-code" class="code-block" readonly></textarea>
+              <button class="btn btn-ghost btn-sm" id="copy-answer" style="margin-top:.3rem">📋 Copy Code</button>
+            </div>
+            <div id="remote-video-wrap" style="display:none;margin-top:.5rem">
+              <label style="font-size:.8rem;color:var(--c-accent)">✅ CONNECTED — BROADCAST PLAYING:</label>
+              <video id="remote-video" class="video-preview" autoplay playsinline controls></video>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="end-broadcast" style="margin-top:1rem;display:none">⏹ End Broadcast</button>
+      </div>
+      <div id="external-panel" style="display:none;margin-top:1.5rem">
+        <h4>📺 External Service Stream</h4>
+        <p class="muted" style="font-size:.85rem">For big audiences — broadcast via a streaming service, then paste your stream URL here.</p>
+        <div class="form-group" style="margin-top:1rem"><label>Broadcast Title</label><input type="text" id="ext-title" class="form-control" placeholder="e.g. Mzuzu Spikers vs Blantyre Blockers"></div>
+        <div class="form-group"><label>Service</label><select id="ext-service" class="form-control"><option>YouTube Live</option><option>Twitch</option><option>Facebook Live</option><option>Other RTMP / HLS</option></select></div>
+        <div class="form-group"><label>Stream URL</label><input type="url" id="ext-url" class="form-control" placeholder="https://www.youtube.com/watch?v=..."><p class="muted" style="font-size:.75rem;margin-top:.3rem">Auto-converts to embeddable URL.</p></div>
+        <button class="btn btn-primary" id="start-external">🚀 Go Live</button>
+      </div>
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.1)">
+        <h4>📡 Currently Live on GZVM</h4>
+        <div id="active-rooms"></div>
+        <p id="no-rooms" class="text-center muted" style="font-size:.9rem;padding:1rem">No active streams right now. Be the first to go live!</p>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { this.cleanup(); modal.remove(); }));
+    modal.addEventListener('click', e => { if (e.target === modal) { this.cleanup(); modal.remove(); } });
+    document.getElementById('choose-p2p').addEventListener('click', () => { document.getElementById('p2p-panel').style.display = 'block'; document.getElementById('external-panel').style.display = 'none'; });
+    document.getElementById('choose-external').addEventListener('click', () => { document.getElementById('p2p-panel').style.display = 'none'; document.getElementById('external-panel').style.display = 'block'; });
+    if (mode === 'p2p') { document.getElementById('p2p-panel').style.display = 'block'; }
+    else if (mode === 'external') { document.getElementById('external-panel').style.display = 'block'; }
+    document.getElementById('start-camera').addEventListener('click', async () => { try { const stream = await this.getCamera(); document.getElementById('local-preview').srcObject = stream; document.getElementById('local-preview').style.display = 'block'; document.getElementById('create-offer').style.display = 'inline-flex'; document.getElementById('start-camera').textContent = '✓ Camera Ready'; document.getElementById('start-camera').disabled = true; } catch (e) { APP.toast(e.message, 'error'); } });
+    document.getElementById('create-offer').addEventListener('click', async () => { try { const me = APP.currentUser(); const title = prompt('Stream title:', me?.name + ' — Live Practice') || 'Live Stream'; const code = await this.createOffer(); document.getElementById('offer-code').value = code; document.getElementById('offer-code-wrap').style.display = 'block'; this.currentRoom = this.createRoom(me?.name || 'Broadcaster', title, '', 'p2p'); document.getElementById('end-broadcast').style.display = 'inline-flex'; this.state = 'broadcasting'; document.getElementById('live-fab').classList.add('active'); APP.toast('Broadcast started! Share the code with viewers.', 'success'); this.renderActiveRooms(); } catch (e) { APP.toast(e.message, 'error'); } });
+    document.getElementById('copy-offer').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('offer-code').value); APP.toast('Code copied! Send it to your viewers.', 'success'); });
+    document.getElementById('connect-viewer').addEventListener('click', async () => { const code = document.getElementById('answer-input').value.trim(); if (!code) return APP.toast('Paste the viewer answer code first', 'warning'); try { const pc = await this.completeConnection(code); APP.toast('Viewer connected! 🎉', 'success'); this.peers.set('peer_' + Date.now(), pc); if (this.currentRoom) this.currentRoom.viewers = this.peers.size; this.saveRooms(); } catch (e) { APP.toast(e.message, 'error'); } });
+    document.getElementById('start-camera-v').addEventListener('click', async () => { try { const stream = await this.getCamera(); document.getElementById('local-preview-v').srcObject = stream; document.getElementById('local-preview-v').style.display = 'block'; document.getElementById('accept-offer').style.display = 'inline-flex'; document.getElementById('start-camera-v').textContent = '✓ Camera Ready'; document.getElementById('start-camera-v').disabled = true; } catch (e) { APP.toast(e.message, 'error'); } });
+    document.getElementById('accept-offer').addEventListener('click', async () => { const offerCode = document.getElementById('offer-input').value.trim(); if (!offerCode) return APP.toast('Paste the broadcaster offer code first', 'warning'); try { const answerCode = await this.acceptOffer(offerCode); this.signaling.pendingAnswer.pc.addEventListener('track', e => { const remote = document.getElementById('remote-video'); remote.srcObject = e.streams[0]; document.getElementById('remote-video-wrap').style.display = 'block'; }); document.getElementById('answer-code').value = answerCode; document.getElementById('answer-code-wrap').style.display = 'block'; this.state = 'viewing'; APP.toast('Connected! Send the answer code back to the broadcaster.', 'success'); } catch (e) { APP.toast(e.message, 'error'); } });
+    document.getElementById('copy-answer').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('answer-code').value); APP.toast('Code copied! Send it back to the broadcaster.', 'success'); });
+    document.getElementById('end-broadcast').addEventListener('click', () => { this.endBroadcast(); modal.remove(); });
+    document.getElementById('start-external').addEventListener('click', () => { const title = document.getElementById('ext-title').value.trim() || 'Live Stream'; const url = document.getElementById('ext-url').value.trim(); if (!url) return APP.toast('Paste your stream URL', 'error'); const me = APP.currentUser(); this.currentRoom = this.createRoom(me?.name || 'Broadcaster', title, url, 'external'); this.currentRoom.externalUrl = url; this.currentRoom.service = document.getElementById('ext-service').value; this.saveRooms(); this.state = 'broadcasting'; document.getElementById('live-fab').classList.add('active'); APP.toast('You are live! 🎉', 'success'); modal.remove(); });
+    this.renderActiveRooms();
+  },
+  endBroadcast() { if (this.currentRoom) { this.endRoom(this.currentRoom.id); this.currentRoom = null; } this.cleanup(); this.state = 'idle'; const fab = document.getElementById('live-fab'); if (fab) fab.classList.remove('active'); APP.toast('Stream ended', 'info'); },
+  cleanup() { this.stopCamera(); },
+  renderActiveRooms() { const wrap = document.getElementById('active-rooms'); const empty = document.getElementById('no-rooms'); if (!wrap) return; const active = this.getActiveRooms(); if (!active.length) { wrap.innerHTML = ''; if (empty) empty.style.display = 'block'; return; } if (empty) empty.style.display = 'none'; wrap.innerHTML = active.map(r => `<div class="live-room-card"><div class="live-pill"><span class="live-dot"></span> LIVE</div><h4>${APP.escapeHtml(r.title)}</h4><p class="muted" style="font-size:.85rem">🎤 ${APP.escapeHtml(r.host)} • ${APP.escapeHtml(r.type === 'external' ? r.service : 'P2P')} • Started ${APP.fmtDate(r.startedAt)} ${APP.fmtTime(r.startedAt)}</p><div style="display:flex;gap:.4rem;margin-top:.6rem;flex-wrap:wrap"><a href="#live?room=${r.id}" class="btn btn-primary btn-sm">▶ Watch</a>${r.type === 'p2p' ? `<button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('${APP.escapeHtml(r.title)} on GZVM').then(()=>APP.toast('Copied','success'))">📋 Share</button>` : ''}${this.currentRoom && this.currentRoom.id === r.id ? `<button class="btn btn-ghost btn-sm" onclick="LIVE.endBroadcast()">⏹ End</button>` : ''}</div></div>`).join(''); }
+};
+
+/* =========================================================
+   ROUTER — hash-based SPA
+   ========================================================= */
+const ROUTES = {
+  home: renderHome,
+  training: renderTraining,
+  live: renderLive,
+  teams: renderTeams,
+  leaderboard: renderLeaderboard,
+  matches: renderMatches,
+  register: renderRegister,
+  donate: renderDonate,
+  login: renderLogin,
+  locker: renderLocker
+};
+
+let currentPage = 'home';
+let pageIntervals = [];
+
+function clearPageIntervals() { pageIntervals.forEach(i => clearInterval(i)); pageIntervals = []; }
+
+function navigate(page, params = {}) {
+  clearPageIntervals();
+  currentPage = page;
+  const handler = ROUTES[page] || renderHome;
+  APP.renderNavbar(page);
+  document.getElementById('app-main').innerHTML = handler(params);
+  APP.attachTilt();
+  window.scrollTo(0, 0);
+}
+
+function getHash() { const h = location.hash.slice(1) || 'home'; const [page, query] = h.split('?'); const params = {}; if (query) query.split('&').forEach(p => { const [k, v] = p.split('='); params[k] = v; }); return { page, params }; }
+
+window.addEventListener('hashchange', () => { const { page, params } = getHash(); navigate(page, params); });
+
+/* =========================================================
+   PAGES
+   ========================================================= */
+function renderHome() {
+  return `
+    <section class="hero"><div class="container">
+      <span class="tag tag-pink">🏐 Under-25 Volleyball Community</span>
+      <h1>Train Hard.<br>Play <span class="gradient-text">Louder.</span><br>Rise Together.</h1>
+      <p>The official home of Gen Z Volleyball Malawi. Register, train, stream live, and chase your dream of representing the nation — all in one place.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#register">Join the Team →</a>
+        <button class="btn btn-accent" onclick="LIVE.openStreamModal()">📡 Go Live</button>
+        <a class="btn btn-ghost" href="#live">Watch Live</a>
+      </div>
+    </div></section>
+    <section><div class="container">
+      <div id="home-live-rooms"></div>
+      <div class="section-title"><span class="badge">NEXT MATCH</span><h2>Countdown to Tip-Off</h2></div>
+      <div id="countdown-next" class="countdown"></div>
+      <p class="text-center muted" id="next-match-info">No matches scheduled yet. Book one to start the countdown!</p>
+    </div></section>
+    <section><div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="section-title"><span class="badge" style="background:var(--c-danger)">▶ WATCH</span><h2>Highlights Reel</h2></div>
+          <div class="live-stream" id="home-reel">
+            <div class="stream-content" id="reel-placeholder"><div class="icon">🏐</div><h3 style="color:white">No match live right now</h3><p>Check out the highlights reel below</p><a href="#live" class="btn btn-primary" style="margin-top:1rem">Open Full Reel →</a></div>
+            <div class="stream-overlay" id="reel-overlay" style="display:none"><span id="reel-title">Loading…</span><span class="viewer-count" id="reel-counter">▶ Reel 1 / 6</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title"><span class="badge" style="background:var(--c-accent-2)">SCORE</span><h2>Match Score Pad</h2></div>
+          <div class="scorepad">
+            <div class="scorepad-header"><strong id="sp-set-label">Set 1</strong><button class="btn btn-sm btn-ghost" id="sp-reset">Reset</button></div>
+            <div class="scorepad-teams">
+              <div class="scorepad-team"><h4 class="name" id="sp-home-name">Home</h4><div class="scorepad-score"><button data-team="home" data-delta="-1">−</button><span id="sp-home">0</span><button data-team="home" data-delta="1">+</button></div></div>
+              <div class="scorepad-vs">VS</div>
+              <div class="scorepad-team"><h4 class="name" id="sp-away-name">Away</h4><div class="scorepad-score"><button data-team="away" data-delta="-1">−</button><span id="sp-away">0</span><button data-team="away" data-delta="1">+</button></div></div>
+            </div>
+            <div class="scorepad-sets" id="sp-sets"></div>
+            <div class="scorepad-actions"><input type="text" id="sp-team-home-input" class="form-control" placeholder="Home team name" style="max-width:160px"><input type="text" id="sp-team-away-input" class="form-control" placeholder="Away team name" style="max-width:160px"></div>
+            <div class="scorepad-actions" style="margin-top:.5rem"><button class="btn btn-accent btn-sm" id="sp-next-set">Finish Set →</button><button class="btn btn-primary btn-sm" id="sp-save">Save Score</button></div>
+            <p class="muted text-center" style="font-size:.8rem;margin-top:.8rem">Track the score in real time. Saves to your match history.</p>
+          </div>
+        </div>
+      </div>
+    </div></section>
+    <section><div class="container">
+      <div class="section-title"><span class="badge">📍 MAP</span><h2>Practice Locations</h2></div>
+      <div class="court-map" id="court-map"><div class="court-lines"></div><div class="net"></div><div class="map-legend"><div><span class="dot" style="background:var(--c-primary)"></span> Active</div><div><span class="dot" style="background:var(--c-accent)"></span> Upcoming</div><div><span class="dot" style="background:var(--c-accent-2)"></span> Open</div></div></div>
+      <div class="grid-3" id="location-cards" style="margin-top:1.5rem"></div>
+    </div></section>
+    <section><div class="container">
+      <div class="section-title"><span class="badge" style="background:var(--c-accent);color:var(--c-deep)">🏆 TOP PLAYERS</span><h2>Leaderboard</h2><a href="#leaderboard" class="btn btn-ghost btn-sm" style="margin-left:auto">View full →</a></div>
+      <div class="table-wrap"><table id="home-leaderboard"><thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>Position</th><th>Points</th><th>MVPs</th></tr></thead><tbody></tbody></table></div>
+      <p id="leaderboard-empty" class="text-center muted" style="margin-top:1rem">Register your team to populate the leaderboard. <a href="#register">Sign up →</a></p>
+    </div></section>
+    <section><div class="container">
+      <div class="section-title"><span class="badge" style="background:var(--c-accent-2)">🎬 SCOUTING</span><h2>Highlights — Get Noticed</h2></div>
+      <div class="grid-3" id="highlights-grid"></div>
+      <p id="highlights-empty" class="text-center muted" style="margin-top:1rem">No highlights yet. Be the first to upload yours after registering.</p>
+    </div></section>
+    <section><div class="container"><div class="grid-4">
+      <div class="card card-3d text-center" style="cursor:pointer;border:2px solid var(--c-primary)" onclick="LIVE.openStreamModal()"><div style="font-size:3rem">📡</div><h3>Go Live</h3><p class="muted" style="font-size:.9rem">Stream your game now</p></div>
+      <a href="#teams" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3rem">👥</div><h3>Teams</h3><p class="muted" style="font-size:.9rem">All registered teams</p></a>
+      <a href="#training" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3rem">💪</div><h3>Training Tips</h3><p class="muted" style="font-size:.9rem">Drills, videos & guides</p></a>
+      <a href="#register" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3rem">📝</div><h3>Register</h3><p class="muted" style="font-size:.9rem">Players & teams</p></a>
+      <a href="#matches" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3rem">📅</div><h3>Book a Match</h3><p class="muted" style="font-size:.9rem">Find opponents</p></a>
+      <a href="#donate" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3rem">💛</div><h3>Donate</h3><p class="muted" style="font-size:.9rem">Support the league</p></a>
+    </div></div></section>`;
+}
+
+function homeIntervals() {
+  const tick = () => {
+    const upcoming = APP.data.matches.filter(m => m.status === 'scheduled' && m.date && new Date(m.date) > new Date()).sort((a, b) => new Date(a.date) - new Date(b.date));
+    const next = upcoming[0] || null;
+    const wrap = document.getElementById('countdown-next'); const info = document.getElementById('next-match-info');
+    if (!next) { if (wrap) wrap.innerHTML = '<div class="countdown-unit"><span class="num">—</span><span class="lbl">No match</span></div>'; if (info) info.innerHTML = 'No matches scheduled yet. <a href="#matches">Book one →</a>'; return; }
+    const c = APP.countdown(next.date);
+    if (wrap) wrap.innerHTML = `<div class="countdown-unit"><span class="num">${c.d}</span><span class="lbl">Days</span></div><div class="countdown-unit"><span class="num">${String(c.h).padStart(2,'0')}</span><span class="lbl">Hours</span></div><div class="countdown-unit"><span class="num">${String(c.m).padStart(2,'0')}</span><span class="lbl">Mins</span></div><div class="countdown-unit"><span class="num">${String(c.s).padStart(2,'0')}</span><span class="lbl">Secs</span></div>`;
+    if (info) info.innerHTML = `<strong>${APP.escapeHtml(next.homeTeam)}</strong> vs <strong>${APP.escapeHtml(next.awayTeam)}</strong> — ${APP.fmtDate(next.date)} at ${APP.fmtTime(next.date)}`;
+  };
+  tick(); pageIntervals.push(setInterval(tick, 1000));
+
+  // Reel
+  let reelIndex = 0;
+  const renderReel = () => {
+    const liveMatch = APP.data.matches.find(m => m.status === 'live');
+    const liveRooms = LIVE.getActiveRooms();
+    const placeholder = document.getElementById('reel-placeholder');
+    const overlay = document.getElementById('reel-overlay');
+    const stream = document.getElementById('home-reel');
+    if (!stream) return;
+    stream.querySelectorAll('iframe').forEach(f => f.remove());
+    stream.querySelectorAll('.live-badge').forEach(b => b.remove());
+    if (liveMatch) {
+      stream.insertAdjacentHTML('afterbegin', '<div class="live-badge"><span class="live-dot"></span> ON AIR</div>');
+      placeholder.innerHTML = `<div class="icon">🏐</div><h3 style="color:white">${APP.escapeHtml(liveMatch.homeTeam)} vs ${APP.escapeHtml(liveMatch.awayTeam)}</h3><p>Match in progress</p><a href="#live" class="btn btn-primary" style="margin-top:1rem">Watch Live →</a>`;
+      placeholder.style.display = 'flex'; overlay.style.display = 'flex';
+      overlay.querySelector('#reel-title').textContent = '📍 ' + (liveMatch.venue || 'Live');
+      overlay.querySelector('#reel-counter').textContent = '● LIVE';
+      return;
+    }
+    if (liveRooms.length) {
+      const room = liveRooms[0];
+      stream.insertAdjacentHTML('afterbegin', '<div class="live-badge"><span class="live-dot"></span> ON AIR</div>');
+      overlay.style.display = 'flex';
+      overlay.querySelector('#reel-title').textContent = `📡 ${room.title}`;
+      overlay.querySelector('#reel-counter').textContent = `● LIVE — ${room.host}`;
+      if (room.type === 'external' && room.externalUrl) {
+        const iframe = document.createElement('iframe');
+        iframe.src = LIVE.toEmbedUrl(room.externalUrl);
+        iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0';
+        stream.appendChild(iframe);
+        placeholder.style.display = 'none';
+      } else {
+        placeholder.style.display = 'flex';
+        placeholder.innerHTML = `<div class="icon">📡</div><h3 style="color:white">${APP.escapeHtml(room.title)}</h3><p>Live P2P stream by ${APP.escapeHtml(room.host)}</p><a href="#live?room=${room.id}" class="btn btn-primary" style="margin-top:1rem">▶ Join Stream</a>`;
+      }
+      return;
+    }
+    const v = APP.publicHighlights[reelIndex % APP.publicHighlights.length];
+    const iframe = document.createElement('iframe');
+    iframe.src = APP.embedUrl(v.videoId);
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0';
+    stream.appendChild(iframe);
+    placeholder.style.display = 'none';
+    overlay.style.display = 'flex';
+    overlay.querySelector('#reel-title').textContent = v.title;
+    overlay.querySelector('#reel-counter').textContent = `▶ Reel ${reelIndex + 1} / ${APP.publicHighlights.length}`;
+  };
+  renderReel();
+  pageIntervals.push(setInterval(() => { reelIndex++; renderReel(); }, 45000));
+  pageIntervals.push(setInterval(renderReel, 30000));
+
+  // Score pad
+  const sp = { home: 0, away: 0, sets: [] };
+  const renderScorePad = () => {
+    const $ = id => document.getElementById(id);
+    if (!$('sp-home')) return;
+    $('sp-home').textContent = sp.home; $('sp-away').textContent = sp.away;
+    $('sp-sets').innerHTML = sp.sets.map((s, i) => `<div class="set-pill">Set ${i+1}: ${s[0]}-${s[1]}</div>`).join('') || '<span class="muted" style="font-size:.85rem">No sets completed</span>';
+    $('sp-set-label').textContent = `Set ${sp.sets.length + 1}`;
+  };
+  document.querySelectorAll('.scorepad-score button').forEach(btn => {
+    btn.addEventListener('click', () => { const team = btn.dataset.team; const delta = parseInt(btn.dataset.delta); sp[team] = Math.max(0, sp[team] + delta); $('sp-home-name').textContent = $('sp-team-home-input').value || 'Home'; $('sp-away-name').textContent = $('sp-team-away-input').value || 'Away'; renderScorePad(); });
+  });
+  const hi = document.getElementById('sp-team-home-input'); if (hi) hi.addEventListener('input', e => $('sp-home-name').textContent = e.target.value || 'Home');
+  const ai = document.getElementById('sp-team-away-input'); if (ai) ai.addEventListener('input', e => $('sp-away-name').textContent = e.target.value || 'Away');
+  const ns = document.getElementById('sp-next-set'); if (ns) ns.addEventListener('click', () => { if (sp.home === 0 && sp.away === 0) return APP.toast('Add some points first', 'info'); sp.sets.push([sp.home, sp.away]); sp.home = 0; sp.away = 0; renderScorePad(); APP.toast('Set saved!', 'success'); });
+  const r = document.getElementById('sp-reset'); if (r) r.addEventListener('click', () => { sp.home = 0; sp.away = 0; sp.sets = []; renderScorePad(); });
+  const sv = document.getElementById('sp-save'); if (sv) sv.addEventListener('click', () => { const home = $('sp-team-home-input').value || 'Home Team'; const away = $('sp-team-away-input').value || 'Away Team'; if (!sp.sets.length) return APP.toast('Finish at least one set first', 'warning'); APP.data.matches.push({ id: APP.uid(), homeTeam: home, awayTeam: away, date: new Date().toISOString(), status: 'completed', score: { home: sp.sets.reduce((a, s) => a + (s[0] > s[1] ? 1 : 0), 0), away: sp.sets.reduce((a, s) => a + (s[1] > s[0] ? 1 : 0), 0) }, sets: sp.sets.map(s => [...s]) }); APP.save(); APP.toast('Match saved to history!', 'success'); sp.home = 0; sp.away = 0; sp.sets = []; renderScorePad(); });
+  renderScorePad();
+
+  // Court map
+  const renderCourtMap = () => {
+    const map = document.getElementById('court-map'); const cards = document.getElementById('location-cards');
+    if (!map) return;
+    map.querySelectorAll('.map-pin').forEach(p => p.remove());
+    const practices = APP.data.bookings.filter(b => b.type === 'practice' && b.status !== 'cancelled').sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (practices.length === 0) {
+      const venues = [{name:'Blantyre Sports Complex',x:20,y:75,cls:''},{name:'Lilongwe Civic Centre',x:55,y:35,cls:'pin-2'},{name:'Mzuzu Court Arena',x:30,y:15,cls:'pin-3'},{name:'Zomba Youth Field',x:75,y:70,cls:'pin-4'}];
+      venues.forEach((v, i) => { const pin = document.createElement('div'); pin.className = 'map-pin ' + v.cls; pin.style.left = v.x + '%'; pin.style.top = v.y + '%'; pin.style.opacity = '0.35'; pin.innerHTML = `<span>${i+1}</span>`; pin.title = v.name + ' — no practices scheduled'; map.appendChild(pin); });
+      if (cards) cards.innerHTML = `<div class="card card-3d" style="grid-column:1/-1;text-align:center;padding:2rem"><h3>📅 No practice sessions scheduled yet</h3><p class="muted">Once teams book practice sessions, they'll appear here on the court map.</p><a href="#matches" class="btn btn-primary" style="margin-top:1rem">Book a Practice →</a></div>`;
+      return;
+    }
+    const venues = { 'Blantyre Sports Complex':{x:20,y:75,cls:''},'Lilongwe Civic Centre':{x:55,y:35,cls:'pin-2'},'Mzuzu Court Arena':{x:30,y:15,cls:'pin-3'},'Zomba Youth Field':{x:75,y:70,cls:'pin-4'},'Capital Volleyball Hall':{x:50,y:50,cls:'pin-2'} };
+    const seen = new Set();
+    practices.forEach((p, i) => { const v = venues[p.venue] || {x:50+(i*7)%30,y:50+(i*11)%30,cls:''}; const key = p.venue; if (!seen.has(key)) { seen.add(key); const pin = document.createElement('div'); pin.className = 'map-pin ' + v.cls; pin.style.left = v.x + '%'; pin.style.top = v.y + '%'; pin.innerHTML = `<span>${seen.size}</span>`; pin.title = `${p.venue} — ${p.teamName}`; map.appendChild(pin); } });
+    if (cards) cards.innerHTML = practices.slice(0, 6).map(p => `<div class="card card-3d"><span class="tag tag-teal">PRACTICE</span><h3 style="margin-top:.5rem">${APP.escapeHtml(p.venue)}</h3><p class="muted" style="font-size:.9rem">🏐 ${APP.escapeHtml(p.teamName)}</p><p style="margin-top:.5rem"><strong>Next session:</strong> ${APP.fmtDate(p.date)} at ${APP.fmtTime(p.date)}</p></div>`).join('');
+  };
+  renderCourtMap();
+
+  // Leaderboard preview
+  const renderLeaderboard = () => {
+    const tb = document.querySelector('#home-leaderboard tbody');
+    const empty = document.getElementById('leaderboard-empty');
+    if (!tb) return;
+    if (!APP.data.players.length) { tb.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
+    if (empty) empty.style.display = 'none';
+    const ranked = APP.data.players.map(p => ({...p, pts: Object.values(p.stats || {}).reduce((a, b) => a + (b || 0), 0), mvps: p.mvps || 0})).sort((a, b) => b.pts - a.pts).slice(0, 5);
+    tb.innerHTML = ranked.map((p, i) => { const avatar = p.photo ? `<img src="${APP.escapeHtml(p.photo)}" alt="" class="player-avatar">` : `<span style="display:inline-block;width:36px;height:36px;line-height:36px;text-align:center;border-radius:50%;background:var(--gradient-2);margin-right:.6rem;vertical-align:middle">🏐</span>`; return `<tr><td><span class="rank-badge ${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n'}">${i+1}</span></td><td>${avatar}<strong>${APP.escapeHtml(p.name)}</strong></td><td>${APP.escapeHtml(p.team || '—')}</td><td><span class="tag tag-blue">${p.position || '—'}</span></td><td><strong style="color:var(--c-accent)">${p.pts}</strong></td><td>${p.mvps}</td></tr>`; }).join('');
+  };
+  renderLeaderboard();
+
+  // Highlights
+  const renderHighlights = () => {
+    const grid = document.getElementById('highlights-grid');
+    const empty = document.getElementById('highlights-empty');
+    if (!grid) return;
+    const userHighlights = APP.data.highlights.map(h => ({...h, source: 'user'}));
+    const publicOnes = APP.publicHighlights.map(p => ({id: p.id, title: p.title, player: p.channel, team: 'Featured', videoId: p.videoId, source: 'public'}));
+    const all = [...userHighlights, ...publicOnes];
+    if (all.length === 0) { grid.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
+    if (empty) empty.style.display = 'none';
+    grid.innerHTML = all.slice(0, 6).map(h => { const thumb = h.videoId ? APP.thumbUrl(h.videoId) : ''; return `<div class="highlight-card" onclick="openHighlight('${h.id}','${h.source}','${h.videoId || ''}')">${thumb ? `<img src="${thumb}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">` : '<div class="highlight-thumb">🏐</div>'}<div class="play-btn">▶</div><div class="highlight-info"><h4>${APP.escapeHtml(h.title)}</h4><div class="highlight-meta">${APP.escapeHtml(h.player || '')} ${h.team ? '• ' + APP.escapeHtml(h.team) : ''} ${h.source === 'public' ? '• 🌐 Featured' : ''}</div></div></div>`; }).join('');
+  };
+  window.openHighlight = (id, source, videoId) => { if (source === 'public' && videoId) location.hash = '#live?v=' + videoId; else APP.toast(`Highlight: ${id}`, 'info'); };
+  renderHighlights();
+
+  // Live rooms strip
+  const renderHomeLiveRooms = () => {
+    const wrap = document.getElementById('home-live-rooms');
+    if (!wrap) return;
+    const active = LIVE.getActiveRooms();
+    if (!active.length) { wrap.innerHTML = ''; return; }
+    wrap.innerHTML = `<div class="alert alert-danger" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem"><div><strong>📡 ${active.length} live stream${active.length === 1 ? '' : 's'} happening right now</strong><p class="muted" style="font-size:.85rem;margin:0">${active.slice(0, 3).map(r => `<span>• ${APP.escapeHtml(r.title)} (${APP.escapeHtml(r.host)})</span>`).join(' ')}</p></div><div style="display:flex;gap:.4rem;flex-wrap:wrap">${active.slice(0, 2).map(r => `<a class="btn btn-sm btn-primary" href="#live?room=${r.id}">▶ Watch</a>`).join('')}</div></div>`;
+  };
+  renderHomeLiveRooms();
+  LIVE.listenToRooms(renderHomeLiveRooms);
+}
+
+function renderTraining() {
+  return `
+    <section class="hero" style="padding:2rem 0"><div class="container">
+      <span class="tag tag-teal">💪 TRAINING HUB</span>
+      <h1>Level Up Your <span class="gradient-text">Game</span></h1>
+      <p>Drills, technique breakdowns, and progress tracking — built for under-25 athletes hungry to improve every week.</p>
+    </div></section>
+    <section><div class="container"><div class="grid-3">
+      <a href="#serve" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3.5rem">🎯</div><h3>Serving</h3><p class="muted">Float, jump & top-spin</p></a>
+      <a href="#spike" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3.5rem">💥</div><h3>Spiking</h3><p class="muted">Approach, jump & power</p></a>
+      <a href="#pass" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3.5rem">🤲</div><h3>Passing</h3><p class="muted">Platform & dig technique</p></a>
+      <a href="#set" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3.5rem">👐</div><h3>Setting</h3><p class="muted">Hands, footwork & tempo</p></a>
+      <a href="#block" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3.5rem">🛡️</div><h3>Blocking</h3><p class="muted">Timing & positioning</p></a>
+      <a href="#fitness" class="card card-3d text-center" style="text-decoration:none;color:var(--c-text)"><div style="font-size:3.5rem">🏃</div><h3>Fitness</h3><p class="muted">Jump, agility & endurance</p></a>
+    </div></div></section>
+    <section><div class="container">
+      <div class="section-title"><span class="badge">DRILLS</span><h2>Skill Breakdown</h2></div>
+      <div class="tabs">
+        <button class="tab active" data-tab="serve">🎯 Serve</button>
+        <button class="tab" data-tab="spike">💥 Spike</button>
+        <button class="tab" data-tab="pass">🤲 Pass</button>
+        <button class="tab" data-tab="set">👐 Set</button>
+        <button class="tab" data-tab="block">🛡️ Block</button>
+        <button class="tab" data-tab="fitness">🏃 Fitness</button>
+      </div>
+      <div class="tab-content active" id="tab-serve"><div class="grid-2"><div class="card"><h3>Float Serve Mastery</h3><p>A no-spin serve that dances in the air. Strike the ball with a flat, firm palm right in the center.</p><ul style="margin-top:1rem;padding-left:1.2rem"><li>🎯 Aim for the back 1m of the court</li><li>🎯 Toss 1.5m in front, slightly to the right</li><li>🎯 Practice 25 serves per session</li></ul></div><div class="card"><h3>Top-Spin Jump Serve</h3><p>Generate power from your legs, rotate your torso, and snap your wrist over the top of the ball.</p><ul style="margin-top:1rem;padding-left:1.2rem"><li>💥 Drive upward, not forward</li><li>💥 Contact at full extension</li><li>💥 Snap wrist to create spin</li></ul></div></div></div>
+      <div class="tab-content" id="tab-spike"><div class="grid-2"><div class="card"><h3>3-Step Approach</h3><p>Right-left-right for right-handers. The last two steps plant and launch. Load your arms like a catapult.</p><ul style="margin-top:1rem;padding-left:1.2rem"><li>Step 1: directional, smaller</li><li>Step 2: big, plant both feet</li><li>Step 3: explosive jump + swing</li></ul></div><div class="card"><h3>Arm Swing Mechanics</h3><p>Bow-and-arrow loading. Lead with the elbow, then snap the wrist over the top. Contact the ball at the highest reachable point.</p></div></div></div>
+      <div class="tab-content" id="tab-pass"><div class="grid-2"><div class="card"><h3>Forearm Pass (Bump)</h3><p>Lock your arms straight, thumbs side-by-side, platform flat. Bend your knees, not your arms.</p><ul style="margin-top:1rem;padding-left:1.2rem"><li>🤲 Platform = locked elbows</li><li>🤲 Angle platform to target</li><li>🤲 Absorb the ball, don't bounce it</li></ul></div><div class="card"><h3>Digging Hard-Driven Balls</h3><p>Get low. Get your chest over your knees. Angle your platform to lift the ball, not absorb it.</p></div></div></div>
+      <div class="tab-content" id="tab-set"><div class="grid-2"><div class="card"><h3>Setting Hand Position</h3><p>Form a "volleyball shape" with your hands — thumbs pointing back, index fingers forming a triangle.</p></div><div class="card"><h3>Footwork to the Ball</h3><p>Always move feet first. Get your body behind the ball, balanced. The set should be smooth, like a gentle throw.</p></div></div></div>
+      <div class="tab-content" id="tab-block"><div class="grid-2"><div class="card"><h3>Block Footwork</h3><p>Stay light on your toes. Take small, quick shuffle steps. Press over the net, hands angled downward.</p></div><div class="card"><h3>Reading the Setter</h3><p>Watch the setter's shoulders and hands. Their body will tell you where the ball is going before it leaves their fingers.</p></div></div></div>
+      <div class="tab-content" id="tab-fitness"><div class="grid-2"><div class="card"><h3>Plyometric Power</h3><p>Box jumps, bounds, and depth jumps build explosive vertical leap. 3 sets of 8 reps, twice a week.</p></div><div class="card"><h3>Court Agility</h3><p>Hexagon drills, ladder drills, and 4-corner shuffles build the foot speed needed for defense.</p></div><div class="card"><h3>Core & Stability</h3><p>Planks, Russian twists, and pallof presses. A strong core transfers power from legs to arms in your spike.</p></div><div class="card"><h3>Match Endurance</h3><p>Interval sprints: 30s sprint, 60s jog, repeat 8x. Mimics the stop-start rhythm of volleyball.</p></div></div></div>
+    </div></section>
+    <section><div class="container">
+      <div class="section-title"><span class="badge" style="background:var(--c-accent-2)">📈 PROGRESS</span><h2>My Skill Tracker</h2></div>
+      <div class="card" id="progress-tracker">
+        <div id="progress-login" class="auth-gate" style="margin:1rem 0">
+          <div class="icon">🔒</div>
+          <h3>Login to track your progress</h3>
+          <p class="muted">Players can log their self-rated skill scores and watch their growth across the season.</p>
+          <a href="#login" class="btn btn-primary" style="margin-top:1rem">Login / Register →</a>
+        </div>
+        <div id="progress-body" style="display:none">
+          <div class="alert alert-info">📅 Season runs January – December. Update your self-rating (0-100) every week to track growth.<button class="btn btn-sm btn-accent" id="save-progress" style="float:right">Save Progress</button></div>
+          <div id="progress-skills" class="grid-2" style="margin-top:1rem"></div>
+          <h3 style="margin-top:2rem">📊 History</h3>
+          <div class="table-wrap"><table id="progress-history"><thead><tr><th>Date</th><th>Avg Skill</th><th>Top Skill</th><th>Worst Skill</th></tr></thead><tbody></tbody></table></div>
+        </div>
+      </div>
+    </div></section>
+    <section><div class="container">
+      <div class="card">
+        <h3>📺 Featured Training Videos</h3>
+        <p class="muted" style="font-size:.9rem;margin-top:.5rem">Curated public volleyball tutorials. Click any to play it.</p>
+        <div class="grid-3" id="training-reel" style="margin-top:1rem"></div>
+      </div>
+    </div></section>`;
+}
+
+function trainingIntervals() {
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => { document.querySelectorAll('.tab').forEach(x => x.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active')); t.classList.add('active'); document.getElementById('tab-' + t.dataset.tab).classList.add('active'); }));
+  const SKILLS = [{k:'serve',l:'🎯 Serve'},{k:'spike',l:'💥 Spike'},{k:'set',l:'👐 Set'},{k:'block',l:'🛡️ Block'},{k:'pass',l:'🤲 Pass'},{k:'dig',l:'🤾 Dig'}];
+  const SKILL_LABELS = { serve: '🎯 Serve', spike: '💥 Spike', set: '👐 Set', block: '🛡️ Block', pass: '🤲 Pass', dig: '🤾 Dig' };
+  const user = APP.currentUser();
+  const login = document.getElementById('progress-login'); const body = document.getElementById('progress-body');
+  if (!user) { if (login) login.style.display = 'block'; if (body) body.style.display = 'none'; } else {
+    if (login) login.style.display = 'none'; if (body) body.style.display = 'block';
+    if (!user.progress) user.progress = { current: { serve: 50, spike: 50, set: 50, block: 50, pass: 50, dig: 50 }, history: [] };
+    if (!user.progress.current) user.progress.current = { serve: 50, spike: 50, set: 50, block: 50, pass: 50, dig: 50 };
+    const wrap = document.getElementById('progress-skills');
+    wrap.innerHTML = SKILLS.map(s => { const v = user.progress.current[s.k] || 50; return `<div class="card"><strong>${SKILL_LABELS[s.k]}</strong><input type="range" min="0" max="100" value="${v}" data-skill="${s.k}" class="form-control" style="padding:0;height:32px"><div class="progress"><div class="progress-bar" style="width:${v}%"></div></div><div class="progress-label"><span>0</span><span><strong>${v}</strong>/100</span><span>100</span></div></div>`; }).join('');
+    wrap.querySelectorAll('input[type=range]').forEach(r => { r.addEventListener('input', e => { const s = e.target.dataset.skill; const v = parseInt(e.target.value); user.progress.current[s] = v; const card = e.target.closest('.card'); card.querySelector('.progress-bar').style.width = v + '%'; card.querySelector('.progress-label strong').textContent = v; }); });
+    const histTbody = document.querySelector('#progress-history tbody');
+    const hist = user.progress.history || [];
+    histTbody.innerHTML = hist.slice().reverse().slice(0, 10).map(h => { const vals = Object.values(h.scores); const avg = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length); const top = Object.entries(h.scores).sort((a, b) => b[1] - a[1])[0]; const worst = Object.entries(h.scores).sort((a, b) => a[1] - b[1])[0]; return `<tr><td>${APP.fmtDate(h.date)}</td><td><strong style="color:var(--c-accent)">${avg}</strong></td><td>${SKILL_LABELS[top[0]]} (${top[1]})</td><td>${SKILL_LABELS[worst[0]]} (${worst[1]})</td></tr>`; }).join('') || '<tr><td colspan="4" class="muted text-center">No history yet. Save your first snapshot!</td></tr>';
+  }
+  const sp = document.getElementById('save-progress'); if (sp) sp.addEventListener('click', () => { const u = APP.currentUser(); if (!u) return; if (!u.progress) u.progress = { current: {}, history: [] }; if (!u.progress.history) u.progress.history = []; u.progress.history.push({ date: new Date().toISOString(), scores: { ...u.progress.current } }); APP.save(); APP.toast('Progress saved! 🎉', 'success'); });
+  const tv = [{ title: 'Float Serve 101', channel: 'Volleyball World', videoId: 'l1cD9LMbcwE' }, { title: 'Approach & Spike Footwork', channel: 'Coach Insights', videoId: 'k3hAkv3Gf50' }, { title: 'Defensive Reading', channel: 'Volley Highlights', videoId: 'F6W-b3iAIkM' }, { title: 'Monster Blocks', channel: 'Block Party', videoId: 'A8A5QxqDYzw' }, { title: 'Setting Masterclass', channel: 'Coach Insights', videoId: 'jS4nD5b3GCA' }, { title: 'African Championship Highlights', channel: 'CAVB', videoId: 'M7lc1UVf-VE' }];
+  const reel = document.getElementById('training-reel'); if (reel) reel.innerHTML = tv.map(v => `<div class="highlight-card" onclick="window.open('https://www.youtube.com/watch?v=${v.videoId}', '_blank')"><img src="${APP.thumbUrl(v.videoId)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"><div class="highlight-thumb" style="background:transparent"></div><div class="play-btn">▶</div><div class="highlight-info"><h4>${APP.escapeHtml(v.title)}</h4><div class="highlight-meta">${APP.escapeHtml(v.channel)} • 🌐 Public</div></div></div>`).join('');
+}
+
+function renderLive(p = {}) {
+  return `
+    <section style="padding-top:2rem"><div class="container">
+      <div id="live-rooms-strip"></div>
+      <div class="section-title">
+        <span class="badge" id="stream-badge" style="background:var(--c-danger)">● OFF AIR</span>
+        <h2 id="stream-title">Highlights Reel</h2>
+        <button class="btn btn-ghost btn-sm" id="autoplay-toggle" style="margin-left:auto">⏯ Autoplay: ON</button>
+        <button class="btn btn-primary btn-sm" onclick="LIVE.openStreamModal()" style="margin-left:.5rem">📡 Go Live</button>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div class="live-stream" id="main-player" style="aspect-ratio:16/9">
+            <div class="stream-content" id="player-placeholder"><div class="icon">🏐</div><h3 style="color:white">No match live right now</h3><p>Pick a highlight below or browse the public reel</p></div>
+            <div class="stream-overlay" id="player-overlay" style="display:none"><span id="overlay-title">Loading…</span><span id="overlay-counter"></span></div>
+          </div>
+        </div>
+        <div>
+          <div class="card"><h3>📅 Match Schedule</h3><table style="margin-top:.5rem" id="schedule-table"><thead><tr><th>Match</th><th>Date</th><th>Status</th></tr></thead><tbody></tbody></table><p id="schedule-empty" class="text-center muted" style="font-size:.85rem;margin-top:.8rem">No matches scheduled yet.</p></div>
+          <div class="card" style="margin-top:1rem"><h3>💬 Live Chat</h3><p class="muted" style="font-size:.9rem">Join the conversation with other fans using the floating chat button.</p><button class="btn btn-primary btn-sm" onclick="document.querySelector('.chat-fab').click()" style="margin-top:.5rem">Open Chat →</button></div>
+          <div class="card" style="margin-top:1rem"><h3>🏐 Past Broadcasts</h3><div id="past-broadcasts"><p class="muted" style="font-size:.9rem">No past broadcasts yet. Once matches are completed, replay links will appear here.</p></div></div>
+        </div>
+      </div>
+      <div class="section-title" style="margin-top:3rem"><span class="badge" style="background:var(--c-accent);color:var(--c-deep)">🎬 REEL</span><h2>Highlights Reel</h2><span class="muted" style="margin-left:auto;font-size:.85rem">Click any clip to play it above</span></div>
+      <div class="grid-3" id="highlights-grid"></div>
+    </div></section>`;
+}
+
+function liveIntervals(p = {}) {
+  let currentIndex = 0; let autoplay = true; let autoplayTimer = null;
+  const clearPlayer = () => { document.querySelectorAll('#main-player iframe').forEach(f => f.remove()); };
+  const renderSchedule = () => { const tb = document.querySelector('#schedule-table tbody'); const empty = document.getElementById('schedule-empty'); const matches = [...APP.data.matches].sort((a, b) => new Date(a.date) - new Date(b.date)); if (!matches.length) { tb.innerHTML = ''; empty.style.display = 'block'; return; } empty.style.display = 'none'; tb.innerHTML = matches.map(m => { const status = m.status === 'live' ? 'tag-pink' : m.status === 'completed' ? 'tag-teal' : m.status === 'scheduled' ? 'tag-blue' : 'tag-yellow'; return `<tr><td>${APP.escapeHtml(m.homeTeam)} vs ${APP.escapeHtml(m.awayTeam)}</td><td>${m.date ? APP.fmtDate(m.date) : 'TBD'}</td><td><span class="tag ${status}">${(m.status || 'scheduled').toUpperCase()}</span></td></tr>`; }).join(''); };
+  renderSchedule();
+  const renderPastBroadcasts = () => { const el = document.getElementById('past-broadcasts'); const completed = APP.data.matches.filter(m => m.status === 'completed'); if (!completed.length) return; el.innerHTML = '<ul style="list-style:none;margin-top:.5rem">' + completed.map(m => `<li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)">▶ <strong>${APP.escapeHtml(m.homeTeam)} ${m.score?.home || 0}-${m.score?.away || 0} ${APP.escapeHtml(m.awayTeam)}</strong><br><small class="muted">${APP.fmtDate(m.date)} • ${APP.escapeHtml(m.venue || '')}</small></li>`).join('') + '</ul>'; };
+  renderPastBroadcasts();
+  const playHighlight = (videoId, title, idx) => { clearPlayer(); const placeholder = document.getElementById('player-placeholder'); const overlay = document.getElementById('player-overlay'); const iframe = document.createElement('iframe'); iframe.src = APP.embedUrl(videoId) + '&autoplay=1'; iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; iframe.allowFullscreen = true; iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3'; document.getElementById('main-player').appendChild(iframe); placeholder.style.display = 'none'; overlay.style.display = 'flex'; document.getElementById('overlay-title').textContent = title; if (typeof idx === 'number') { currentIndex = idx; document.getElementById('overlay-counter').textContent = `🎬 ${idx + 1} / ${APP.publicHighlights.length}`; } document.getElementById('stream-badge').innerHTML = '▶ NOW PLAYING'; document.getElementById('stream-badge').style.background = 'var(--c-accent-2)'; document.getElementById('stream-title').textContent = title; };
+  const playExternal = (url, title, service) => { clearPlayer(); const iframe = document.createElement('iframe'); iframe.src = LIVE.toEmbedUrl(url); iframe.allow = 'autoplay; encrypted-media; picture-in-picture'; iframe.allowFullscreen = true; iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3'; document.getElementById('main-player').appendChild(iframe); document.getElementById('player-placeholder').style.display = 'none'; document.getElementById('player-overlay').style.display = 'flex'; document.getElementById('overlay-title').textContent = title; document.getElementById('overlay-counter').textContent = `📡 ${service || 'External'}`; document.getElementById('stream-badge').innerHTML = '<span class="live-dot"></span> ON AIR'; document.getElementById('stream-badge').style.background = 'var(--c-danger)'; document.getElementById('stream-title').textContent = title; clearInterval(autoplayTimer); };
+  const showP2PJoinPanel = (room) => { const player = document.getElementById('main-player'); clearPlayer(); document.getElementById('player-placeholder').style.display = 'flex'; document.getElementById('player-placeholder').innerHTML = `<div style="padding:2rem;max-width:500px"><div class="icon">📡</div><h3 style="color:white">${APP.escapeHtml(room.title)}</h3><p>Hosted by ${APP.escapeHtml(room.host)} • Started ${APP.fmtTime(room.startedAt)}</p><p class="muted" style="font-size:.9rem;margin-top:1rem">This is a peer-to-peer stream. To watch, you need the share code from the broadcaster.</p><button class="btn btn-primary" style="margin-top:1rem" onclick="LIVE.openStreamModal('p2p'); setTimeout(()=>{const i=document.getElementById('offer-input'); if(i) i.scrollIntoView({block:'center'});}, 100)">📥 Join Stream</button></div>`; document.getElementById('stream-badge').innerHTML = '● P2P LIVE'; document.getElementById('stream-badge').style.background = 'var(--c-accent)'; document.getElementById('stream-title').textContent = room.title; clearInterval(autoplayTimer); };
+  const enterReelMode = () => { document.getElementById('stream-badge').innerHTML = '● OFF AIR'; document.getElementById('stream-badge').style.background = 'var(--c-muted)'; document.getElementById('stream-title').textContent = 'Highlights Reel'; if (APP.publicHighlights.length) playHighlight(APP.publicHighlights[0].videoId, APP.publicHighlights[0].title, 0); else { document.getElementById('player-placeholder').style.display = 'flex'; document.getElementById('player-placeholder').innerHTML = `<div class="icon">🏐</div><h3 style="color:white">No highlights available</h3><p>Check back later</p>`; } startAutoplay(); };
+  const startAutoplay = () => { clearInterval(autoplayTimer); if (!autoplay) return; autoplayTimer = setInterval(() => { if (!autoplay) return; currentIndex = (currentIndex + 1) % APP.publicHighlights.length; const v = APP.publicHighlights[currentIndex]; playHighlight(v.videoId, v.title, currentIndex); }, 45000); };
+  document.getElementById('autoplay-toggle').addEventListener('click', e => { autoplay = !autoplay; e.target.textContent = autoplay ? '⏯ Autoplay: ON' : '⏯ Autoplay: OFF'; if (autoplay) startAutoplay(); else clearInterval(autoplayTimer); });
+  const renderHighlightsGrid = () => { const grid = document.getElementById('highlights-grid'); if (!grid) return; const user = APP.data.highlights.map(h => ({ id: h.id, title: h.title, sub: h.player || '—', videoId: h.videoId, source: 'user' })); const pub = APP.publicHighlights.map((p, i) => ({ id: p.id, title: p.title, sub: p.channel + ' • ' + p.duration, videoId: p.videoId, source: 'public', idx: i })); const all = [...user, ...pub]; if (!all.length) { grid.innerHTML = '<p class="muted text-center" style="grid-column:1/-1;padding:2rem">No highlights yet.</p>'; return; } grid.innerHTML = all.map(h => `<div class="highlight-card" onclick="window._playCard('${h.videoId || ''}','${APP.escapeHtml(h.title).replace(/'/g,"&#39;")}',${h.idx ?? -1})"><img src="${APP.thumbUrl(h.videoId)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"><div class="highlight-thumb" style="background:transparent"></div><div class="play-btn">▶</div><div class="highlight-info"><h4>${APP.escapeHtml(h.title)}</h4><div class="highlight-meta">${APP.escapeHtml(h.sub)}${h.source === 'public' ? ' • 🌐 Featured' : ''}</div></div></div>`).join(''); };
+  window._playCard = (videoId, title, idx) => { if (!videoId) return APP.toast('No video available', 'warning'); playHighlight(videoId, title, idx >= 0 ? idx : 0); document.getElementById('main-player').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  const renderLiveRoomsStrip = () => { const wrap = document.getElementById('live-rooms-strip'); const active = LIVE.getActiveRooms(); if (!active.length) { wrap.innerHTML = ''; return; } wrap.innerHTML = `<div class="alert alert-danger" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem"><div><strong>📡 ${active.length} live stream${active.length === 1 ? '' : 's'} right now</strong><p class="muted" style="font-size:.85rem;margin:0">${active.map(r => `<span>• ${APP.escapeHtml(r.title)} (${APP.escapeHtml(r.host)})</span>`).join(' ')}</p></div><div style="display:flex;gap:.4rem;flex-wrap:wrap">${active.map(r => `<a class="btn btn-sm btn-primary" href="#live?room=${r.id}">▶ Watch "${APP.escapeHtml(r.title)}"</a>`).join('')}</div></div>`; };
+  renderHighlightsGrid();
+  // Init
+  renderLiveRoomsStrip(); LIVE.listenToRooms(renderLiveRoomsStrip);
+  if (p.room) { const room = LIVE.rooms.find(r => r.id === p.room && r.active); if (room) { if (room.type === 'external' && room.externalUrl) { playExternal(room.externalUrl, room.title, room.service); return; } showP2PJoinPanel(room); return; } }
+  const live = APP.data.matches.find(m => m.status === 'live'); if (live) { const badge = document.getElementById('stream-badge'); badge.innerHTML = '<span class="live-dot"></span> ON AIR'; badge.style.background = 'var(--c-danger)'; document.getElementById('stream-title').textContent = 'Live Now'; document.getElementById('player-placeholder').innerHTML = `<div class="icon">🏐</div><h3 style="color:white">${APP.escapeHtml(live.homeTeam)} vs ${APP.escapeHtml(live.awayTeam)}</h3><p>Match is live</p>`; document.getElementById('player-placeholder').style.display = 'flex'; document.getElementById('player-overlay').style.display = 'flex'; document.getElementById('overlay-title').textContent = '📍 ' + (live.venue || 'Live'); document.getElementById('overlay-counter').innerHTML = '<span class="live-dot"></span> ● LIVE'; return; }
+  if (p.v) { const found = APP.publicHighlights.find(x => x.videoId === p.v); if (found) { playHighlight(found.videoId, found.title, APP.publicHighlights.indexOf(found)); return; } }
+  enterReelMode();
+  pageIntervals.push(setInterval(() => { const l = APP.data.matches.find(m => m.status === 'live'); const badge = document.getElementById('stream-badge').textContent; if (l && !badge.includes('ON AIR')) { const b = document.getElementById('stream-badge'); b.innerHTML = '<span class="live-dot"></span> ON AIR'; b.style.background = 'var(--c-danger)'; document.getElementById('stream-title').textContent = 'Live Now'; document.getElementById('player-placeholder').innerHTML = `<div class="icon">🏐</div><h3 style="color:white">${APP.escapeHtml(l.homeTeam)} vs ${APP.escapeHtml(l.awayTeam)}</h3><p>Match is live</p>`; document.getElementById('player-placeholder').style.display = 'flex'; } if (!l && badge.includes('ON AIR')) enterReelMode(); renderLiveRoomsStrip(); }, 30000));
+}
+
+function renderTeams() {
+  return `
+    <section class="hero" style="padding:2rem 0"><div class="container">
+      <span class="tag tag-teal">👥 TEAMS</span>
+      <h1>Every Team in <span class="gradient-text">GZVM</span></h1>
+      <p>All registered teams across Malawi. Click a team to see its roster, schedule, and stats.</p>
+      <a href="#register" class="btn btn-primary" style="margin-top:1rem">+ Register Your Team</a>
+    </div></section>
+    <section><div class="container">
+      <div class="grid-2" style="margin-bottom:1rem">
+        <div><label style="font-size:.85rem;color:var(--c-muted);font-weight:600">FILTER BY CITY</label><select id="city-filter" class="form-control"><option value="">All cities</option></select></div>
+        <div><label style="font-size:.85rem;color:var(--c-muted);font-weight:600">SEARCH</label><input type="text" id="search" class="form-control" placeholder="Team or coach name…"></div>
+      </div>
+      <div class="grid-3" id="teams-grid"></div>
+      <p id="teams-empty" class="text-center muted" style="margin:2rem 0;display:none">No teams registered yet. <a href="#register">Be the first →</a></p>
+    </div></section>
+    <div class="modal-backdrop" id="team-modal"><div class="modal" style="max-width:680px"><div class="modal-header"><h3 id="team-modal-name">Team Name</h3><button class="modal-close" data-close>✕</button></div><div id="team-modal-body"></div></div></div>`;
+}
+
+function teamsIntervals() {
+  const renderTeams = () => {
+    const grid = document.getElementById('teams-grid'); const empty = document.getElementById('teams-empty');
+    const cityFilter = document.getElementById('city-filter').value;
+    const search = (document.getElementById('search').value || '').toLowerCase();
+    let teams = [...APP.data.teams];
+    if (cityFilter) teams = teams.filter(t => t.city === cityFilter);
+    if (search) teams = teams.filter(t => (t.name || '').toLowerCase().includes(search) || (t.coach || '').toLowerCase().includes(search));
+    const citySel = document.getElementById('city-filter');
+    const cities = [...new Set(APP.data.teams.map(t => t.city).filter(Boolean))].sort();
+    citySel.innerHTML = '<option value="">All cities</option>' + cities.map(c => `<option ${c === cityFilter ? 'selected' : ''}>${APP.escapeHtml(c)}</option>`).join('');
+    if (!APP.data.teams.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    if (!teams.length) { grid.innerHTML = '<p class="muted text-center" style="grid-column:1/-1;padding:2rem">No teams match your filters</p>'; return; }
+    grid.innerHTML = teams.map(t => { const playerCount = APP.data.players.filter(p => p.team === t.name).length; return `<div class="card card-3d" style="cursor:pointer;text-align:center" onclick="openTeam('${t.id}')"><div class="team-avatar">${t.logo ? `<img src="${APP.escapeHtml(t.logo)}" alt="">` : '🏐'}</div><h3 style="margin-bottom:.2rem">${APP.escapeHtml(t.name)}</h3><p class="muted" style="font-size:.85rem">📍 ${APP.escapeHtml(t.city || '—')} • ${APP.escapeHtml(t.level || 'Recreational')}</p><p style="margin-top:.6rem;font-size:.9rem"><strong>${playerCount}</strong> player${playerCount === 1 ? '' : 's'} registered</p><p class="muted" style="font-size:.8rem">Coach: ${APP.escapeHtml(t.coach || '—')}</p></div>`; }).join('');
+  };
+  window.openTeam = (teamId) => { const team = APP.data.teams.find(t => t.id === teamId); if (!team) return; const players = APP.data.players.filter(p => p.team === team.name); const bookings = APP.data.bookings.filter(b => b.teamName === team.name);
+    document.getElementById('team-modal-name').innerHTML = `<div style="display:flex;align-items:center;gap:.6rem"><div class="team-avatar" style="width:40px;height:40px;font-size:1.2rem">${team.logo ? `<img src="${APP.escapeHtml(team.logo)}" alt="">` : '🏐'}</div>${APP.escapeHtml(team.name)}</div>`;
+    document.getElementById('team-modal-body').innerHTML = `<div class="grid-2" style="margin-bottom:1rem"><div><strong>City:</strong> ${APP.escapeHtml(team.city || '—')}</div><div><strong>Level:</strong> ${APP.escapeHtml(team.level || '—')}</div><div><strong>Coach:</strong> ${APP.escapeHtml(team.coach || '—')}</div><div><strong>Contact:</strong> ${APP.escapeHtml(team.contact || '—')}</div></div><h4 style="margin-top:1rem">👥 Roster (${players.length})</h4>${players.length === 0 ? '<p class="muted" style="font-size:.9rem">No players have joined this team yet.</p>' : `<div class="grid-3" style="margin-top:.5rem">${players.map(p => `<div class="card" style="padding:.8rem;text-align:center"><div style="width:60px;height:60px;margin:0 auto .4rem;border-radius:50%;background:var(--gradient-2);display:grid;place-items:center;font-size:1.5rem;overflow:hidden">${p.photo ? `<img src="${APP.escapeHtml(p.photo)}" alt="" style="width:100%;height:100%;object-fit:cover">` : '🏐'}</div><strong style="font-size:.9rem">${APP.escapeHtml(p.name)}</strong><p class="muted" style="font-size:.75rem">${APP.escapeHtml(p.position || '—')} • #${p.jersey || '—'}</p></div>`).join('')}</div>`}<h4 style="margin-top:1.5rem">📅 Schedule (${bookings.length})</h4>${bookings.length === 0 ? '<p class="muted" style="font-size:.9rem">No upcoming matches or practices.</p>' : `<ul style="list-style:none;padding:0;margin-top:.5rem">${bookings.slice(0, 5).map(b => `<li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.9rem"><span class="tag ${b.type === 'match' ? 'tag-pink' : 'tag-teal'}">${b.type.toUpperCase()}</span> ${APP.escapeHtml(b.opponent)} — ${APP.fmtDate(b.date)}<br><small class="muted">📍 ${APP.escapeHtml(b.venue)}</small></li>`).join('')}</ul>`}<div style="text-align:center;margin-top:1.5rem"><a class="btn btn-accent btn-sm" href="#leaderboard">🏆 See Team on Leaderboard</a></div>`;
+    document.getElementById('team-modal').classList.add('open');
+  };
+  document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById('team-modal').classList.remove('open')));
+  document.getElementById('team-modal').addEventListener('click', e => { if (e.target.id === 'team-modal') e.target.classList.remove('open'); });
+  document.getElementById('city-filter').addEventListener('change', renderTeams);
+  document.getElementById('search').addEventListener('input', renderTeams);
+  renderTeams();
+}
+
+function renderLeaderboard() {
+  return `
+    <section class="hero" style="padding:2rem 0"><div class="container">
+      <span class="tag tag-yellow">🏆 RANKINGS</span>
+      <h1>Top <span class="gradient-text">Players</span></h1>
+      <p>Ranked by overall performance, MVPs, and consistency across the season.</p>
+    </div></section>
+    <section><div class="container">
+      <div class="tabs">
+        <button class="tab active" data-rank="all">All Players</button>
+        <button class="tab" data-rank="setter">Setters</button>
+        <button class="tab" data-rank="hitter">Hitters</button>
+        <button class="tab" data-rank="libero">Liberos</button>
+        <button class="tab" data-rank="blocker">Blockers</button>
+      </div>
+      <div class="grid-2" style="margin-bottom:1.5rem">
+        <div><label style="font-size:.85rem;color:var(--c-muted);font-weight:600">SORT BY</label><select id="sort-by" class="form-control"><option value="points">Total Points</option><option value="mvps">MVPs</option><option value="serve">Serve Rating</option><option value="spike">Spike Rating</option><option value="block">Block Rating</option><option value="name">Name (A–Z)</option></select></div>
+        <div><label style="font-size:.85rem;color:var(--c-muted);font-weight:600">SEARCH</label><input type="text" id="search" class="form-control" placeholder="Player or team name…"></div>
+      </div>
+      <div class="table-wrap"><table id="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th>Team</th><th>Pos</th><th>Serve</th><th>Spike</th><th>Set</th><th>Block</th><th>Pass</th><th>Dig</th><th>Total</th><th>MVPs</th></tr></thead><tbody id="lb-body"></tbody></table></div>
+      <p id="lb-empty" class="text-center muted" style="margin-top:1.5rem;display:none">No players yet. <a href="#register">Register your team</a> to populate the leaderboard.</p>
+    </div></section>
+    <section><div class="container">
+      <div class="section-title"><span class="badge" style="background:var(--c-accent);color:var(--c-deep)">⭐ TOP 3</span><h2>Podium</h2></div>
+      <div class="grid-3" id="podium"></div>
+    </div></section>`;
+}
+
+function leaderboardIntervals() {
+  let currentFilter = 'all';
+  const computeLeaderboard = () => { const sortBy = document.getElementById('sort-by').value; const search = (document.getElementById('search').value || '').toLowerCase(); let players = APP.data.players.map(p => { const stats = p.stats || { serve:0, spike:0, set:0, block:0, pass:0, dig:0 }; return { ...p, stats, total: Object.values(stats).reduce((a,b) => a + (b || 0), 0), mvps: p.mvps || 0 }; }); if (currentFilter !== 'all') players = players.filter(p => (p.position || '').toLowerCase().includes(currentFilter)); if (search) players = players.filter(p => (p.name || '').toLowerCase().includes(search) || (p.team || '').toLowerCase().includes(search)); if (sortBy === 'name') players.sort((a,b) => a.name.localeCompare(b.name)); else if (sortBy === 'mvps') players.sort((a,b) => b.mvps - a.mvps); else if (['serve','spike','set','block','pass','dig'].includes(sortBy)) players.sort((a,b) => (b.stats[sortBy] || 0) - (a.stats[sortBy] || 0)); else players.sort((a,b) => b.total - a.total); return players; };
+  const renderLeaderboard = () => { const players = computeLeaderboard(); const tbody = document.getElementById('lb-body'); const empty = document.getElementById('lb-empty'); if (!APP.data.players.length) { tbody.innerHTML = ''; empty.style.display = 'block'; document.getElementById('podium').innerHTML = ''; return; } empty.style.display = 'none'; if (!players.length) { tbody.innerHTML = '<tr><td colspan="12" class="text-center muted" style="padding:2rem">No players match your filters</td></tr>'; return; } tbody.innerHTML = players.map((p, i) => { const r = i + 1; const cls = r === 1 ? 'rank-1' : r === 2 ? 'rank-2' : r === 3 ? 'rank-3' : 'rank-n'; const avatar = p.photo ? `<img src="${APP.escapeHtml(p.photo)}" alt="" class="player-avatar">` : `<span style="display:inline-block;width:36px;height:36px;line-height:36px;text-align:center;border-radius:50%;background:var(--gradient-2);margin-right:.6rem;vertical-align:middle">🏐</span>`; return `<tr><td><span class="rank-badge ${cls}">${r}</span></td><td>${avatar}<strong>${APP.escapeHtml(p.name)}</strong></td><td>${APP.escapeHtml(p.team || '—')}</td><td><span class="tag tag-blue">${p.position || '—'}</span></td><td>${p.stats.serve || 0}</td><td>${p.stats.spike || 0}</td><td>${p.stats.set || 0}</td><td>${p.stats.block || 0}</td><td>${p.stats.pass || 0}</td><td>${p.stats.dig || 0}</td><td><strong style="color:var(--c-accent)">${p.total}</strong></td><td>${p.mvps > 0 ? '⭐ ' + p.mvps : '—'}</td></tr>`; }).join(''); const top3 = players.slice(0, 3); const podium = document.getElementById('podium'); const order = [1, 0, 2]; const colors = ['linear-gradient(135deg, #c0c0c0, #888)', 'linear-gradient(135deg, #ffd400, #c89b00)', 'linear-gradient(135deg, #cd7f32, #8a4a1f)']; podium.innerHTML = order.map(i => { const p = top3[i]; if (!p) return '<div></div>'; return `<div class="card card-3d text-center" style="background:${colors[i]};color:var(--c-deep);border:none"><div style="font-size:3rem">${i === 0 ? '🥈' : i === 1 ? '🥇' : '🥉'}</div><h3 style="color:var(--c-deep)">${APP.escapeHtml(p.name)}</h3><p style="font-weight:700">${APP.escapeHtml(p.team || 'Free Agent')}</p><p style="font-size:1.4rem;font-family:var(--font-display);margin-top:.5rem">${p.total} PTS</p><p>${p.mvps} MVPs</p></div>`; }).join(''); };
+  document.querySelectorAll('.tab[data-rank]').forEach(t => { t.addEventListener('click', () => { document.querySelectorAll('.tab[data-rank]').forEach(x => x.classList.remove('active')); t.classList.add('active'); currentFilter = t.dataset.rank; renderLeaderboard(); }); });
+  document.getElementById('sort-by').addEventListener('change', renderLeaderboard);
+  document.getElementById('search').addEventListener('input', renderLeaderboard);
+  renderLeaderboard();
+}
+
+function renderMatches() {
+  return `
+    <section class="hero" style="padding:2rem 0"><div class="container">
+      <span class="tag tag-pink">📅 SCHEDULE</span>
+      <h1>Matches & <span class="gradient-text">Bookings</span></h1>
+      <p>View past results, upcoming fixtures, and book your team's next match in seconds.</p>
+      <button class="btn btn-primary" id="book-match-btn" style="margin-top:1rem">+ Book a Match</button>
+    </div></section>
+    <section><div class="container">
+      <div class="tabs">
+        <button class="tab active" data-mt="upcoming">Upcoming</button>
+        <button class="tab" data-mt="completed">Results</button>
+        <button class="tab" data-mt="bookings">My Bookings</button>
+      </div>
+      <div class="tab-content active" id="mt-upcoming"><div id="upcoming-list" class="grid-2"></div><p id="upcoming-empty" class="text-center muted">No upcoming matches. Book one!</p></div>
+      <div class="tab-content" id="mt-completed"><div id="completed-list"></div><p id="completed-empty" class="text-center muted">No completed matches yet.</p></div>
+      <div class="tab-content" id="mt-bookings"><div id="bookings-list"></div><p id="bookings-empty" class="text-center muted">No bookings yet. Book your first match above!</p></div>
+    </div></section>
+    <div class="modal-backdrop" id="book-modal"><div class="modal">
+      <div class="modal-header"><h3>📅 Book a Match</h3><button class="modal-close" data-close>✕</button></div>
+      <form id="book-form">
+        <div class="form-group"><label>Your Team</label><select name="teamId" class="form-control" required><option value="">— Select your team —</option></select><p class="muted" style="font-size:.8rem;margin-top:.3rem">Don't see your team? <a href="#register">Register one here</a>.</p></div>
+        <div class="form-group"><label>Booking Type</label><select name="type" class="form-control" required><option value="match">Competitive Match (vs another team)</option><option value="practice">Practice / Scrimmage</option></select></div>
+        <div class="form-group"><label>Opponent (leave blank if open challenge)</label><input type="text" name="opponent" class="form-control" placeholder="e.g. Blantyre Blockers"></div>
+        <div class="grid-2"><div class="form-group"><label>Date</label><input type="date" name="date" class="form-control" required></div><div class="form-group"><label>Time</label><input type="time" name="time" class="form-control" required></div></div>
+        <div class="form-group"><label>Venue</label><select name="venue" class="form-control" required><option value="">— Select venue —</option><option>Blantyre Sports Complex</option><option>Lilongwe Civic Centre</option><option>Mzuzu Court Arena</option><option>Zomba Youth Field</option><option>Capital Volleyball Hall</option></select></div>
+        <div class="form-group"><label>Notes (optional)</label><textarea name="notes" class="form-control" placeholder="Any special requests or info…"></textarea></div>
+        <button type="submit" class="btn btn-primary btn-block">Confirm Booking</button>
+      </form>
+    </div></div>`;
+}
+
+function matchesIntervals() {
+  const loadTeamOptions = () => { const sel = document.querySelector('#book-form select[name=teamId]'); sel.innerHTML = '<option value="">— Select your team —</option>' + APP.data.teams.map(t => `<option value="${t.id}">${APP.escapeHtml(t.name)} (${t.city})</option>`).join('') + '<option value="__new__">+ Register a new team</option>'; };
+  document.querySelectorAll('.tab[data-mt]').forEach(t => { t.addEventListener('click', () => { document.querySelectorAll('.tab[data-mt]').forEach(x => x.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active')); t.classList.add('active'); document.getElementById('mt-' + t.dataset.mt).classList.add('active'); }); });
+  document.getElementById('book-match-btn').addEventListener('click', () => { if (!APP.currentUser()) { APP.toast('Please log in to book a match', 'warning'); setTimeout(() => location.hash = '#login', 800); return; } loadTeamOptions(); document.getElementById('book-modal').classList.add('open'); });
+  document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById('book-modal').classList.remove('open')));
+  document.getElementById('book-modal').addEventListener('click', e => { if (e.target.id === 'book-modal') e.target.classList.remove('open'); });
+  document.getElementById('book-form').addEventListener('submit', e => { e.preventDefault(); const fd = new FormData(e.target); const teamId = fd.get('teamId'); if (teamId === '__new__') { APP.toast('Please register your team first', 'info'); setTimeout(() => location.hash = '#register', 800); return; } if (!teamId) return APP.toast('Pick your team', 'error'); const team = APP.data.teams.find(t => t.id === teamId); const date = fd.get('date'); const time = fd.get('time'); const booking = { id: APP.uid(), teamId, teamName: team?.name || 'Team', type: fd.get('type'), opponent: fd.get('opponent') || 'TBD', date: new Date(date + 'T' + time).toISOString(), venue: fd.get('venue'), notes: fd.get('notes'), status: 'pending', createdBy: APP.currentUser().id, createdAt: new Date().toISOString() }; APP.data.bookings.push(booking); if (booking.type === 'match' && booking.opponent !== 'TBD') { APP.data.matches.push({ id: APP.uid(), homeTeam: booking.teamName, awayTeam: booking.opponent, date: booking.date, venue: booking.venue, status: 'scheduled', score: null }); } APP.save(); APP.toast('Match booked! 🎉', 'success'); e.target.reset(); document.getElementById('book-modal').classList.remove('open'); renderAll(); });
+  const matchCard = (m) => { const d = m.date ? new Date(m.date) : null; const isCompleted = m.status === 'completed'; return `<div class="card card-3d"><div style="display:flex;justify-content:space-between;align-items:start"><span class="tag ${m.status === 'live' ? 'tag-pink' : m.status === 'completed' ? 'tag-teal' : m.status === 'scheduled' ? 'tag-blue' : 'tag-yellow'}">${(m.status || 'scheduled').toUpperCase()}</span><span class="muted" style="font-size:.8rem">${d ? APP.fmtDate(d) + ' • ' + APP.fmtTime(d) : 'TBD'}</span></div><div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;margin-top:1rem"><div style="text-align:center"><div style="font-size:2rem">🏐</div><strong>${APP.escapeHtml(m.homeTeam || 'TBD')}</strong></div><div class="scorepad-vs">VS</div><div style="text-align:center"><div style="font-size:2rem">🏐</div><strong>${APP.escapeHtml(m.awayTeam || 'TBD')}</strong></div></div>${isCompleted && m.score ? `<p class="text-center" style="font-size:1.5rem;font-family:var(--font-display);color:var(--c-accent);margin-top:.8rem">${m.score.home} - ${m.score.away}</p>` : ''}<p class="text-center muted" style="font-size:.85rem;margin-top:.5rem">📍 ${APP.escapeHtml(m.venue || 'TBD')}</p></div>`; };
+  const renderAll = () => { const upcoming = APP.data.matches.filter(m => m.status === 'scheduled').sort((a, b) => new Date(a.date) - new Date(b.date)); const completed = APP.data.matches.filter(m => m.status === 'completed').sort((a, b) => new Date(b.date) - new Date(a.date)); const me = APP.currentUser(); const myTeamIds = me ? APP.data.teams.filter(t => t.captainId === me.id || (t.members || []).includes(me.id)).map(t => t.id) : []; const myBookings = APP.data.bookings.filter(b => myTeamIds.includes(b.teamId) || b.createdBy === me?.id).sort((a, b) => new Date(b.date) - new Date(a.date)); document.getElementById('upcoming-list').innerHTML = upcoming.length ? upcoming.map(matchCard).join('') : ''; document.getElementById('upcoming-empty').style.display = upcoming.length ? 'none' : 'block'; document.getElementById('completed-list').innerHTML = completed.length ? `<div class="grid-2">${completed.map(matchCard).join('')}</div>` : ''; document.getElementById('completed-empty').style.display = completed.length ? 'none' : 'block'; document.getElementById('bookings-list').innerHTML = myBookings.length ? `<div class="grid-2">${myBookings.map(b => `<div class="card"><div style="display:flex;justify-content:space-between;align-items:start"><span class="tag ${b.type === 'match' ? 'tag-pink' : 'tag-teal'}">${b.type.toUpperCase()}</span><span class="tag ${b.status === 'confirmed' ? 'tag-teal' : b.status === 'cancelled' ? 'tag-pink' : 'tag-yellow'}">${b.status.toUpperCase()}</span></div><h3 style="margin-top:.5rem">${APP.escapeHtml(b.teamName)} vs ${APP.escapeHtml(b.opponent)}</h3><p class="muted" style="font-size:.9rem">📅 ${APP.fmtDate(b.date)} at ${APP.fmtTime(b.date)}</p><p class="muted" style="font-size:.9rem">📍 ${APP.escapeHtml(b.venue)}</p>${b.notes ? `<p style="font-size:.9rem;margin-top:.4rem">${APP.escapeHtml(b.notes)}</p>` : ''}<div style="display:flex;gap:.4rem;margin-top:.8rem"><button class="btn btn-sm btn-accent" onclick="updateBooking('${b.id}','confirmed')">Confirm</button><button class="btn btn-sm btn-ghost" onclick="updateBooking('${b.id}','cancelled')">Cancel</button></div></div>`).join('')}</div>` : ''; document.getElementById('bookings-empty').style.display = myBookings.length ? 'none' : 'block'; };
+  window.updateBooking = (id, status) => { const b = APP.data.bookings.find(x => x.id === id); if (!b) return; b.status = status; APP.save(); APP.toast(`Booking ${status}`, 'success'); renderAll(); };
+  renderAll();
+}
+
+function renderRegister() {
+  return `
+    <section class="hero" style="padding:2rem 0"><div class="container">
+      <span class="tag tag-teal">📝 JOIN THE LEAGUE</span>
+      <h1>Player & Team <span class="gradient-text">Registration</span></h1>
+      <p>Sign waivers, upload your medical form, and start tracking your skills across the season.</p>
+    </div></section>
+    <section><div class="container">
+      <div class="tabs">
+        <button class="tab active" data-reg="player">🏐 Player Sign-Up</button>
+        <button class="tab" data-reg="team">👥 Team Sign-Up</button>
+      </div>
+      <div class="tab-content active" id="reg-player"><div class="card">
+        <h3>Player Information</h3>
+        <p class="muted" style="font-size:.9rem">All players must be under 25. You must be 18+ to register, or have a parent/guardian sign below.</p>
+        <form id="player-form" style="margin-top:1rem">
+          <div class="grid-2"><div class="form-group"><label>Full Name *</label><input type="text" name="name" class="form-control" required></div><div class="form-group"><label>Date of Birth *</label><input type="date" name="dob" class="form-control" required><p class="muted" style="font-size:.75rem;margin-top:.2rem">Must be under 25 years old</p></div></div>
+          <div class="grid-2"><div class="form-group"><label>Email *</label><input type="email" name="email" class="form-control" required></div><div class="form-group"><label>Phone</label><input type="tel" name="phone" class="form-control" placeholder="+265 ..."></div></div>
+          <div class="grid-2"><div class="form-group"><label>Position *</label><select name="position" class="form-control" required><option value="">— Select —</option><option>Setter</option><option>Outside Hitter</option><option>Opposite Hitter</option><option>Middle Blocker</option><option>Libero</option><option>Defensive Specialist</option></select></div><div class="form-group"><label>Team (optional)</label><select name="team" class="form-control"><option value="">— Free Agent —</option></select></div></div>
+          <div class="form-group"><label>Profile Photo</label><label class="file-drop" id="photo-drop"><input type="file" name="photo" accept="image/*"><div>📷 Click or drag to upload your photo</div><small class="muted" id="photo-name">No file selected</small></label></div>
+          <div class="form-group"><label>Jersey Number</label><input type="number" name="jersey" class="form-control" min="0" max="99" style="max-width:120px"></div>
+          <h3 style="margin-top:1.5rem">Medical & Waiver</h3>
+          <div class="form-group"><label>Medical Form (PDF/Image) *</label><label class="file-drop" id="med-drop"><input type="file" name="medical" accept=".pdf,image/*" required><div>📄 Click or drag to upload your medical clearance form</div><small class="muted" id="med-name">No file selected</small></label></div>
+          <div class="form-group"><label>Emergency Contact *</label><input type="text" name="emergency" class="form-control" placeholder="Name & phone number" required></div>
+          <div class="form-group"><label>Allergies / Medical Conditions</label><textarea name="conditions" class="form-control" placeholder="List any allergies, asthma, or medical conditions coaches should know about."></textarea></div>
+          <h3 style="margin-top:1.5rem">Liability Waiver *</h3>
+          <div class="card" style="background:var(--c-deeper);max-height:200px;overflow-y:auto;font-size:.85rem;padding:1rem">
+            <p><strong>RELEASE OF LIABILITY</strong></p><p>In consideration of being allowed to participate in Gen Z Volleyball Malawi (GZVM) activities, I, the undersigned, acknowledge and agree that:</p>
+            <p>1. Volleyball involves inherent risks of injury, including but not limited to sprains, fractures, head injuries, and in rare cases, death.</p>
+            <p>2. I am physically fit to participate and have disclosed all medical conditions.</p>
+            <p>3. I release GZVM, its coaches, volunteers, and partners from any liability for injuries sustained during sanctioned activities.</p>
+            <p>4. I grant permission for emergency medical treatment in case I am unable to provide consent.</p>
+            <p>5. I understand my photo/video may be used for promotional purposes.</p>
+            <p>6. I confirm I am under 25 years of age as of the date of registration.</p>
+          </div>
+          <div class="form-group checkbox-row" style="margin-top:1rem"><input type="checkbox" name="waiver" required><label>I have read and agree to the liability waiver above. *</label></div>
+          <div class="form-group checkbox-row"><input type="checkbox" name="photoConsent"><label>I consent to my photo and video being used in GZVM promotional materials.</label></div>
+          <div class="form-group checkbox-row"><input type="checkbox" name="codeOfConduct" required><label>I agree to abide by the GZVM Code of Conduct (respect, fair play, no violence). *</label></div>
+          <h3 style="margin-top:1.5rem">Initial Self-Rated Skill Levels (0-100)</h3>
+          <p class="muted" style="font-size:.9rem">Be honest — you can update these anytime from the Training page.</p>
+          <div class="grid-2" id="init-skills" style="margin-top:.5rem"></div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem">Complete Registration 🎉</button>
+        </form>
+      </div></div>
+      <div class="tab-content" id="reg-team"><div class="card">
+        <h3>Team Information</h3>
+        <form id="team-form" style="margin-top:1rem">
+          <div class="grid-2"><div class="form-group"><label>Team Name *</label><input type="text" name="name" class="form-control" required></div><div class="form-group"><label>City *</label><select name="city" class="form-control" required><option value="">— Select —</option><option>Blantyre</option><option>Lilongwe</option><option>Mzuzu</option><option>Zomba</option><option>Other</option></select></div></div>
+          <div class="grid-2"><div class="form-group"><label>Head Coach *</label><input type="text" name="coach" class="form-control" required></div><div class="form-group"><label>Contact Phone *</label><input type="tel" name="contact" class="form-control" required></div></div>
+          <div class="grid-2"><div class="form-group"><label>Team Email *</label><input type="email" name="email" class="form-control" required></div><div class="form-group"><label>Skill Level *</label><select name="level" class="form-control" required><option>Recreational</option><option>Competitive</option><option>Elite</option></select></div></div>
+          <div class="form-group"><label>Team Logo (optional)</label><label class="file-drop" id="logo-drop"><input type="file" name="logo" accept="image/*"><div>🖼️ Click or drag to upload team logo</div><small class="muted" id="logo-name">No file selected</small></label></div>
+          <div class="form-group"><label>Number of Roster Players</label><input type="number" name="rosterSize" class="form-control" min="6" max="20" value="12" style="max-width:120px"></div>
+          <div class="form-group checkbox-row"><input type="checkbox" name="agree" required><label>I confirm all players on our roster are under 25 and have signed individual waivers. *</label></div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem">Register Team 🏐</button>
+        </form>
+      </div></div>
+    </div></section>`;
+}
+
+function registerIntervals() {
+  const bindDrop = (id, nameId) => { const drop = document.getElementById(id); const nameEl = document.getElementById(nameId); const input = drop.querySelector('input'); drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag'); }); drop.addEventListener('dragleave', () => drop.classList.remove('drag')); drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('drag'); if (e.dataTransfer.files.length) { input.files = e.dataTransfer.files; nameEl.textContent = e.dataTransfer.files[0].name; } }); input.addEventListener('change', e => { if (e.target.files.length) nameEl.textContent = e.target.files[0].name; }); };
+  bindDrop('med-drop', 'med-name'); bindDrop('logo-drop', 'logo-name'); bindDrop('photo-drop', 'photo-name');
+  const SKILLS = [{k:'serve',l:'🎯 Serve'},{k:'spike',l:'💥 Spike'},{k:'set',l:'👐 Set'},{k:'block',l:'🛡️ Block'},{k:'pass',l:'🤲 Pass'},{k:'dig',l:'🤾 Dig'}];
+  document.getElementById('init-skills').innerHTML = SKILLS.map(s => `<div class="form-group"><label>${s.l}</label><input type="range" name="skill_${s.k}" min="0" max="100" value="50" class="form-control" style="padding:0;height:32px"><small class="muted">Self-rating: <span class="skill-val">50</span>/100</small></div>`).join('');
+  document.querySelectorAll('#init-skills input[type=range]').forEach(r => r.addEventListener('input', e => e.target.nextElementSibling.querySelector('.skill-val').textContent = e.target.value));
+  const loadTeamSelect = () => { const sel = document.querySelector('#player-form select[name=team]'); sel.innerHTML = '<option value="">— Free Agent —</option>' + APP.data.teams.map(t => `<option value="${APP.escapeHtml(t.name)}">${APP.escapeHtml(t.name)} (${t.city})</option>`).join(''); };
+  loadTeamSelect();
+  document.getElementById('player-form').addEventListener('submit', async e => { e.preventDefault(); const fd = new FormData(e.target); const dob = new Date(fd.get('dob')); const age = Math.floor((Date.now() - dob) / (365.25 * 86400000)); if (age >= 25) return APP.toast('Players must be under 25 years old', 'error'); if (age < 13) return APP.toast('Minimum age is 13', 'error'); const medFile = e.target.medical.files[0]; if (!medFile) return APP.toast('Please upload your medical form', 'error'); const photoFile = e.target.photo.files[0]; const readFileAsDataURL = (file) => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(file); }); const photoUrl = photoFile ? await readFileAsDataURL(photoFile) : null; const medicalUrl = await readFileAsDataURL(medFile); const stats = {}; SKILLS.forEach(s => { stats[s.k] = parseInt(fd.get('skill_' + s.k) || 50); }); const player = { id: APP.uid(), name: fd.get('name'), dob: fd.get('dob'), age, email: fd.get('email'), phone: fd.get('phone'), position: fd.get('position'), team: fd.get('team'), jersey: fd.get('jersey'), photo: photoUrl, emergency: fd.get('emergency'), conditions: fd.get('conditions'), waiver: { signed: true, signedAt: new Date().toISOString() }, photoConsent: !!fd.get('photoConsent'), codeOfConduct: !!fd.get('codeOfConduct'), medical: { name: medFile.name, type: medFile.type, size: medFile.size, url: medicalUrl }, stats, mvps: 0, registeredAt: new Date().toISOString() }; APP.data.players.push(player); APP.save(); APP.toast('Player registered! Welcome to GZVM 🎉', 'success'); e.target.reset(); document.querySelectorAll('.skill-val').forEach(s => s.textContent = '50'); document.getElementById('med-name').textContent = 'No file selected'; document.getElementById('photo-name').textContent = 'No file selected'; });
+  document.getElementById('team-form').addEventListener('submit', async e => { e.preventDefault(); const fd = new FormData(e.target); const me = APP.currentUser(); if (!me) { APP.toast('Please log in first to register a team', 'warning'); setTimeout(() => location.hash = '#login', 800); return; } const logoFile = e.target.logo.files[0]; const logoUrl = logoFile ? await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(logoFile); }) : null; const team = { id: APP.uid(), name: fd.get('name'), city: fd.get('city'), coach: fd.get('coach'), contact: fd.get('contact'), email: fd.get('email'), level: fd.get('level'), logo: logoUrl, rosterSize: parseInt(fd.get('rosterSize') || 12), members: [me.id], captainId: me.id, createdAt: new Date().toISOString() }; APP.data.teams.push(team); APP.save(); APP.toast('Team registered! 🏐', 'success'); e.target.reset(); loadTeamSelect(); });
+  document.querySelectorAll('.tab[data-reg]').forEach(t => t.addEventListener('click', () => { document.querySelectorAll('.tab[data-reg]').forEach(x => x.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active')); t.classList.add('active'); document.getElementById('reg-' + t.dataset.reg).classList.add('active'); }));
+}
+
+function renderDonate() {
+  return `
+    <section class="hero" style="padding:2rem 0"><div class="container">
+      <span class="tag tag-yellow">💛 SUPPORT US</span>
+      <h1>Fuel the <span class="gradient-text">Next Generation</span></h1>
+      <p>Every kwacha goes directly to gear, transport to matches, court rentals, and tournament fees for our under-25 players.</p>
+    </div></section>
+    <section><div class="container"><div class="grid-2">
+      <div class="card card-3d"><h3>💸 Make a Donation</h3>
+        <form id="donate-form" style="margin-top:1rem">
+          <div class="form-group"><label>Your Name</label><input type="text" name="name" class="form-control" placeholder="Optional — leave blank to donate anonymously"></div>
+          <div class="form-group"><label>Amount (MWK) *</label><div style="display:flex;gap:.4rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn btn-sm amount-preset" data-amt="1000">MK 1,000</button><button type="button" class="btn btn-sm amount-preset" data-amt="5000">MK 5,000</button><button type="button" class="btn btn-sm amount-preset" data-amt="10000">MK 10,000</button><button type="button" class="btn btn-sm amount-preset" data-amt="25000">MK 25,000</button><button type="button" class="btn btn-sm amount-preset" data-amt="50000">MK 50,000</button></div><input type="number" name="amount" class="form-control" min="100" placeholder="Custom amount" required></div>
+          <div class="form-group"><label>Payment Method *</label><select name="method" class="form-control" required><option value="">— Select —</option><option>Mobile Money (Airtel Money)</option><option>Mobile Money (TNM Mpamba)</option><option>Bank Transfer</option><option>Card</option></select></div>
+          <div class="form-group"><label>Message (optional)</label><textarea name="message" class="form-control" placeholder="Leave a message of support for the team…"></textarea></div>
+          <div class="form-group checkbox-row"><input type="checkbox" name="recurring"><label>Make this a monthly recurring donation 🔁</label></div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:1rem">Donate Now ❤️</button>
+          <p class="muted text-center" style="font-size:.8rem;margin-top:.8rem">🔒 Secure & encrypted. You'll receive a confirmation SMS.</p>
+        </form>
+      </div>
+      <div>
+        <div class="card"><h3>🎯 Your Impact</h3><div class="grid-2" style="margin-top:1rem"><div class="text-center"><p style="font-size:2rem;font-family:var(--font-display);color:var(--c-accent)">MK 5K</p><p class="muted" style="font-size:.85rem">Buys 1 official volleyball</p></div><div class="text-center"><p style="font-size:2rem;font-family:var(--font-display);color:var(--c-accent)">MK 15K</p><p class="muted" style="font-size:.85rem">Knee pads for a full team</p></div><div class="text-center"><p style="font-size:2rem;font-family:var(--font-display);color:var(--c-accent)">MK 30K</p><p class="muted" style="font-size:.85rem">Court rental for 1 month</p></div><div class="text-center"><p style="font-size:2rem;font-family:var(--font-display);color:var(--c-accent)">MK 100K</p><p class="muted" style="font-size:.85rem">Sends a team to nationals</p></div></div></div>
+        <div class="card" style="margin-top:1rem"><h3>📈 Fundraiser Progress</h3><p style="margin-top:.5rem"><strong>Season 2026 Equipment Drive</strong></p><div class="progress" style="margin-top:.5rem;height:16px"><div class="progress-bar teal" id="donation-progress" style="width:0%"></div></div><div class="progress-label"><span id="donation-raised">MK 0 raised</span><span>Goal: MK 1,000,000</span></div><p class="muted" style="font-size:.85rem;margin-top:.5rem" id="donation-supporter-count">No supporters yet — be the first!</p></div>
+        <div class="card" style="margin-top:1rem"><h3>💝 Recent Supporters</h3><div id="recent-donations" style="margin-top:.5rem"></div><p id="donations-empty" class="text-center muted" style="font-size:.9rem">Be the first to donate!</p></div>
+      </div>
+    </div></div></section>`;
+}
+
+function donateIntervals() {
+  document.querySelectorAll('.amount-preset').forEach(b => b.addEventListener('click', () => { document.querySelector('input[name=amount]').value = b.dataset.amt; document.querySelectorAll('.amount-preset').forEach(x => { x.classList.remove('btn-primary'); x.classList.add('btn-ghost'); }); b.classList.remove('btn-ghost'); b.classList.add('btn-primary'); }));
+  const renderDonations = () => { const list = document.getElementById('recent-donations'); const empty = document.getElementById('donations-empty'); const recent = APP.data.donations.slice().reverse().slice(0, 5); if (!recent.length) { list.innerHTML = ''; empty.style.display = 'block'; } else { empty.style.display = 'none'; list.innerHTML = recent.map(d => `<div style="padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.05)"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${APP.escapeHtml(d.name)}</strong><span style="color:var(--c-accent);font-weight:700">MK ${d.amount.toLocaleString()}</span></div>${d.message ? `<p class="muted" style="font-size:.85rem;font-style:italic">"${APP.escapeHtml(d.message)}"</p>` : ''}<small class="muted">${APP.fmtDate(d.date)} ${d.recurring ? '• 🔁 monthly' : ''}</small></div>`).join(''); } const total = APP.data.donations.reduce((sum, d) => sum + (d.amount || 0), 0); const goal = 1000000; const pct = Math.min(100, Math.round((total / goal) * 100)); const supporters = APP.data.donations.length; document.getElementById('donation-progress').style.width = pct + '%'; document.getElementById('donation-raised').textContent = `MK ${total.toLocaleString()} raised (${pct}%)`; document.getElementById('donation-supporter-count').textContent = supporters === 0 ? 'No supporters yet — be the first!' : `${pct}% funded by ${supporters} supporter${supporters === 1 ? '' : 's'}`; };
+  document.getElementById('donate-form').addEventListener('submit', e => { e.preventDefault(); const fd = new FormData(e.target); const amt = parseInt(fd.get('amount')); if (!amt || amt < 100) return APP.toast('Minimum donation is MK 100', 'error'); const donation = { id: APP.uid(), name: fd.get('name') || 'Anonymous', amount: amt, method: fd.get('method'), message: fd.get('message'), recurring: !!fd.get('recurring'), date: new Date().toISOString() }; APP.data.donations.push(donation); APP.save(); APP.toast(`Thank you for donating MK ${amt.toLocaleString()}! 🎉`, 'success'); e.target.reset(); document.querySelectorAll('.amount-preset').forEach(x => { x.classList.remove('btn-primary'); x.classList.add('btn-ghost'); }); renderDonations(); });
+  renderDonations();
+}
+
+function renderLogin() {
+  return `
+    <section><div class="container">
+      <div class="tabs" style="justify-content:center"><button class="tab active" data-au="login">Login</button><button class="tab" data-au="signup">Sign Up</button></div>
+      <div class="grid-2" style="max-width:900px;margin:0 auto">
+        <div class="tab-content active" id="au-login"><div class="card card-3d"><h3>Welcome Back 🏐</h3><p class="muted" style="font-size:.9rem">Login to access your dashboard, training tracker, and locker room.</p>
+          <form id="login-form" style="margin-top:1rem"><div class="form-group"><label>Email</label><input type="email" name="email" class="form-control" required></div><div class="form-group"><label>Password</label><input type="password" name="password" class="form-control" required></div><button type="submit" class="btn btn-primary btn-block">Login →</button></form>
+          <p class="muted text-center" style="font-size:.85rem;margin-top:1rem">No account yet? <a href="#" id="goto-signup">Sign up</a></p>
+        </div></div>
+        <div class="tab-content" id="au-signup"><div class="card card-3d"><h3>Create Account</h3><p class="muted" style="font-size:.9rem">Players, coaches, and team captains all need an account.</p>
+          <form id="signup-form" style="margin-top:1rem"><div class="form-group"><label>Full Name *</label><input type="text" name="name" class="form-control" required></div><div class="form-group"><label>Email *</label><input type="email" name="email" class="form-control" required></div><div class="form-group"><label>Password *</label><input type="password" name="password" class="form-control" minlength="6" required></div><div class="form-group"><label>Role *</label><select name="role" class="form-control" required><option value="">— Select —</option><option value="player">Player</option><option value="coach">Coach</option><option value="captain">Team Captain</option><option value="admin">League Admin</option><option value="fan">Fan / Supporter</option></select></div><button type="submit" class="btn btn-primary btn-block">Create Account →</button></form>
+          <p class="muted text-center" style="font-size:.85rem;margin-top:1rem">Already have an account? <a href="#" id="goto-login">Login</a></p>
+        </div></div>
+      </div>
+    </div></section>`;
+}
+
+function loginIntervals() {
+  const switchAuth = (tab) => { document.querySelectorAll('.tab[data-au]').forEach(x => x.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active')); document.querySelector(`.tab[data-au="${tab}"]`).classList.add('active'); document.getElementById('au-' + tab).classList.add('active'); };
+  document.querySelectorAll('.tab[data-au]').forEach(t => t.addEventListener('click', () => switchAuth(t.dataset.au)));
+  document.getElementById('goto-signup').addEventListener('click', e => { e.preventDefault(); switchAuth('signup'); });
+  document.getElementById('goto-login').addEventListener('click', e => { e.preventDefault(); switchAuth('login'); });
+  document.getElementById('login-form').addEventListener('submit', e => { e.preventDefault(); const fd = new FormData(e.target); try { const u = APP.login(fd.get('email'), fd.get('password')); APP.toast(`Welcome back, ${u.name}!`, 'success'); location.hash = '#home'; } catch (err) { APP.toast(err.message, 'error'); } });
+  document.getElementById('signup-form').addEventListener('submit', e => { e.preventDefault(); const fd = new FormData(e.target); try { const u = APP.register({ name: fd.get('name'), email: fd.get('email'), password: fd.get('password'), role: fd.get('role') }); APP.toast(`Account created! Welcome, ${u.name} 🎉`, 'success'); location.hash = '#home'; } catch (err) { APP.toast(err.message, 'error'); } });
+}
+
+function renderLocker() {
+  const user = APP.currentUser();
+  const unlocked = sessionStorage.getItem('gzvm_locker') === '1';
+  const ALLOWED = ['coach', 'admin', 'captain'];
+  if (!user) return `<div class="auth-gate card card-3d"><div class="icon">🔒</div><h2>Login Required</h2><p class="muted">You must log in to access the Coach Locker Room.</p><a href="#login" class="btn btn-primary" style="margin-top:1rem">Login / Sign Up →</a></div>`;
+  if (!ALLOWED.includes(user.role)) return `<div class="auth-gate card card-3d"><div class="icon">🚫</div><h2>Access Denied</h2><p class="muted">Your account (${user.role}) doesn't have locker room access.</p><a href="#home" class="btn btn-ghost" style="margin-top:1rem">← Back to home</a></div>`;
+  if (!unlocked) return `<div id="locker-gate" class="auth-gate card card-3d"><div class="icon">🔒</div><h2>Coach Locker Room</h2><p class="muted">Restricted area. Coaches and admins only.</p><button class="btn btn-primary" id="enter-locker" style="margin-top:1rem">Enter Locker Room →</button></div><div class="modal-backdrop" id="password-modal"><div class="modal"><div class="modal-header"><h3>🔐 Enter Locker Room</h3><button class="modal-close" data-close>✕</button></div><p class="muted" style="font-size:.9rem">Enter the coach password to access the strategy area.</p><form id="password-form" style="margin-top:1rem"><div class="form-group"><label>Password</label><input type="password" name="password" class="form-control" required autofocus></div><button type="submit" class="btn btn-primary btn-block">Unlock</button><p class="muted text-center" style="font-size:.8rem;margin-top:.8rem">Demo password: <code>locker2026</code></p></form></div></div>`;
+  return `
+    <section class="hero" style="padding:2rem 0"><div class="container">
+      <span class="tag tag-pink">🔒 COACHES ONLY</span>
+      <h1>The <span class="gradient-text">Locker Room</span></h1>
+      <p>Strategy videos, private feedback, and team notes. <span class="muted">Logged in as ${user.name} (${user.role})</span></p>
+    </div></section>
+    <section><div class="container">
+      <div class="tabs"><button class="tab active" data-lk="strategy">📹 Strategy Videos</button><button class="tab" data-lk="feedback">💬 Private Feedback</button><button class="tab" data-lk="roster">👥 Roster</button></div>
+      <div class="tab-content active" id="lk-strategy"><div class="grid-2">
+        <div class="card"><h3>📤 Upload Strategy Video</h3>
+          <form id="strategy-form" style="margin-top:1rem"><div class="form-group"><label>Title *</label><input type="text" name="title" class="form-control" placeholder="e.g. Rotation Analysis vs Top Spikers" required></div><div class="form-group"><label>Description</label><textarea name="description" class="form-control" placeholder="Key takeaways, what to focus on…"></textarea></div><div class="form-group"><label>Video URL</label><input type="url" name="videoUrl" class="form-control" placeholder="https://youtube.com/... or .mp4 link"></div><div class="form-group"><label>Tag Players (multi-select)</label><select name="taggedPlayers" class="form-control" multiple size="4" id="tagged-players"></select></div><button type="submit" class="btn btn-primary btn-block">📤 Share with Team</button></form>
+        </div>
+        <div><h3 style="margin-bottom:1rem">📂 Shared Videos</h3><div id="strategy-list" class="grid-2"></div><p id="strategy-empty" class="text-center muted">No strategy videos yet. Upload one!</p></div>
+      </div></div>
+      <div class="tab-content" id="lk-feedback"><div class="grid-2">
+        <div class="card"><h3>📝 Send Private Feedback</h3>
+          <form id="feedback-form" style="margin-top:1rem"><div class="form-group"><label>Player *</label><select name="playerId" class="form-control" required id="fb-player"></select></div><div class="form-group"><label>Feedback Message *</label><textarea name="text" class="form-control" rows="5" placeholder="Constructive notes only. Be specific. Encourage first, then improve." required></textarea></div><div class="form-group"><label>Rating (1-5 stars)</label><select name="rating" class="form-control"><option value="5">⭐⭐⭐⭐⭐ Excellent</option><option value="4">⭐⭐⭐⭐ Strong</option><option value="3" selected>⭐⭐⭐ Solid</option><option value="2">⭐⭐ Developing</option><option value="1">⭐ Needs work</option></select></div><button type="submit" class="btn btn-primary btn-block">Send Feedback</button></form>
+        </div>
+        <div><h3 style="margin-bottom:1rem">📬 Feedback History</h3><div id="feedback-list"></div><p id="feedback-empty" class="text-center muted">No feedback sent yet.</p></div>
+      </div></div>
+      <div class="tab-content" id="lk-roster"><div class="card"><h3>👥 Team Roster</h3><p class="muted" style="font-size:.9rem">All registered players across all teams.</p><div class="table-wrap" style="margin-top:1rem"><table id="roster-table"><thead><tr><th>#</th><th>Name</th><th>Team</th><th>Pos</th><th>Age</th><th>Waiver</th><th>Medical</th></tr></thead><tbody></tbody></table></div><p id="roster-empty" class="text-center muted">No players registered yet.</p></div></div>
+    </div></section>`;
+}
+
+function lockerIntervals() {
+  const user = APP.currentUser();
+  if (!user) return;
+  if (sessionStorage.getItem('gzvm_locker') !== '1') {
+    const enterBtn = document.getElementById('enter-locker');
+    if (enterBtn) enterBtn.addEventListener('click', () => { document.getElementById('password-modal').classList.add('open'); });
+    document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById('password-modal').classList.remove('open')));
+    const pf = document.getElementById('password-form');
+    if (pf) pf.addEventListener('submit', e => { e.preventDefault(); if (e.target.password.value === 'locker2026') { sessionStorage.setItem('gzvm_locker', '1'); document.getElementById('password-modal').classList.remove('open'); APP.toast('Welcome to the Locker Room 🔓', 'success'); location.hash = '#locker'; } else { APP.toast('Wrong password', 'error'); } });
+    return;
+  }
+  const populatePlayerOptions = () => { const opts = APP.data.players.map(p => `<option value="${p.id}">${APP.escapeHtml(p.name)} (${p.team || '—'})</option>`).join(''); const fb = document.getElementById('fb-player'); if (fb) fb.innerHTML = '<option value="">— Select player —</option>' + opts; const tagged = document.getElementById('tagged-players'); if (tagged) tagged.innerHTML = opts; };
+  const loadRoster = () => { const tb = document.querySelector('#roster-table tbody'); const empty = document.getElementById('roster-empty'); if (!APP.data.players.length) { tb.innerHTML = ''; empty.style.display = 'block'; return; } empty.style.display = 'none'; tb.innerHTML = APP.data.players.map((p, i) => `<tr><td>${i+1}</td><td><strong>${APP.escapeHtml(p.name)}</strong></td><td>${APP.escapeHtml(p.team || '—')}</td><td><span class="tag tag-blue">${p.position || '—'}</span></td><td>${p.age || '—'}</td><td>${p.waiver?.signed ? '<span class="tag tag-teal">SIGNED</span>' : '<span class="tag tag-pink">MISSING</span>'}</td><td>${p.medical?.name ? '<span class="tag tag-teal">✓</span>' : '<span class="tag tag-pink">✗</span>'}</td></tr>`).join(''); };
+  const loadStrategyList = () => { const list = document.getElementById('strategy-list'); const empty = document.getElementById('strategy-empty'); if (!APP.data.strategy.length) { list.innerHTML = ''; empty.style.display = 'block'; return; } empty.style.display = 'none'; list.innerHTML = APP.data.strategy.slice().reverse().map(s => `<div class="card card-3d"><h3>📹 ${APP.escapeHtml(s.title)}</h3><p class="muted" style="font-size:.85rem">By ${APP.escapeHtml(s.coach)} • ${APP.fmtDate(s.date)}</p><p style="font-size:.9rem">${APP.escapeHtml(s.description || 'No description')}</p>${s.videoUrl ? `<a href="${APP.escapeHtml(s.videoUrl)}" target="_blank" class="btn btn-sm btn-accent">▶ Watch Video</a>` : ''}</div>`).join(''); };
+  const loadFeedbackHistory = () => { const list = document.getElementById('feedback-list'); const empty = document.getElementById('feedback-empty'); if (!APP.data.feedback.length) { list.innerHTML = ''; empty.style.display = 'block'; return; } empty.style.display = 'none'; list.innerHTML = APP.data.feedback.slice().reverse().map(f => { const player = APP.data.players.find(p => p.id === f.playerId); return `<div class="card" style="margin-bottom:.8rem"><div style="display:flex;justify-content:space-between;align-items:start"><strong>→ ${APP.escapeHtml(player?.name || 'Unknown')}</strong><span>${'⭐'.repeat(f.rating || 0)}</span></div><p style="margin-top:.5rem">${APP.escapeHtml(f.text)}</p><small class="muted">${APP.fmtDate(f.date)} • from ${APP.escapeHtml(f.coach)}</small></div>`; }).join(''); };
+  document.querySelectorAll('.tab[data-lk]').forEach(t => { t.addEventListener('click', () => { document.querySelectorAll('.tab[data-lk]').forEach(x => x.classList.remove('active')); document.querySelectorAll('#lk-strategy, #lk-feedback, #lk-roster').forEach(x => x.classList.remove('active')); t.classList.add('active'); document.getElementById('lk-' + t.dataset.lk).classList.add('active'); }); });
+  populatePlayerOptions(); loadRoster(); loadStrategyList(); loadFeedbackHistory();
+  document.getElementById('strategy-form').addEventListener('submit', e => { e.preventDefault(); const fd = new FormData(e.target); if (!fd.get('videoUrl')) return APP.toast('Add a video URL', 'error'); const tagged = Array.from(e.target.taggedPlayers.selectedOptions).map(o => o.value); const strategy = { id: APP.uid(), coach: user.name, title: fd.get('title'), description: fd.get('description'), videoUrl: fd.get('videoUrl'), taggedPlayers: tagged, date: new Date().toISOString() }; APP.data.strategy.push(strategy); APP.save(); APP.toast('Strategy video shared! 📹', 'success'); e.target.reset(); loadStrategyList(); });
+  document.getElementById('feedback-form').addEventListener('submit', e => { e.preventDefault(); const fd = new FormData(e.target); const feedback = { id: APP.uid(), coach: user.name, playerId: fd.get('playerId'), text: fd.get('text'), rating: parseInt(fd.get('rating') || 3), date: new Date().toISOString() }; APP.data.feedback.push(feedback); APP.save(); APP.toast('Feedback sent! 💬', 'success'); e.target.reset(); loadFeedbackHistory(); });
+}
+
+/* =========================================================
+   PAGE-DISPATCH (runs after each navigation)
+   ========================================================= */
+const _origNavigate = navigate;
+navigate = function (page, params) {
+  _origNavigate(page, params);
+  const p = params || {};
+  if (page === 'home') homeIntervals();
+  else if (page === 'training') trainingIntervals();
+  else if (page === 'live') liveIntervals(p);
+  else if (page === 'teams') teamsIntervals();
+  else if (page === 'leaderboard') leaderboardIntervals();
+  else if (page === 'matches') matchesIntervals();
+  else if (page === 'register') registerIntervals();
+  else if (page === 'donate') donateIntervals();
+  else if (page === 'login') loginIntervals();
+  else if (page === 'locker') lockerIntervals();
+  APP.renderTicker();
+};
+
+// Boot
+APP.load();
+APP.renderBackground();
+window.LIVE = LIVE;
+window.APP = APP;
+const { page, params } = getHash();
+navigate(page, params);
+</script>
+
+</body>
+</html>

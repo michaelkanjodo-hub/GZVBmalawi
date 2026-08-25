@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donate — Gen Z Volleyball Malawi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <section class="hero" style="padding:2rem 0;">
+    <div class="container">
+      <span class="tag tag-yellow">💛 SUPPORT US</span>
+      <h1>Fuel the <span class="gradient-text">Next Generation</span></h1>
+      <p>Every kwacha goes directly to gear, transport to matches, court rentals, and tournament fees for our under-25 players.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="grid-2">
+        <!-- DONATION FORM -->
+        <div class="card card-3d">
+          <h3>💸 Make a Donation</h3>
+          <form id="donate-form" style="margin-top:1rem;">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" name="name" class="form-control" placeholder="Optional — leave blank to donate anonymously">
+            </div>
+            <div class="form-group">
+              <label>Amount (MWK) *</label>
+              <div style="display:flex; gap:0.4rem; margin-bottom:0.5rem; flex-wrap:wrap;">
+                <button type="button" class="btn btn-sm amount-preset" data-amt="1000">MK 1,000</button>
+                <button type="button" class="btn btn-sm amount-preset" data-amt="5000">MK 5,000</button>
+                <button type="button" class="btn btn-sm amount-preset" data-amt="10000">MK 10,000</button>
+                <button type="button" class="btn btn-sm amount-preset" data-amt="25000">MK 25,000</button>
+                <button type="button" class="btn btn-sm amount-preset" data-amt="50000">MK 50,000</button>
+              </div>
+              <input type="number" name="amount" class="form-control" min="100" placeholder="Custom amount" required>
+            </div>
+            <div class="form-group">
+              <label>Payment Method *</label>
+              <select name="method" class="form-control" required>
+                <option value="">— Select —</option>
+                <option>Mobile Money (Airtel Money)</option>
+                <option>Mobile Money (TNM Mpamba)</option>
+                <option>Bank Transfer</option>
+                <option>Card</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message (optional)</label>
+              <textarea name="message" class="form-control" placeholder="Leave a message of support for the team…"></textarea>
+            </div>
+            <div class="form-group checkbox-row">
+              <input type="checkbox" name="recurring">
+              <label>Make this a monthly recurring donation 🔁</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:1rem;">Donate Now ❤️</button>
+            <p class="muted text-center" style="font-size:0.8rem; margin-top:0.8rem;">🔒 Secure & encrypted. You'll receive a confirmation SMS.</p>
+          </form>
+        </div>
+
+        <!-- IMPACT + RECENT DONATIONS -->
+        <div>
+          <div class="card">
+            <h3>🎯 Your Impact</h3>
+            <div class="grid-2" style="margin-top:1rem;">
+              <div class="text-center">
+                <p style="font-size:2rem; font-family: var(--font-display); color: var(--c-accent);">MK 5K</p>
+                <p class="muted" style="font-size:0.85rem;">Buys 1 official volleyball</p>
+              </div>
+              <div class="text-center">
+                <p style="font-size:2rem; font-family: var(--font-display); color: var(--c-accent);">MK 15K</p>
+                <p class="muted" style="font-size:0.85rem;">Knee pads for a full team</p>
+              </div>
+              <div class="text-center">
+                <p style="font-size:2rem; font-family: var(--font-display); color: var(--c-accent);">MK 30K</p>
+                <p class="muted" style="font-size:0.85rem;">Court rental for 1 month</p>
+              </div>
+              <div class="text-center">
+                <p style="font-size:2rem; font-family: var(--font-display); color: var(--c-accent);">MK 100K</p>
+                <p class="muted" style="font-size:0.85rem;">Sends a team to nationals</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1rem;">
+            <h3>📈 Fundraiser Progress</h3>
+            <p style="margin-top:0.5rem;"><strong>Season 2026 Equipment Drive</strong></p>
+            <div class="progress" style="margin-top:0.5rem; height: 16px;">
+              <div class="progress-bar teal" id="donation-progress" style="width: 0%;"></div>
+            </div>
+            <div class="progress-label">
+              <span id="donation-raised">MK 0 raised</span>
+              <span>Goal: MK 1,000,000</span>
+            </div>
+            <p class="muted" style="font-size:0.85rem; margin-top:0.5rem;" id="donation-supporter-count">No supporters yet — be the first!</p>
+          </div>
+
+          <div class="card" style="margin-top:1rem;">
+            <h3>💝 Recent Supporters</h3>
+            <div id="recent-donations" style="margin-top:0.5rem;"></div>
+            <p id="donations-empty" class="text-center muted" style="font-size:0.9rem;">Be the first to donate!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"></footer>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+
+document.querySelectorAll('.amount-preset').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelector('input[name=amount]').value = b.dataset.amt;
+    document.querySelectorAll('.amount-preset').forEach(x => { x.classList.remove('btn-primary'); x.classList.add('btn-ghost'); });
+    b.classList.remove('btn-ghost');
+    b.classList.add('btn-primary');
+  });
+});
+
+document.getElementById('donate-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (window.EXTRAS && !(await EXTRAS.confirm('Send this donation?'))) return;
+  const fd = new FormData(e.target);
+  const amt = parseInt(fd.get('amount'));
+  if (!amt || amt < 100) return APP.toast('Minimum donation is MK 100', 'error');
+  const donation = {
+    id: APP.uid(),
+    name: fd.get('name') || 'Anonymous',
+    amount: amt,
+    method: fd.get('method'),
+    message: fd.get('message'),
+    recurring: !!fd.get('recurring'),
+    date: new Date().toISOString()
+  };
+  APP.data.donations.push(donation);
+  APP.save();
+  APP.toast(`Thank you for donating MK ${amt.toLocaleString()}! 🎉`, 'success');
+  if (window.EXTRAS) EXTRAS.showSuccess(e.target, 'Donation received', `Thank you for MK ${amt.toLocaleString()}.`);
+  e.target.reset();
+  document.querySelectorAll('.amount-preset').forEach(x => { x.classList.remove('btn-primary'); x.classList.add('btn-ghost'); });
+  renderDonations();
+});
+
+function renderDonations() {
+  const list = document.getElementById('recent-donations');
+  const empty = document.getElementById('donations-empty');
+  const recent = APP.data.donations.slice().reverse().slice(0, 5);
+  if (!recent.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    list.innerHTML = recent.map(d => `
+      <div style="padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong>${APP.escapeHtml(d.name)}</strong>
+          <span style="color: var(--c-accent); font-weight: 700;">MK ${d.amount.toLocaleString()}</span>
+        </div>
+        ${d.message ? `<p class="muted" style="font-size:0.85rem; font-style:italic;">"${APP.escapeHtml(d.message)}"</p>` : ''}
+        <small class="muted">${APP.fmtDate(d.date)} ${d.recurring ? '• 🔁 monthly' : ''}</small>
+      </div>
+    `).join('');
+  }
+
+  // Compute live progress from real donations
+  const total = APP.data.donations.reduce((sum, d) => sum + (d.amount || 0), 0);
+  const goal = 1000000;
+  const pct = Math.min(100, Math.round((total / goal) * 100));
+  const supporters = APP.data.donations.length;
+  document.getElementById('donation-progress').style.width = pct + '%';
+  document.getElementById('donation-raised').textContent = `MK ${total.toLocaleString()} raised (${pct}%)`;
+  document.getElementById('donation-supporter-count').textContent = supporters === 0
+    ? 'No supporters yet — be the first!'
+    : `${pct}% funded by ${supporters} supporter${supporters === 1 ? '' : 's'}`;
+}
+renderDonations();
+</script>
+</body>
+</html>

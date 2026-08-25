@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — Gen Z Volleyball Malawi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/extras.css">
+<style>#sync-banner{display:none!important}</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="nav"></nav>
+
+<div class="ticker"><div class="ticker-track container"></div></div>
+
+<main>
+  <section class="hero" style="padding:2rem 0;">
+    <div class="container">
+      <span class="tag tag-teal">📝 JOIN THE LEAGUE</span>
+      <h1>Player & Team <span class="gradient-text">Registration</span></h1>
+      <p>Sign waivers, upload your medical form, and start tracking your skills across the season.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="tabs">
+        <button class="tab active" data-reg="player">🏐 Player Sign-Up</button>
+        <button class="tab" data-reg="team">👥 Team Sign-Up</button>
+      </div>
+
+      <!-- PLAYER REGISTRATION -->
+      <div class="tab-content active" id="reg-player">
+        <div class="card">
+          <h3>Player Information</h3>
+          <p class="muted" style="font-size:0.9rem;">All players must be under 25. You must be 18+ to register, or have a parent/guardian sign below.</p>
+          <form id="player-form" style="margin-top:1rem;">
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="name" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Date of Birth *</label>
+                <input type="date" name="dob" class="form-control" required>
+                <p class="muted" style="font-size:0.75rem; margin-top:0.2rem;">Must be under 25 years old</p>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="email" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" name="phone" class="form-control" placeholder="+265 ...">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Position *</label>
+                <select name="position" class="form-control" required>
+                  <option value="">— Select —</option>
+                  <option>Setter</option>
+                  <option>Outside Hitter</option>
+                  <option>Opposite Hitter</option>
+                  <option>Middle Blocker</option>
+                  <option>Libero</option>
+                  <option>Defensive Specialist</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Team (optional)</label>
+                <select name="team" class="form-control">
+                  <option value="">— Free Agent —</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Profile Photo</label>
+              <label class="file-drop" id="photo-drop">
+                <input type="file" name="photo" accept="image/*">
+                <div>📷 Click or drag to upload your photo</div>
+                <small class="muted" id="photo-name">No file selected</small>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Jersey Number</label>
+              <input type="number" name="jersey" class="form-control" min="0" max="99" style="max-width:120px;">
+            </div>
+
+            <h3 style="margin-top:1.5rem;">Medical & Waiver</h3>
+            <div class="form-group">
+              <label>Medical Form (PDF/Image) *</label>
+              <label class="file-drop" id="med-drop">
+                <input type="file" name="medical" accept=".pdf,image/*" required>
+                <div>📄 Click or drag to upload your medical clearance form</div>
+                <small class="muted" id="med-name">No file selected</small>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Emergency Contact *</label>
+              <input type="text" name="emergency" class="form-control" placeholder="Name & phone number" required>
+            </div>
+            <div class="form-group">
+              <label>Allergies / Medical Conditions</label>
+              <textarea name="conditions" class="form-control" placeholder="List any allergies, asthma, or medical conditions coaches should know about."></textarea>
+            </div>
+
+            <h3 style="margin-top:1.5rem;">Liability Waiver *</h3>
+            <div class="card" style="background: var(--c-deeper); max-height: 200px; overflow-y: auto; font-size: 0.85rem; padding: 1rem;">
+              <p><strong>RELEASE OF LIABILITY</strong></p>
+              <p>In consideration of being allowed to participate in Gen Z Volleyball Malawi (GZVM) activities, I, the undersigned, acknowledge and agree that:</p>
+              <p>1. Volleyball involves inherent risks of injury, including but not limited to sprains, fractures, head injuries, and in rare cases, death.</p>
+              <p>2. I am physically fit to participate and have disclosed all medical conditions.</p>
+              <p>3. I release GZVM, its coaches, volunteers, and partners from any liability for injuries sustained during sanctioned activities.</p>
+              <p>4. I grant permission for emergency medical treatment in case I am unable to provide consent.</p>
+              <p>5. I understand my photo/video may be used for promotional purposes.</p>
+              <p>6. I confirm I am under 25 years of age as of the date of registration.</p>
+            </div>
+            <div class="form-group checkbox-row" style="margin-top:1rem;">
+              <input type="checkbox" name="waiver" required>
+              <label>I have read and agree to the liability waiver above. *</label>
+            </div>
+            <div class="form-group checkbox-row">
+              <input type="checkbox" name="photoConsent">
+              <label>I consent to my photo and video being used in GZVM promotional materials.</label>
+            </div>
+            <div class="form-group checkbox-row">
+              <input type="checkbox" name="codeOfConduct" required>
+              <label>I agree to abide by the GZVM Code of Conduct (respect, fair play, no violence). *</label>
+            </div>
+
+            <h3 style="margin-top:1.5rem;">Initial Self-Rated Skill Levels (0-100)</h3>
+            <p class="muted" style="font-size:0.9rem;">Be honest — you can update these anytime from the Training page.</p>
+            <div class="grid-2" id="init-skills" style="margin-top:0.5rem;"></div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem;">Complete Registration 🎉</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- TEAM REGISTRATION -->
+      <div class="tab-content" id="reg-team">
+        <div class="card">
+          <h3>Team Information</h3>
+          <form id="team-form" style="margin-top:1rem;">
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Team Name *</label>
+                <input type="text" name="name" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>City *</label>
+                <select name="city" class="form-control" required>
+                  <option value="">— Select —</option>
+                  <option>Blantyre</option>
+                  <option>Lilongwe</option>
+                  <option>Mzuzu</option>
+                  <option>Zomba</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Head Coach *</label>
+                <input type="text" name="coach" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Contact Phone *</label>
+                <input type="tel" name="contact" class="form-control" required>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Team Email *</label>
+                <input type="email" name="email" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Skill Level *</label>
+                <select name="level" class="form-control" required>
+                  <option>Recreational</option>
+                  <option>Competitive</option>
+                  <option>Elite</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Team Logo (optional)</label>
+              <label class="file-drop" id="logo-drop">
+                <input type="file" name="logo" accept="image/*">
+                <div>🖼️ Click or drag to upload team logo</div>
+                <small class="muted" id="logo-name">No file selected</small>
+              </label>
+            </div>
+            <div class="form-group">
+              <label>Number of Roster Players</label>
+              <input type="number" name="rosterSize" class="form-control" min="6" max="20" value="12" style="max-width:120px;">
+            </div>
+            <div class="form-group checkbox-row">
+              <input type="checkbox" name="agree" required>
+              <label>I confirm all players on our roster are under 25 and have signed individual waivers. *</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem;">Register Team 🏐</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"></footer>
+
+<script src="js/livestream.js"></script>
+<script src="js/supabase-sync.js"></script>
+<script src="js/app.js"></script>
+<script src="js/extras.js"></script>
+<script>
+APP.renderTicker();
+APP.attachTilt();
+
+document.querySelectorAll('.tab[data-reg]').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab[data-reg]').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('reg-' + t.dataset.reg).classList.add('active');
+  });
+});
+
+// File drop
+function bindDrop(id, nameId) {
+  const drop = document.getElementById(id);
+  const nameEl = document.getElementById(nameId);
+  const input = drop.querySelector('input');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    drop.classList.remove('drag');
+    if (e.dataTransfer.files.length) {
+      input.files = e.dataTransfer.files;
+      nameEl.textContent = e.dataTransfer.files[0].name;
+    }
+  });
+  input.addEventListener('change', e => {
+    if (e.target.files.length) nameEl.textContent = e.target.files[0].name;
+  });
+}
+bindDrop('med-drop', 'med-name');
+bindDrop('logo-drop', 'logo-name');
+bindDrop('photo-drop', 'photo-name');
+
+// Skill init
+const SKILLS = [
+  { k: 'serve', l: '🎯 Serve' },
+  { k: 'spike', l: '💥 Spike' },
+  { k: 'set', l: '👐 Set' },
+  { k: 'block', l: '🛡️ Block' },
+  { k: 'pass', l: '🤲 Pass' },
+  { k: 'dig', l: '🤾 Dig' }
+];
+document.getElementById('init-skills').innerHTML = SKILLS.map(s => `
+  <div class="form-group">
+    <label>${s.l}</label>
+    <input type="range" name="skill_${s.k}" min="0" max="100" value="50" class="form-control" style="padding:0; height:32px;">
+    <small class="muted">Self-rating: <span class="skill-val">50</span>/100</small>
+  </div>
+`).join('');
+document.querySelectorAll('#init-skills input[type=range]').forEach(r => {
+  r.addEventListener('input', e => e.target.nextElementSibling.querySelector('.skill-val').textContent = e.target.value);
+});
+
+// Team select
+function loadTeamSelect() {
+  const sel = document.querySelector('#player-form select[name=team]');
+  sel.innerHTML = '<option value="">— Free Agent —</option>' +
+    APP.data.teams.map(t => `<option value="${APP.escapeHtml(t.name)}">${APP.escapeHtml(t.name)} (${t.city})</option>`).join('');
+}
+loadTeamSelect();
+
+// Player submit
+document.getElementById('player-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const dob = new Date(fd.get('dob'));
+  const age = Math.floor((Date.now() - dob) / (365.25 * 86400000));
+  if (age >= 25) return APP.toast('Players must be under 25 years old', 'error');
+  if (age < 13) return APP.toast('Minimum age is 13', 'error');
+
+  const medFile = e.target.medical.files[0];
+  if (!medFile) return APP.toast('Please upload your medical form', 'error');
+
+  const photoFile = e.target.photo.files[0];
+
+  APP.toast('Uploading files…', 'info');
+
+  // Upload to Supabase if configured, otherwise embed as dataURL
+  const readFileAsDataURL = (file) => new Promise((res) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.readAsDataURL(file);
+  });
+
+  let photoUrl = null;
+  if (photoFile) {
+    if (window.SYNC && SYNC.ready) {
+      photoUrl = await SYNC.uploadFile('profiles', photoFile, 'players');
+    }
+    if (!photoUrl) {
+      // Fallback: store small data URL locally
+      const dataUrl = await readFileAsDataURL(photoFile);
+      photoUrl = dataUrl;
+    }
+  }
+
+  let medicalUrl = null;
+  if (window.SYNC && SYNC.ready) {
+    medicalUrl = await SYNC.uploadFile('medical', medFile, 'forms');
+  }
+  if (!medicalUrl) {
+    medicalUrl = await readFileAsDataURL(medFile);
+  }
+
+  const stats = {};
+  SKILLS.forEach(s => { stats[s.k] = parseInt(fd.get('skill_' + s.k) || 50); });
+
+  const player = {
+    id: APP.uid(),
+    name: fd.get('name'),
+    dob: fd.get('dob'),
+    age,
+    email: fd.get('email'),
+    phone: fd.get('phone'),
+    position: fd.get('position'),
+    team: fd.get('team'),
+    jersey: fd.get('jersey'),
+    photo: photoUrl,
+    emergency: fd.get('emergency'),
+    conditions: fd.get('conditions'),
+    waiver: { signed: true, signedAt: new Date().toISOString() },
+    photoConsent: !!fd.get('photoConsent'),
+    codeOfConduct: !!fd.get('codeOfConduct'),
+    medical: { name: medFile.name, type: medFile.type, size: medFile.size, url: medicalUrl },
+    stats,
+    mvps: 0,
+    registeredAt: new Date().toISOString()
+  };
+  APP.data.players.push(player);
+  APP.save();
+  APP.toast('Player registered! Welcome to GZVM 🎉', 'success');
+  e.target.reset();
+  document.querySelectorAll('.skill-val').forEach(s => s.textContent = '50');
+  document.getElementById('med-name').textContent = 'No file selected';
+  document.getElementById('photo-name').textContent = 'No file selected';
+});
+
+// Team submit
+document.getElementById('team-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const me = APP.currentUser();
+  if (!me) {
+    APP.toast('Please log in first to register a team', 'warning');
+    setTimeout(() => location.href = 'login.html', 800);
+    return;
+  }
+
+  const logoFile = e.target.logo.files[0];
+  let logoUrl = null;
+  if (logoFile) {
+    if (window.SYNC && SYNC.ready) {
+      APP.toast('Uploading team logo…', 'info');
+      logoUrl = await SYNC.uploadFile('profiles', logoFile, 'teams');
+    } else {
+      const r = new FileReader();
+      logoUrl = await new Promise(res => { r.onload = () => res(r.result); r.readAsDataURL(logoFile); });
+    }
+  }
+
+  const team = {
+    id: APP.uid(),
+    name: fd.get('name'),
+    city: fd.get('city'),
+    coach: fd.get('coach'),
+    contact: fd.get('contact'),
+    email: fd.get('email'),
+    level: fd.get('level'),
+    logo: logoUrl,
+    rosterSize: parseInt(fd.get('rosterSize') || 12),
+    members: [me.id],
+    captainId: me.id,
+    createdAt: new Date().toISOString()
+  };
+  APP.data.teams.push(team);
+  APP.save();
+  APP.toast('Team registered! 🏐', 'success');
+  e.target.reset();
+  loadTeamSelect();
+});
+</script>
+</body>
+</html>
