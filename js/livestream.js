@@ -1,53 +1,59 @@
 /* =========================================================
-   Gen Z Volleyball Malawi — Live Streaming Module
-   WebRTC peer-to-peer + external RTMP service integration
+   Live streaming — PeerJS (watch via link) + YouTube/Twitch
+   Viewers open a link. No offer/answer codes.
    ========================================================= */
 
 const LIVE = {
-  state: 'idle', // 'idle' | 'previewing' | 'broadcasting' | 'viewing'
+  state: 'idle',
   localStream: null,
   currentRoom: null,
-  peers: new Map(), // viewerId -> RTCPeerConnection
-  config: {
-    iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' }
-    ]
-  },
-  signaling: {
-    // Manual signaling: broadcaster generates an "offer" code,
-    // viewer pastes it back as an "answer" code.
-    pendingOffer: null,
-    pendingAnswer: null
-  },
-  // Active rooms catalog (in localStorage so other tabs can see them)
+  hostPeer: null,
+  viewerPeer: null,
+  peers: new Map(),
   rooms: [],
 
   init() {
     this.loadRooms();
     this.renderBroadcastButton();
+    this.autoJoinFromUrl();
   },
 
-  // Unicode-safe SDP encoding (plain btoa() throws on non-Latin1)
-  encodeSignal(obj) {
-    return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
-  },
-  decodeSignal(code) {
-    return JSON.parse(decodeURIComponent(escape(atob(String(code || '').trim()))));
+  async ensurePeer() {
+    if (window.Peer) return;
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('Could not load the live-video library'));
+      document.head.appendChild(s);
+    });
   },
 
-  // ---------- ROOMS CATALOG ----------
-  // A list of currently live broadcasts. Other tabs / users can see them
-  // (in this same browser, for now — the manual signaling is what enables
-  // real cross-browser streaming).
+  iceConfig() {
+    return {
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' }
+        ]
+      }
+    };
+  },
+
   loadRooms() {
-    try {
-      const raw = localStorage.getItem('gzvm_rooms');
-      this.rooms = raw ? JSON.parse(raw) : [];
-    } catch { this.rooms = []; }
+    let local = [];
+    try { local = JSON.parse(localStorage.getItem('gzvm_rooms') || '[]'); } catch { local = []; }
+    const synced = (window.APP && Array.isArray(APP.data.liveRooms)) ? APP.data.liveRooms : [];
+    const byId = new Map();
+    [...local, ...synced].forEach(r => { if (r && r.id) byId.set(r.id, r); });
+    this.rooms = [...byId.values()];
   },
   saveRooms() {
     try { localStorage.setItem('gzvm_rooms', JSON.stringify(this.rooms)); } catch {}
+    if (window.APP) {
+      APP.data.liveRooms = this.rooms;
+      APP.save();
+    }
   },
   createRoom(hostName, title, description, type = 'p2p') {
     const room = {
@@ -55,8 +61,9 @@ const LIVE = {
       host: hostName,
       title: title || 'Live stream',
       description: description || '',
-      type, // 'p2p' | 'external'
-      externalUrl: null, // for RTMP/Youtube/Twitch embeds
+      type,
+      peerId: null,
+      externalUrl: null,
       startedAt: new Date().toISOString(),
       viewers: 0,
       active: true
@@ -71,22 +78,15 @@ const LIVE = {
     if (r) { r.active = false; r.endedAt = new Date().toISOString(); }
     this.saveRooms();
   },
-  removeRoom(roomId) {
-    this.rooms = this.rooms.filter(r => r.id !== roomId);
-    this.saveRooms();
-  },
   getActiveRooms() {
+    this.loadRooms();
     return this.rooms.filter(r => r.active);
   },
   listenToRooms(callback) {
-    // Listen to changes from other tabs
     window.addEventListener('storage', e => {
-      if (e.key === 'gzvm_rooms') {
-        this.loadRooms();
-        callback();
-      }
+      if (e.key === 'gzvm_rooms') { this.loadRooms(); callback(); }
     });
-    // Also poll every 3s as a fallback (in case storage events miss)
+    window.addEventListener('gzvm:refresh', () => { this.loadRooms(); callback(); });
     setInterval(() => {
       const before = JSON.stringify(this.rooms);
       this.loadRooms();
@@ -94,12 +94,11 @@ const LIVE = {
     }, 3000);
   },
 
-  // ---------- CAMERA ACCESS ----------
   async getCamera(optional = false) {
     if (this.localStream) return this.localStream;
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    if (!navigator.mediaDevices?.getUserMedia) {
       if (optional) return null;
-      throw new Error('Camera API is not available in this browser. Use HTTPS or localhost.');
+      throw new Error('Camera needs HTTPS or localhost.');
     }
     try {
       this.localStream = await navigator.mediaDevices.getUserMedia({
@@ -112,79 +111,82 @@ const LIVE = {
       throw new Error('Camera/mic access denied: ' + err.message);
     }
   },
-
   stopCamera() {
     if (this.localStream) {
       this.localStream.getTracks().forEach(t => t.stop());
       this.localStream = null;
     }
-    this.peers.forEach(pc => pc.close());
+    if (this.hostPeer) { try { this.hostPeer.destroy(); } catch {} this.hostPeer = null; }
+    if (this.viewerPeer) { try { this.viewerPeer.destroy(); } catch {} this.viewerPeer = null; }
+    this.peers.forEach(c => { try { c.close(); } catch {} });
     this.peers.clear();
   },
 
-  // ---------- MANUAL SIGNALING (P2P) ----------
-  // The broadcaster creates an SDP offer, encodes it as a string,
-  // and shares it with viewers. Each viewer creates an SDP answer
-  // and sends it back. Then they exchange ICE candidates the same way.
-  //
-  // This is the simplest way to do real WebRTC without a server.
-  async createOffer(roomId) {
+  watchUrl(room) {
+    const u = new URL('live.html', location.href);
+    if (room.peerId) u.searchParams.set('peer', room.peerId);
+    u.searchParams.set('room', room.id);
+    return u.href;
+  },
+
+  async startCameraBroadcast(title) {
+    await this.ensurePeer();
     const stream = await this.getCamera();
-    const pc = new RTCPeerConnection(this.config);
-    stream.getTracks().forEach(t => pc.addTrack(t, stream));
-
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    // Wait for ICE gathering to complete
-    await new Promise(resolve => {
-      if (pc.iceGatheringState === 'complete') return resolve();
-      pc.addEventListener('icegatheringstatechange', () => {
-        if (pc.iceGatheringState === 'complete') resolve();
-      });
-      // Safety timeout
-      setTimeout(resolve, 3000);
+    this.hostPeer = new window.Peer(this.iceConfig());
+    const peerId = await new Promise((resolve, reject) => {
+      this.hostPeer.on('open', id => resolve(id));
+      this.hostPeer.on('error', err => reject(err));
+      setTimeout(() => reject(new Error('Live connection timed out')), 12000);
     });
-
-    const offerCode = btoa(JSON.stringify(pc.localDescription));
-    this.signaling.pendingOffer = { roomId, pc, offerCode };
-    return offerCode;
-  },
-
-  async acceptOffer(offerCode) {
-    const stream = await this.getCamera();
-    const pc = new RTCPeerConnection(this.config);
-    stream.getTracks().forEach(t => pc.addTrack(t, stream));
-
-    const offer = JSON.parse(atob(offerCode));
-    await pc.setRemoteDescription(offer);
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
-
-    await new Promise(resolve => {
-      if (pc.iceGatheringState === 'complete') return resolve();
-      pc.addEventListener('icegatheringstatechange', () => {
-        if (pc.iceGatheringState === 'complete') resolve();
-      });
-      setTimeout(resolve, 3000);
+    this.hostPeer.on('connection', conn => {
+      const call = this.hostPeer.call(conn.peer, stream);
+      this.peers.set(conn.peer, call);
+      if (this.currentRoom) {
+        this.currentRoom.viewers = this.peers.size;
+        this.saveRooms();
+      }
     });
-
-    const answerCode = btoa(JSON.stringify(pc.localDescription));
-    this.signaling.pendingAnswer = { pc, answerCode };
-    return answerCode;
+    this.hostPeer.on('call', call => call.answer(stream));
+    const me = window.APP && APP.currentUser();
+    this.currentRoom = this.createRoom(me?.name || 'Broadcaster', title, '', 'p2p');
+    this.currentRoom.peerId = peerId;
+    this.saveRooms();
+    this.state = 'broadcasting';
+    const fab = document.getElementById('live-fab');
+    if (fab) fab.classList.add('active');
+    return this.currentRoom;
   },
 
-  async completeConnection(answerCode) {
-    const answer = JSON.parse(atob(answerCode));
-    const offer = this.signaling.pendingOffer;
-    if (!offer) throw new Error('No pending offer');
-    await offer.pc.setRemoteDescription(answer);
-    return offer.pc;
+  async watchPeer(peerId, videoEl) {
+    await this.ensurePeer();
+    this.viewerPeer = new window.Peer(this.iceConfig());
+    await new Promise((resolve, reject) => {
+      this.viewerPeer.on('open', () => resolve());
+      this.viewerPeer.on('error', reject);
+      setTimeout(() => reject(new Error('Could not reach the live server')), 12000);
+    });
+    this.viewerPeer.on('call', call => {
+      call.answer();
+      call.on('stream', remote => {
+        if (videoEl) {
+          videoEl.srcObject = remote;
+          videoEl.play?.().catch(() => {});
+        }
+      });
+    });
+    this.viewerPeer.connect(peerId);
+    this.state = 'viewing';
   },
 
-  // ---------- UI ----------
+  autoJoinFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const peer = params.get('peer');
+    if (!peer || !location.pathname.endsWith('live.html')) return;
+    // live.html script also handles this; keep a late fallback
+    window.addEventListener('gzvm:join-peer', () => {});
+  },
+
   renderBroadcastButton() {
-    // Floating "Go Live" button (similar to chat fab) — only added once
     if (document.getElementById('live-fab')) return;
     const fab = document.createElement('button');
     fab.id = 'live-fab';
@@ -194,356 +196,118 @@ const LIVE = {
     fab.setAttribute('aria-label', 'Start a live stream');
     document.body.appendChild(fab);
     fab.addEventListener('click', () => this.openStreamModal());
-
-    // Add styles
     if (!document.getElementById('live-fab-styles')) {
       const style = document.createElement('style');
       style.id = 'live-fab-styles';
       style.textContent = `
         .live-fab {
           position: fixed; bottom: 24px; right: 100px;
-          width: 60px; height: 60px;
-          border-radius: 50%;
+          width: 60px; height: 60px; border-radius: 50%;
           background: linear-gradient(135deg, #ff3b6b 0%, #ffd400 100%);
-          color: #0b1426;
-          border: none;
-          font-size: 1.6rem;
-          cursor: pointer;
-          box-shadow: 0 12px 0 0 rgba(0,0,0,0.35), 0 18px 40px rgba(0,0,0,0.4), 0 0 30px rgba(255,59,107,0.6);
+          color: #0b1426; border: none; font-size: 1.6rem; cursor: pointer;
+          box-shadow: 0 12px 0 0 rgba(0,0,0,0.35), 0 0 30px rgba(255,59,107,0.6);
           z-index: 90;
-          transition: transform 0.2s;
         }
-        .live-fab:hover { transform: scale(1.1) rotate(-8deg); }
         .live-fab.active { animation: livePulse 1.5s infinite; }
         @keyframes livePulse {
-          0%, 100% { box-shadow: 0 12px 0 0 rgba(0,0,0,0.35), 0 18px 40px rgba(0,0,0,0.4), 0 0 30px rgba(255,59,107,0.6); }
-          50% { box-shadow: 0 12px 0 0 rgba(0,0,0,0.35), 0 18px 40px rgba(0,0,0,0.4), 0 0 50px rgba(255,59,107,1); }
+          0%,100% { box-shadow: 0 12px 0 0 rgba(0,0,0,0.35), 0 0 30px rgba(255,59,107,0.6); }
+          50% { box-shadow: 0 12px 0 0 rgba(0,0,0,0.35), 0 0 50px rgba(255,59,107,1); }
         }
-
-        .stream-modal-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-          margin-top: 1rem;
-        }
-        @media (max-width: 700px) {
-          .stream-modal-grid { grid-template-columns: 1fr; }
-        }
-        .stream-choice {
-          background: var(--c-deeper);
-          border: 2px solid rgba(255,255,255,0.1);
-          border-radius: 12px;
-          padding: 1.2rem;
-          cursor: pointer;
-          transition: all 0.2s;
-          text-align: center;
-        }
-        .stream-choice:hover {
-          border-color: var(--c-primary);
-          background: rgba(255,59,107,0.08);
-          transform: translateY(-3px);
-        }
-        .stream-choice .icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .stream-choice h4 { margin-bottom: 0.3rem; }
-        .stream-choice p { color: var(--c-muted); font-size: 0.85rem; }
-
-        .code-block {
-          width: 100%;
-          min-height: 100px;
-          max-height: 200px;
-          background: #000;
-          color: #00ff88;
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 8px;
-          padding: 0.6rem;
-          font-family: 'Courier New', monospace;
-          font-size: 0.75rem;
-          word-break: break-all;
-          resize: vertical;
-        }
-        .code-block:focus { outline: none; border-color: var(--c-accent); }
-
-        .live-room-card {
-          position: relative;
-          background: linear-gradient(135deg, #1a0a0a 0%, var(--c-card) 100%);
-          border: 2px solid var(--c-danger);
-          border-radius: 12px;
-          padding: 1rem;
-          margin-bottom: 0.8rem;
-        }
-        .live-room-card h4 { color: var(--c-text); margin-bottom: 0.3rem; }
-        .live-room-card .live-pill {
-          position: absolute; top: 10px; right: 10px;
-          background: var(--c-danger);
-          color: white;
-          padding: 0.2rem 0.6rem;
-          border-radius: 4px;
-          font-size: 0.7rem;
-          font-weight: 800;
-          letter-spacing: 1px;
-          display: flex; align-items: center; gap: 0.4rem;
-        }
-        .live-room-card .live-pill .live-dot {
-          width: 6px; height: 6px;
-          background: white;
-          border-radius: 50%;
-          animation: pulse 1.5s infinite;
-        }
-
-        .video-preview {
-          width: 100%;
-          background: #000;
-          border-radius: 8px;
-          aspect-ratio: 16/9;
-          object-fit: cover;
-        }
-
-        .device-bar {
-          display: flex; gap: 0.4rem;
-          flex-wrap: wrap;
-          margin: 0.6rem 0;
-        }
-        .device-bar button { flex: 1; min-width: 80px; }
-        .device-bar button.active { background: var(--gradient-1); color: var(--c-deep); }
+        .stream-modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem; }
+        @media (max-width:700px){ .stream-modal-grid{grid-template-columns:1fr} }
+        .stream-choice { background:var(--c-deeper); border:2px solid rgba(255,255,255,0.1); border-radius:12px; padding:1.2rem; cursor:pointer; text-align:center; }
+        .stream-choice:hover { border-color:var(--c-primary); }
+        .stream-choice .icon { font-size:2.5rem; }
+        .video-preview { width:100%; background:#000; border-radius:8px; aspect-ratio:16/9; object-fit:cover; }
+        .live-room-card { position:relative; background:var(--c-card); border:2px solid var(--c-danger); border-radius:12px; padding:1rem; margin-bottom:.8rem; }
+        .live-room-card .live-pill { position:absolute; top:10px; right:10px; background:var(--c-danger); color:#fff; padding:.2rem .6rem; border-radius:4px; font-size:.7rem; font-weight:800; }
+        .share-link { width:100%; padding:.6rem; border-radius:8px; background:#000; color:#00ff88; border:1px solid rgba(255,255,255,.1); font-size:.8rem; }
       `;
       document.head.appendChild(style);
     }
   },
 
-  // ---------- STREAM MODAL ----------
   async openStreamModal(mode = null) {
-    // Remove existing modal
     const existing = document.getElementById('stream-modal');
     if (existing) existing.remove();
-
     const modal = document.createElement('div');
     modal.id = 'stream-modal';
     modal.className = 'modal-backdrop open';
     modal.innerHTML = `
-      <div class="modal" style="max-width: 720px;">
-        <div class="modal-header">
-          <h3>📡 Go Live</h3>
-          <button class="modal-close" data-close>✕</button>
-        </div>
-
-        <p class="muted" style="font-size:0.9rem;">Pick how you want to stream. Everyone on the site will be able to watch.</p>
-
+      <div class="modal" style="max-width:720px">
+        <div class="modal-header"><h3>📡 Go Live</h3><button class="modal-close" data-close>✕</button></div>
+        <p class="muted" style="font-size:.9rem">Start a camera stream — viewers just open your link. Or paste a YouTube / Twitch URL.</p>
         <div class="stream-modal-grid">
-          <div class="stream-choice" id="choose-p2p">
-            <div class="icon">🏐</div>
-            <h4>Stream from my camera</h4>
-            <p>P2P WebRTC. Best for small audiences (5-20 viewers). No server needed.</p>
-          </div>
-          <div class="stream-choice" id="choose-external">
-            <div class="icon">📺</div>
-            <h4>Stream via YouTube / Twitch / Facebook</h4>
-            <p>Use a streaming service for big audiences (50+). Just paste your stream URL.</p>
-          </div>
+          <div class="stream-choice" id="choose-p2p"><div class="icon">🏐</div><h4>Stream from my camera</h4><p>Anyone with the watch link can join.</p></div>
+          <div class="stream-choice" id="choose-external"><div class="icon">📺</div><h4>YouTube / Twitch / Facebook</h4><p>Paste a public watch URL.</p></div>
         </div>
-
-        <div id="p2p-panel" style="display:none; margin-top:1.5rem;">
-          <h4>📹 Camera Broadcast</h4>
-          <p class="muted" style="font-size:0.85rem;">Broadcasters create a share code. Viewers paste it to connect.</p>
-
-          <div class="grid-2" style="margin-top:1rem;">
-            <div>
-              <h5 style="color: var(--c-accent);">📤 As Broadcaster</h5>
-              <ol style="font-size:0.85rem; padding-left: 1.2rem; margin-top:0.5rem;">
-                <li>Click "Start Camera"</li>
-                <li>Click "Create Share Code"</li>
-                <li>Copy the code and send it to your viewers (chat, SMS, etc.)</li>
-                <li>Paste each viewer's answer code back here</li>
-              </ol>
-              <button class="btn btn-primary btn-sm" id="start-camera" style="margin-top:0.6rem;">📹 Start Camera</button>
-              <button class="btn btn-accent btn-sm" id="create-offer" style="margin-top:0.4rem; display:none;">Create Share Code</button>
-              <video id="local-preview" class="video-preview" autoplay muted playsinline style="margin-top:0.5rem; display:none;"></video>
-              <div id="offer-code-wrap" style="display:none; margin-top:0.5rem;">
-                <label style="font-size:0.8rem; color: var(--c-muted);">SHARE THIS CODE WITH YOUR VIEWERS:</label>
-                <textarea id="offer-code" class="code-block" readonly></textarea>
-                <button class="btn btn-ghost btn-sm" id="copy-offer" style="margin-top:0.3rem;">📋 Copy Code</button>
-              </div>
-              <div style="margin-top:0.5rem;">
-                <label style="font-size:0.8rem; color: var(--c-muted);">PASTE VIEWER'S ANSWER CODE:</label>
-                <textarea id="answer-input" class="code-block" placeholder="Paste answer code from viewer..."></textarea>
-                <button class="btn btn-primary btn-sm" id="connect-viewer" style="margin-top:0.3rem;">🔗 Connect</button>
-              </div>
-            </div>
-
-            <div>
-              <h5 style="color: var(--c-accent);">📥 As Viewer</h5>
-              <ol style="font-size:0.85rem; padding-left: 1.2rem; margin-top:0.5rem;">
-                <li>Paste the broadcaster's offer code below</li>
-                <li>Click "Generate Answer Code" (camera is optional)</li>
-                <li>Send the answer code back to the broadcaster</li>
-              </ol>
-              <button class="btn btn-ghost btn-sm" id="start-camera-v" style="margin-top:0.6rem;">📹 Optional: share my camera</button>
-              <button class="btn btn-accent btn-sm" id="accept-offer" style="margin-top:0.4rem;">Generate Answer Code</button>
-              <video id="local-preview-v" class="video-preview" autoplay muted playsinline style="margin-top:0.5rem; display:none;"></video>
-              <div id="offer-input-wrap" style="margin-top:0.5rem;">
-                <label style="font-size:0.8rem; color: var(--c-muted);">PASTE BROADCASTER'S OFFER CODE:</label>
-                <textarea id="offer-input" class="code-block" placeholder="Paste offer code..."></textarea>
-              </div>
-              <div id="answer-code-wrap" style="display:none; margin-top:0.5rem;">
-                <label style="font-size:0.8rem; color: var(--c-muted);">SEND THIS CODE BACK TO BROADCASTER:</label>
-                <textarea id="answer-code" class="code-block" readonly></textarea>
-                <button class="btn btn-ghost btn-sm" id="copy-answer" style="margin-top:0.3rem;">📋 Copy Code</button>
-              </div>
-              <div id="remote-video-wrap" style="display:none; margin-top:0.5rem;">
-                <label style="font-size:0.8rem; color: var(--c-accent);">✅ CONNECTED — BROADCAST PLAYING:</label>
-                <video id="remote-video" class="video-preview" autoplay playsinline controls></video>
-              </div>
-            </div>
+        <div id="p2p-panel" style="display:none;margin-top:1.2rem">
+          <div class="form-group"><label>Stream title</label><input id="p2p-title" class="form-control" placeholder="e.g. Lilongwe practice"></div>
+          <button class="btn btn-primary" id="start-camera-live">📹 Go Live from camera</button>
+          <video id="local-preview" class="video-preview" autoplay muted playsinline style="margin-top:.8rem;display:none"></video>
+          <div id="share-wrap" style="display:none;margin-top:.8rem">
+            <label class="muted" style="font-size:.8rem">SHARE THIS WATCH LINK</label>
+            <input id="share-link" class="share-link" readonly>
+            <button class="btn btn-accent btn-sm" id="copy-share" style="margin-top:.4rem">📋 Copy watch link</button>
+            <p class="muted" style="font-size:.8rem;margin-top:.4rem">Send it in chat, WhatsApp or SMS. The other person taps it and the stream plays.</p>
           </div>
-
-          <button class="btn btn-ghost btn-sm" id="end-broadcast" style="margin-top:1rem; display:none;">⏹ End Broadcast</button>
+          <button class="btn btn-ghost btn-sm" id="end-broadcast" style="margin-top:1rem;display:none">⏹ End Broadcast</button>
         </div>
-
-        <div id="external-panel" style="display:none; margin-top:1.5rem;">
-          <h4>📺 External Service Stream</h4>
-          <p class="muted" style="font-size:0.85rem;">For big audiences — broadcast via a streaming service, then paste your stream URL here so everyone on the site can watch it.</p>
-          <div class="form-group" style="margin-top:1rem;">
-            <label>Broadcast Title</label>
-            <input type="text" id="ext-title" class="form-control" placeholder="e.g. Mzuzu Spikers vs Blantyre Blockers">
+        <div id="external-panel" style="display:none;margin-top:1.2rem">
+          <div class="form-group"><label>Title</label><input id="ext-title" class="form-control"></div>
+          <div class="form-group"><label>Service</label>
+            <select id="ext-service" class="form-control"><option>YouTube Live</option><option>Twitch</option><option>Facebook Live</option><option>Other</option></select>
           </div>
-          <div class="form-group">
-            <label>Service</label>
-            <select id="ext-service" class="form-control">
-              <option>YouTube Live</option>
-              <option>Twitch</option>
-              <option>Facebook Live</option>
-              <option>Other RTMP / HLS</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Stream URL (the watch link your viewers use)</label>
-            <input type="url" id="ext-url" class="form-control" placeholder="https://www.youtube.com/watch?v=... or https://www.twitch.tv/yourchannel">
-            <p class="muted" style="font-size:0.75rem; margin-top:0.3rem;">
-              The site will automatically convert it to an embeddable URL.
-            </p>
-          </div>
+          <div class="form-group"><label>Watch URL</label><input id="ext-url" class="form-control" type="url" placeholder="https://www.youtube.com/watch?v=..."></div>
           <button class="btn btn-primary" id="start-external">🚀 Go Live</button>
         </div>
-
-        <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
-          <h4>📡 Currently Live on GZVM</h4>
+        <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.1)">
+          <h4>📡 Currently Live</h4>
           <div id="active-rooms"></div>
-          <p id="no-rooms" class="text-center muted" style="font-size:0.9rem; padding:1rem;">No active streams right now. Be the first to go live!</p>
+          <p id="no-rooms" class="text-center muted" style="padding:1rem">No active streams right now.</p>
         </div>
-      </div>
-    `;
+      </div>`;
     document.body.appendChild(modal);
-
-    // Bind close — do NOT tear down an active broadcast/view session
-    const closeModal = () => modal.remove();
-    modal.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeModal));
-    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-
-    // Choose mode
-    document.getElementById('choose-p2p').addEventListener('click', () => {
+    const close = () => modal.remove();
+    modal.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', close));
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
+    document.getElementById('choose-p2p').onclick = () => {
       document.getElementById('p2p-panel').style.display = 'block';
       document.getElementById('external-panel').style.display = 'none';
-    });
-    document.getElementById('choose-external').addEventListener('click', () => {
+    };
+    document.getElementById('choose-external').onclick = () => {
       document.getElementById('p2p-panel').style.display = 'none';
       document.getElementById('external-panel').style.display = 'block';
-    });
+    };
+    if (mode === 'p2p') document.getElementById('choose-p2p').click();
+    if (mode === 'external') document.getElementById('choose-external').click();
 
-    // Auto-select mode if passed
-    if (mode === 'p2p') {
-      document.getElementById('p2p-panel').style.display = 'block';
-      document.getElementById('external-panel').style.display = 'none';
-    } else if (mode === 'external') {
-      document.getElementById('p2p-panel').style.display = 'none';
-      document.getElementById('external-panel').style.display = 'block';
-    }
-
-    // P2P Broadcaster side
-    document.getElementById('start-camera').addEventListener('click', async () => {
+    document.getElementById('start-camera-live').addEventListener('click', async () => {
       try {
-        const stream = await this.getCamera();
-        document.getElementById('local-preview').srcObject = stream;
-        document.getElementById('local-preview').style.display = 'block';
-        document.getElementById('create-offer').style.display = 'inline-flex';
-        document.getElementById('start-camera').textContent = '✓ Camera Ready';
-        document.getElementById('start-camera').disabled = true;
-      } catch (e) { APP.toast(e.message, 'error'); }
-    });
-    document.getElementById('create-offer').addEventListener('click', async () => {
-      try {
-        const me = APP.currentUser();
-        const title = prompt('Stream title:', me?.name + ' — Live Practice') || 'Live Stream';
-        const code = await this.createOffer();
-        document.getElementById('offer-code').value = code;
-        document.getElementById('offer-code-wrap').style.display = 'block';
-        this.currentRoom = this.createRoom(me?.name || 'Broadcaster', title, '', 'p2p');
+        const title = document.getElementById('p2p-title').value.trim() || 'Live stream';
+        document.getElementById('start-camera-live').disabled = true;
+        document.getElementById('start-camera-live').textContent = 'Connecting…';
+        const room = await this.startCameraBroadcast(title);
+        const preview = document.getElementById('local-preview');
+        preview.srcObject = this.localStream;
+        preview.style.display = 'block';
+        const link = this.watchUrl(room);
+        document.getElementById('share-link').value = link;
+        document.getElementById('share-wrap').style.display = 'block';
         document.getElementById('end-broadcast').style.display = 'inline-flex';
-        this.state = 'broadcasting';
-        document.getElementById('live-fab').classList.add('active');
-        APP.toast('Broadcast started! Share the code with viewers.', 'success');
+        APP.toast('You are live — copy the watch link', 'success');
         this.renderActiveRooms();
-      } catch (e) { APP.toast(e.message, 'error'); }
+      } catch (e) {
+        document.getElementById('start-camera-live').disabled = false;
+        document.getElementById('start-camera-live').textContent = '📹 Go Live from camera';
+        APP.toast(e.message || 'Could not go live', 'error');
+      }
     });
-    document.getElementById('copy-offer').addEventListener('click', () => {
-      navigator.clipboard.writeText(document.getElementById('offer-code').value);
-      APP.toast('Code copied! Send it to your viewers.', 'success');
+    document.getElementById('copy-share').addEventListener('click', () => {
+      const v = document.getElementById('share-link').value;
+      navigator.clipboard.writeText(v).then(() => APP.toast('Watch link copied', 'success'));
     });
-    document.getElementById('connect-viewer').addEventListener('click', async () => {
-      const code = document.getElementById('answer-input').value.trim();
-      if (!code) return APP.toast('Paste the viewer answer code first', 'warning');
-      try {
-        const pc = await this.completeConnection(code);
-        // Attach our local stream to a hidden video for the broadcaster
-        APP.toast('Viewer connected! 🎉', 'success');
-        // Track this peer
-        const peerId = 'peer_' + Date.now();
-        this.peers.set(peerId, pc);
-        // For demo: we just log that it's connected
-        if (this.currentRoom) this.currentRoom.viewers = this.peers.size;
-        document.getElementById('answer-input').value = '';
-        this.saveRooms();
-      } catch (e) { APP.toast(e.message, 'error'); }
-    });
-
-    // P2P Viewer side
-    document.getElementById('start-camera-v').addEventListener('click', async () => {
-      try {
-        const stream = await this.getCamera();
-        document.getElementById('local-preview-v').srcObject = stream;
-        document.getElementById('local-preview-v').style.display = 'block';
-        document.getElementById('accept-offer').style.display = 'inline-flex';
-        document.getElementById('start-camera-v').textContent = '✓ Camera Ready';
-        document.getElementById('start-camera-v').disabled = true;
-      } catch (e) { APP.toast(e.message, 'error'); }
-    });
-    document.getElementById('accept-offer').addEventListener('click', async () => {
-      const offerCode = document.getElementById('offer-input').value.trim();
-      if (!offerCode) return APP.toast('Paste the broadcaster offer code first', 'warning');
-      try {
-        const answerCode = await this.acceptOffer(offerCode);
-        // Hook up remote stream
-        this.signaling.pendingAnswer.pc.addEventListener('track', e => {
-          const remote = document.getElementById('remote-video');
-          remote.srcObject = e.streams[0];
-          document.getElementById('remote-video-wrap').style.display = 'block';
-        });
-        document.getElementById('answer-code').value = answerCode;
-        document.getElementById('answer-code-wrap').style.display = 'block';
-        this.state = 'viewing';
-        APP.toast('Connected! Send the answer code back to the broadcaster.', 'success');
-      } catch (e) { APP.toast(e.message, 'error'); }
-    });
-    document.getElementById('copy-answer').addEventListener('click', () => {
-      navigator.clipboard.writeText(document.getElementById('answer-code').value);
-      APP.toast('Code copied! Send it back to the broadcaster.', 'success');
-    });
-
-    // End broadcast
-    document.getElementById('end-broadcast').addEventListener('click', () => {
-      this.endBroadcast();
-      modal.remove();
-    });
-
-    // External stream
+    document.getElementById('end-broadcast').addEventListener('click', () => { this.endBroadcast(); modal.remove(); });
     document.getElementById('start-external').addEventListener('click', () => {
       const title = document.getElementById('ext-title').value.trim() || 'Live Stream';
       const url = document.getElementById('ext-url').value.trim();
@@ -554,93 +318,75 @@ const LIVE = {
       this.currentRoom.service = document.getElementById('ext-service').value;
       this.saveRooms();
       this.state = 'broadcasting';
-      document.getElementById('live-fab').classList.add('active');
-      APP.toast('You are live! 🎉', 'success');
+      document.getElementById('live-fab')?.classList.add('active');
+      APP.toast('You are live', 'success');
       modal.remove();
     });
-
     this.renderActiveRooms();
   },
 
   endBroadcast() {
-    if (this.currentRoom) {
-      this.endRoom(this.currentRoom.id);
-      this.currentRoom = null;
-    }
-    this.cleanup();
+    if (this.currentRoom) { this.endRoom(this.currentRoom.id); this.currentRoom = null; }
+    this.stopCamera();
     this.state = 'idle';
-    document.getElementById('live-fab').classList.remove('active');
+    document.getElementById('live-fab')?.classList.remove('active');
     APP.toast('Stream ended', 'info');
   },
+  cleanup() { this.stopCamera(); },
 
-  cleanup() {
-    this.stopCamera();
-  },
-
-  // ---------- ACTIVE ROOMS PANEL ----------
   renderActiveRooms() {
     const wrap = document.getElementById('active-rooms');
     const empty = document.getElementById('no-rooms');
     if (!wrap) return;
     const active = this.getActiveRooms();
-    if (!active.length) {
-      wrap.innerHTML = '';
-      if (empty) empty.style.display = 'block';
-      return;
-    }
+    if (!active.length) { wrap.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
     if (empty) empty.style.display = 'none';
-    wrap.innerHTML = active.map(r => `
-      <div class="live-room-card">
-        <div class="live-pill"><span class="live-dot"></span> LIVE</div>
+    wrap.innerHTML = active.map(r => {
+      const href = r.peerId ? `live.html?peer=${encodeURIComponent(r.peerId)}&room=${r.id}` : `live.html?room=${r.id}`;
+      return `<div class="live-room-card">
+        <div class="live-pill">LIVE</div>
         <h4>${APP.escapeHtml(r.title)}</h4>
-        <p class="muted" style="font-size:0.85rem;">🎤 ${APP.escapeHtml(r.host)} • ${APP.escapeHtml(r.type === 'external' ? r.service : 'P2P')} • Started ${APP.fmtDate(r.startedAt)} ${APP.fmtTime(r.startedAt)}</p>
-        <div style="display:flex; gap:0.4rem; margin-top:0.6rem; flex-wrap:wrap;">
-          <a href="live.html?room=${r.id}" class="btn btn-primary btn-sm">▶ Watch</a>
-          ${r.type === 'p2p' ? `<button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('${APP.escapeHtml(r.title)} on GZVM').then(()=>APP.toast('Copied','success'))">📋 Share</button>` : ''}
+        <p class="muted" style="font-size:.85rem">🎤 ${APP.escapeHtml(r.host)} · ${APP.escapeHtml(r.type === 'external' ? (r.service || 'External') : 'Camera')}</p>
+        <div style="display:flex;gap:.4rem;margin-top:.6rem;flex-wrap:wrap">
+          <a class="btn btn-primary btn-sm" href="${href}">▶ Watch</a>
+          <button class="btn btn-ghost btn-sm" data-copy-link="${href}">📋 Copy link</button>
           ${this.currentRoom && this.currentRoom.id === r.id ? `<button class="btn btn-ghost btn-sm" onclick="LIVE.endBroadcast()">⏹ End</button>` : ''}
         </div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
+    wrap.querySelectorAll('[data-copy-link]').forEach(b => {
+      b.addEventListener('click', () => {
+        const abs = new URL(b.getAttribute('data-copy-link'), location.href).href;
+        navigator.clipboard.writeText(abs).then(() => APP.toast('Copied', 'success'));
+      });
+    });
   },
 
-  // ---------- EXTERNAL URL CONVERTER ----------
-  // Convert a YouTube/Twitch/Facebook watch URL into an embeddable iframe URL
   toEmbedUrl(url) {
     if (!url) return null;
     try {
       const u = new URL(url);
-      // YouTube
       if (u.hostname.includes('youtube.com')) {
         const v = u.searchParams.get('v');
         if (v) return `https://www.youtube.com/embed/${v}?autoplay=1&rel=0`;
         if (u.pathname.startsWith('/live/')) return `https://www.youtube.com/embed${u.pathname}?autoplay=1`;
       }
-      if (u.hostname === 'youtu.be') {
-        const id = u.pathname.slice(1);
-        return `https://www.youtube.com/embed/${id}?autoplay=1`;
-      }
-      // Twitch
+      if (u.hostname === 'youtu.be') return `https://www.youtube.com/embed/${u.pathname.slice(1)}?autoplay=1`;
       if (u.hostname.includes('twitch.tv')) {
-        // Strip /directory or /videos/...
         const path = u.pathname.replace(/^\//, '').split('/')[0];
         if (path) return `https://player.twitch.tv/?channel=${path}&parent=${location.hostname}&autoplay=true`;
       }
-      // Facebook
       if (u.hostname.includes('facebook.com') || u.hostname.includes('fb.watch')) {
         return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&autoplay=true`;
       }
-      // Vimeo
       if (u.hostname.includes('vimeo.com')) {
         const id = u.pathname.split('/').filter(Boolean).pop();
         return `https://player.vimeo.com/video/${id}?autoplay=1`;
       }
-      // HLS / .m3u8 — needs a player; for now just return the raw URL
       return url;
     } catch { return url; }
   }
 };
 
-// Rooms must be available before page scripts call getActiveRooms()
 LIVE.loadRooms();
 window.LIVE = LIVE;
-

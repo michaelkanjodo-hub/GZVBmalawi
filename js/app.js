@@ -212,8 +212,8 @@ const APP = {
             <h4>Contact</h4>
             <ul>
               <li>📍 Blantyre, Malawi</li>
-              <li>📞 +265 888 123 456</li>
-              <li>✉️ hello@genzvolleyball.mw</li>
+              <li>📞 0993139028</li>
+              <li>✉️ Michaelkanjodo@gmail.com</li>
             </ul>
           </div>
         </div>

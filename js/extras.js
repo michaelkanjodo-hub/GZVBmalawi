@@ -304,7 +304,7 @@ const EXTRAS = {
     const panel = document.createElement('div');
     panel.className = 'contact-panel';
     panel.innerHTML = `<h3>Contact</h3>
-      <p class="muted" style="font-size:0.85rem">Blantyre · hello@genzvolleyball.mw</p>
+      <p class="muted" style="font-size:0.85rem">Blantyre · 0993139028 · Michaelkanjodo@gmail.com</p>
       <form id="contact-form">
         <div class="form-group"><label>Name</label><input class="form-control" name="name" required></div>
         <div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" required></div>
@@ -318,7 +318,7 @@ const EXTRAS = {
       e.preventDefault();
       const fd = new FormData(e.target);
       const body = encodeURIComponent(`${fd.get('msg')}\n\nFrom: ${fd.get('name')} <${fd.get('email')}>`);
-      location.href = `mailto:hello@genzvolleyball.mw?subject=${encodeURIComponent('GZVM contact')}&body=${body}`;
+      location.href = `mailto:Michaelkanjodo@gmail.com?subject=${encodeURIComponent('GZVM contact')}&body=${body}`;
       this.showSuccess(e.target, 'Ready to send', 'Your email app should open. We usually reply within 2 days.');
     });
   },
